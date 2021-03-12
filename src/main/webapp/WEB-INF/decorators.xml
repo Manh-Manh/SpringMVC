@@ -3,7 +3,7 @@
 
 	
     <decorator name="user" page="user.jsp">
-       <pattern>/app-view/*</pattern>
+       <pattern>/app-view*</pattern>
     </decorator>
     
     <decorator name="admin" page="admin.jsp">

@@ -1,7 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@include file="/common/taglib.jsp"%>
-	
+	<h1>
+	<span>
+		<c:forEach
+		var="item"
+		items="${dataList }">
+		<c:out value="${item.productName }"></c:out>
+		</c:forEach>
+	</span>	
+	</h1>
    <div class="breadcrumb-section breadcrumb-bg-color--golden">
         <div class="breadcrumb-wrapper">
             <div class="container">
@@ -238,6 +246,7 @@
                         </div>
                     </div> <!-- End Section Content -->
 
+<!-- Product -->
                     <!-- Start Tab Wrapper -->
                     <div class="sort-product-tab-wrapper">
                         <div class="container">
@@ -247,12 +256,14 @@
                                         <!-- Start Grid View Product -->
                                         <div class="tab-pane active show sort-layout-single" id="layout-3-grid">
                                             <div class="row">
-                                                <div class="col-xl-4 col-sm-6 col-12">
+                                     <c:forEach var="item" items="${dataList}">
+                                                <div class="col-xl-4 col-sm-6 col-12">                                                
                                                     <!-- Start Product Default Single Item -->
                                                     <div class="product-default-single-item product-color--golden" data-aos="fade-up"  data-aos-delay="0">
                                                         <div class="image-box">
                                                             <a href="product-details-default.html" class="image-link">
-                                                                <img src="<c:url value='/assets/images/product/default/home-1/default-9.jpg'/> " alt="">
+                                                           
+                                                                <img src="<c:url value='/assets/images/product/default/${item.image}' /> " alt="">
                                                                 <img src="<c:url value='/assets/images/product/default/home-1/default-10.jpg' /> " alt="">
                                                             </a>
                                                             <div class="action-link">
@@ -283,6 +294,7 @@
                 
                                                         </div>
                                                     </div>
+                                           </c:forEach>
                                                     <!-- End Product Default Single Item -->
                                                 </div>
                                                 <div class="col-xl-4 col-sm-6 col-12">

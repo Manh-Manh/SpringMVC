@@ -1,7 +1,9 @@
 package com.manhdn.entity;
 
+import java.text.DecimalFormat;
+
 public class productEntity extends CommonEntity<productEntity> {
-	
+
 	private String productName;
 	private Long quantity;
 	private String productId;
@@ -19,9 +21,69 @@ public class productEntity extends CommonEntity<productEntity> {
 	private String material;
 	private String otherFunc;
 	private String image;
-	private String del_flag;
+	private Long del_flag;
+	private String description;
 
-//	public String getProductName() {
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	// Supplier
+	private supplierEntity supplier;
+	// Strap
+	private strapEntity strap;
+	private faceEntity face;
+	private machineEntity machine;
+	private Long disCountPrice = 0L;
+
+	public Long getDisCountPrice() {
+		if (unitPrice != null && unitPrice > 0 && discount != null && discount > 0) {
+			disCountPrice = (long) ((1 - 0.01) * discount * unitPrice);
+		}
+		return disCountPrice;
+	}
+
+	public void setDisCountPrice(Long disCountPrice) {
+		this.disCountPrice = disCountPrice;
+	}
+
+	public strapEntity getStrap() {
+		return strap;
+	}
+
+	public void setStrap(strapEntity strap) {
+		this.strap = strap;
+	}
+
+	public faceEntity getFace() {
+		return face;
+	}
+
+	public void setFace(faceEntity face) {
+		this.face = face;
+	}
+
+	public machineEntity getMachine() {
+		return machine;
+	}
+
+	public void setMachine(machineEntity machine) {
+		this.machine = machine;
+	}
+
+	public supplierEntity getSupplier() {
+		return supplier;
+	}
+
+	public void setSupplier(supplierEntity supplier) {
+		this.supplier = supplier;
+	}
+
+	// public String getProductName() {
 //		return productName;
 //	}
 //	public void setProductName(String productName) {
@@ -34,7 +96,6 @@ public class productEntity extends CommonEntity<productEntity> {
 	public void setQuantity(Long quantity) {
 		this.quantity = quantity;
 	}
-
 
 	public String getProductName() {
 		return productName;
@@ -62,6 +123,16 @@ public class productEntity extends CommonEntity<productEntity> {
 
 	public Long getUnitPrice() {
 		return unitPrice;
+	}
+
+	public String getStringDiscountPrice() {
+		DecimalFormat myFormatter = new DecimalFormat("###,###,###,###");
+		return myFormatter.format(disCountPrice);
+	}
+
+	public String getStringUnitPrice() {
+		DecimalFormat myFormatter = new DecimalFormat("###,###,###,###");
+		return myFormatter.format(unitPrice);
 	}
 
 	public void setUnitPrice(Long unitPrice) {
@@ -164,11 +235,11 @@ public class productEntity extends CommonEntity<productEntity> {
 		this.image = image;
 	}
 
-	public String getDel_flag() {
+	public Long getDel_flag() {
 		return del_flag;
 	}
 
-	public void setDel_flag(String del_flag) {
+	public void setDel_flag(Long del_flag) {
 		this.del_flag = del_flag;
 	}
 }

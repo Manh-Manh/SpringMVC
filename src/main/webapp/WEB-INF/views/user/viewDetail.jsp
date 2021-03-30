@@ -33,7 +33,7 @@
                         <div class="product-large-image product-large-image-horaizontal swiper-container">
                                 <div class="swiper-wrapper">
                                     <div class="product-image-large-image swiper-slide zoom-image-hover img-responsive">
-                                        <img src="<c:url value='/assets/images/product/default/home-1/default-1.jpg' /> " alt="">
+                                        <img src="<c:url value='/assets/images/products/${dataSelected.image}' /> " alt="" >
                                     </div>
                                     <div class="product-image-large-image swiper-slide zoom-image-hover img-responsive">
                                         <img src="<c:url value='/assets/images/product/default/home-1/default-2.jpg' /> " alt="">
@@ -49,13 +49,13 @@
                                     </div>
                                     <div class="product-image-large-image swiper-slide zoom-image-hover img-responsive">
                                         <img src="<c:url value='/assets/images/product/default/home-1/default-6.jpg'/> " alt="">
-                                    </div>
+                                    </div> 
                                 </div>
                         </div>
                         <!-- End Large Image -->
                          <!-- Start Thumbnail Image -->
-                        <div class="product-image-thumb product-image-thumb-horizontal swiper-container pos-relative mt-5">
-                                <div class="swiper-wrapper">
+                         <div class="product-image-thumb product-image-thumb-horizontal swiper-container pos-relative mt-5">
+                               <!-- <div class="swiper-wrapper">
                                     <div class="product-image-thumb-single swiper-slide">
                                         <img class="img-fluid" src="<c:url value='/assets/images/product/default/home-1/default-1.jpg'/> " alt="">
                                     </div>
@@ -75,10 +75,11 @@
                                         <img class="img-fluid" src="<c:url value='/assets/images/product/default/home-1/default-6.jpg'/> " alt="">
                                     </div>
                             </div>
-                            <!-- Add Arrows -->
+                             Add Arrows 
                             <div class="gallery-thumb-arrow swiper-button-next"></div>
                             <div class="gallery-thumb-arrow swiper-button-prev"></div>
-                        </div>
+                            -->
+                        </div> 
                          <!-- End Thumbnail Image -->
                     </div>
                 </div>
@@ -86,8 +87,10 @@
                     <div class="product-details-content-area product-details--golden" data-aos="fade-up"  data-aos-delay="200">
                         <!-- Start  Product Details Text Area-->
                         <div class="product-details-text">
-                            <h4 class="title">Ornare sed consequat</h4>
-                            <div class="d-flex align-items-center">
+                            <h4 class="title">
+                            <c:out value="${dataSelected.productName }"></c:out>
+                            </h4>
+                            <!-- <div class="d-flex align-items-center">
                                 <ul class="review-star">
                                     <li class="fill"><i class="ion-android-star"></i></li>
                                     <li class="fill"><i class="ion-android-star"></i></li>
@@ -96,38 +99,69 @@
                                     <li class="empty"><i class="ion-android-star"></i></li>
                                 </ul>
                                 <a href="#" class="customer-review ml-2">(customer review )</a>
-                            </div>
-                            <div class="price">$80.00</div>
+                            </div> -->
+                            
+                            <c:if test="${dataSelected.discount > 0}">
+		                        <div class="price unitPrice">$ 
+	                            	<s><i><c:out value="${dataSelected.stringUnitPrice }"></c:out></i></s>
+	                            </div>
+	                            <div class="price discountPrice">$ 
+	                            	<c:out value="${dataSelected.stringDiscountPrice }"></c:out>
+	                            	 <i>(-<c:out value="${dataSelected.discount }"></c:out>%) </i>
+	                            </div>
+                            </c:if>
+                            <c:if test="${dataSelected.discount == null || dataSelected.discount <= 0}">
+		                        <div class="price unitPrice">$ 
+	                            	<c:out value="${dataSelected.stringUnitPrice }"></c:out>
+	                            </div>
+	                            <!-- <div class="price discountPrice">$ 
+	                            	<out value="${dataSelected.stringDiscountPrice }
+	                            </div> -->
+                            </c:if>
+                            
                             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam fringilla augue nec est tristique auctor. Donec non est at libero vulputate rutrum. Morbi ornare lectus quis justo gravida semper. Nulla tellus mi, vulputate adipiscing cursus eu, suscipit id nulla.</p>
                         </div> <!-- End  Product Details Text Area-->
                         <!-- Start Product Variable Area -->
                         <div class="product-details-variable">
-                            <h4 class="title">Available Options</h4>
+                            <h4 class="title">Tình trạng hàng</h4>
                             <!-- Product Variable Single Item -->
-                            <div class="variable-single-item">
-                                <div class="product-stock"> <span class="product-stock-in"><i class="ion-checkmark-circled"></i></span> 200 IN STOCK</div>
-                            </div>
+                            <c:if test="${dataSelected.quantity > 0 }">
+	                            <div class="variable-single-item">
+	                                <div class="product-stock"> <span class="product-stock-in"><i class="ion-checkmark-circled"></i> </span>
+	                               <%--<c:out value="${dataSelected.quantity }"></c:out> --%>Còn hàng
+	                            </div>                            
+                            </c:if>
+                            <c:if test="${dataSelected.quantity <= 0 }">
+	                            <div class="variable-single-item">
+	                                <div class="product-stock"> <span class="product-stock-out"><i class="ion-checkmark-circled"></i> </span>
+	                                <s style="color: red;"> Hết hàng </s> </div>
+	                            </div>                            
+                            </c:if>
+                            
+                            
+                            <br>
+                            <hr>
                             <!-- Product Variable Single Item -->
                             <div class="d-flex align-items-center ">
                                 <div class="variable-single-item ">
-                                    <span>Quantity</span>
+                                    <span>Số lượng</span>
                                     <div class="product-variable-quantity">
                                         <input min="1" max="100" value="1" type="number">
                                     </div>
                                 </div>
 
                                 <div class="product-add-to-cart-btn">
-                                    <a href="#" class="btn btn-block btn-lg btn-black-default-hover" data-bs-toggle="modal" data-bs-target="#modalAddcart">+ Add To Cart</a>
+                                    <a href="#" class="btn btn-block btn-lg btn-black-default-hover" data-bs-toggle="modal" data-bs-target="">+ Thêm vào giỏ</a>
                                 </div>
                             </div>
-                            <!-- Start  Product Details Meta Area-->
+                            <!-- Start  Product Details Meta Area
                             <div class="product-details-meta mb-20">
                                 <a href="wishlist.html" class="icon-space-right"><i class="icon-heart"></i>Add to wishlist</a>
                                 <a href="compare.html" class="icon-space-right"><i class="icon-refresh"></i>Compare</a>
                             </div> <!-- End  Product Details Meta Area-->
                         </div> <!-- End Product Variable Area -->
                         
-                        <!-- Start  Product Details Catagories Area-->
+                        <!-- Start  Product Details Catagories Area
                         <div class="product-details-catagory mb-2">
                             <span class="title">CATEGORIES:</span>
                             <ul>
@@ -135,8 +169,8 @@
                                 <li><a href="#">KITCHEN UTENSILS</a></li>
                                 <li><a href="#">TENNIS</a></li>
                             </ul>
-                        </div> <!-- End  Product Details Catagories Area-->
-                        <!-- Start  Product Details Social Area-->
+                        </div> End  Product Details Catagories Area-->
+                        <!-- Start  Product Details Social Area
                         <div class="product-details-social">
                             <span class="title">SHARE THIS PRODUCT:</span>
                             <ul>
@@ -146,7 +180,7 @@
                                 <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
                                 <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
                             </ul>
-                        </div> <!-- End  Product Details Social Area-->
+                        </div> End  Product Details Social Area-->
                     </div>
                 </div>
             </div>
@@ -163,13 +197,13 @@
                         <!-- Start Product Details Tab Button -->
                         <ul class="nav tablist product-details-content-tab-btn d-flex justify-content-center">
                             <li><a class="nav-link active" data-bs-toggle="tab" href="#description">
-                                    Description
+                                    Mô tả sản phẩm
                                 </a></li>
                             <li><a class="nav-link" data-bs-toggle="tab" href="#specification">
-                                    Specification
+                                    Thông số kỹ thuật
                                 </a></li>
                             <li><a class="nav-link" data-bs-toggle="tab" href="#review">
-                                    Reviews (1)
+                                    Đánh giá (1)
                                 </a></li>
                         </ul> <!-- End Product Details Tab Button -->
 
@@ -177,34 +211,127 @@
                         <div class="product-details-content-tab">
                             <div class="tab-content">
                                 <!-- Start Product Details Tab Content Singel -->
+                                <!-- Descrip tion tab -->
                                 <div class="tab-pane active show" id="description">
                                     <div class="single-tab-content-item">
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam fringilla augue nec est tristique auctor. Donec non est at libero vulputate rutrum. Morbi ornare lectus quis justo gravida semper. Nulla tellus mi, vulputate adipiscing cursus eu, suscipit id nulla. </p>
-                                        <p>Pellentesque aliquet, sem eget laoreet ultrices, ipsum metus feugiat sem, quis fermentum turpis eros eget velit. Donec ac tempus ante. Fusce ultricies massa massa. Fusce aliquam, purus eget sagittis vulputate, sapien libero hendrerit est, sed commodo augue nisi non neque. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tempor, lorem et placerat vestibulum, metus nisi posuere nisl, in accumsan elit odio quis mi. Cras neque metus, consequat et blandit et, luctus a nunc. Etiam gravida vehicula tellus, in imperdiet ligula euismod eget</p>
+                                        
+                                        <c:out value="${dataSelected.description }"></c:out>
+                                        
                                     </div>
                                 </div> <!-- End Product Details Tab Content Singel -->
                                 <!-- Start Product Details Tab Content Singel -->
+                                
+                                <!-- Tab chi tiet -->
                                 <div class="tab-pane" id="specification">
                                     <div class="single-tab-content-item">
                                         <table class="table table-bordered mb-20">
                                             <tbody>
+                                            	<c:if test="${dataSelected.gender!=null}">
                                                 <tr>
-                                                    <th scope="row">Compositions</th>
-                                                    <td>Polyester</td>
+                                                    <th scope="row">                                                    	
+                                                    	Giới tính                                                    
+                                                    </th>
+                                                    <td> <c:out value="${dataSelected.gender }"></c:out></td>
                                                 </tr>
+                                                </c:if>
+                                                
+                                                <c:if test="${dataSelected.face.waterProof!=null}">
                                                 <tr>
-                                                    <th scope="row">Styles</th>
-                                                    <td>Girly</td>
-                                                <tr>
-                                                    <th scope="row">Properties</th>
-                                                    <td>Short Dress</td>
+                                                    <th scope="row">                                                    	
+                                                    	Độ chịu nước                                                   
+                                                    </th>
+                                                    <td> <c:out value="${dataSelected.face.waterProof }"></c:out> m</td>
                                                 </tr>
+                                                </c:if>
+                                                
+                                                <c:if test="${dataSelected.face.thickness!=null}">
+                                                <tr>
+                                                    <th scope="row">                                                    	
+                                                    	Độ dày mặt                                                  
+                                                    </th>
+                                                    <td> <c:out value="${dataSelected.face.thickness }"></c:out> mm</td>
+                                                </tr>
+                                                </c:if>
+                                                
+                                                <c:if test="${dataSelected.face.faceSize!=null}">
+                                                <tr>
+                                                    <th scope="row">                                                    	
+                                                    	Kích cỡ                                                
+                                                    </th>
+                                                    <td> <c:out value="${dataSelected.face.faceSize }"></c:out> mm</td>
+                                                </tr>
+                                                </c:if>
+                                                
+                                                <c:if test="${dataSelected.supplier.supplierName!=null}">
+                                                <tr>
+                                                    <th scope="row">                                                    	
+                                                    	Nhãn hiệu                                                
+                                                    </th>
+                                                    <td> <c:out value="${dataSelected.supplier.supplierName }"></c:out></td>
+                                                </tr>
+                                                </c:if>
+                                                
+                                                <c:if test="${dataSelected.supplier.location!=null}">
+                                                <tr>
+                                                    <th scope="row">                                                    	
+                                                    	Quốc gia                                               
+                                                    </th>
+                                                    <td> <c:out value="${dataSelected.supplier.location }"></c:out></td>
+                                                </tr>
+                                                </c:if>
+                                                
+                                                <c:if test="${dataSelected.machine.machineName!=null}">
+                                                <tr>
+                                                    <th scope="row">                                                    	
+                                                    	Kiểu máy                                               
+                                                    </th>
+                                                    <td> <c:out value="${dataSelected.machine.machineName }"></c:out></td>
+                                                </tr>
+                                                </c:if>
+                                                
+                                                <c:if test="${dataSelected.strap.materialStrap!=null}">
+                                                <tr>
+                                                    <th scope="row">                                                    	
+                                                    	Chất liệu dây                                             
+                                                    </th>
+                                                    <td> <c:out value="${dataSelected.strap.materialStrap }"></c:out></td>
+                                                </tr>
+                                                </c:if>
+                                                
+                                                <c:if test="${dataSelected.face.glass!=null}">
+                                                <tr>
+                                                    <th scope="row">                                                    	
+                                                    	Chất liệu kính                                            
+                                                    </th>
+                                                    <td> <c:out value="${dataSelected.face.glass }"></c:out></td>
+                                                </tr>
+                                                </c:if>
+                                                
+                                                <c:if test="${dataSelected.material!=null}">
+                                                <tr>
+                                                    <th scope="row">                                                    	
+                                                    	Chất liệu vỏ                                        
+                                                    </th>
+                                                    <td> <c:out value="${dataSelected.material }"></c:out></td>
+                                                </tr>
+                                                </c:if>
+                                                
+                                                <c:if test="${dataSelected.otherFunc!=null}">
+                                                <tr>
+                                                    <th scope="row">                                                    	
+                                                    	Chức năng khác                                     
+                                                    </th>
+                                                    <td> <c:out value="${dataSelected.otherFunc }"></c:out></td>
+                                                </tr>
+                                                </c:if>
                                             </tbody>
                                         </table>
                                         <p>Fashion has been creating well-designed collections since 2010. The brand offers feminine designs delivering stylish separates and statement dresses which have since evolved into a full ready-to-wear collection in which every item is a vital part of a woman's wardrobe. The result? Cool, easy, chic looks with youthful elegance and unmistakable signature style. All the beautiful pieces are made in Italy and manufactured with the greatest attention. Now Fashion extends to a range of accessories including shoes, hats, belts and more!</p>
                                     </div>
                                 </div> <!-- End Product Details Tab Content Singel -->
                                 <!-- Start Product Details Tab Content Singel -->
+                                
+                                <!-- Tab Comment -->
                                 <div class="tab-pane" id="review">
                                     <div class="single-tab-content-item">
                                         <!-- Start - Review Comment -->

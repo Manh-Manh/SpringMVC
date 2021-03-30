@@ -19,5 +19,22 @@ public class productService {
 		prDAO =new productDAO();
 		return prDAO.findAll();
 	}
+	
+	public List<productEntity> findDaList(Long userId, productEntity dataSearch) {
+		prDAO =new productDAO();
+		return prDAO.findDataList(userId, dataSearch);
+	}
+
+	public productEntity getProductDetail(String id) {
+		// TODO Auto-generated method stub
+		prDAO =new productDAO();
+		return prDAO.getProductDetail(id);
+	}
+
+	public void insertOrUpdate(long userId, productEntity dataSearch) {
+		// TODO Auto-generated method stub
+		prDAO = new productDAO();
+		prDAO.insert(userId,dataSearch);
+	}
 
 }

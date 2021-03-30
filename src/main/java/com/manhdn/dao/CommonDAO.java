@@ -1,5 +1,7 @@
 package com.manhdn.dao;
 
-public class CommonDAO {
+import com.manhdn.database.CommonDatabase;
 
+public class CommonDAO {
+	private CommonDatabase cmd;
 }

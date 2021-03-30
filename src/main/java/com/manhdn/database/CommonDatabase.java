@@ -71,6 +71,13 @@ public class CommonDatabase {
 		PreparedStatement preparedStatement;
 		try {
 			preparedStatement = conn.prepareStatement(sql.toString());
+			if (params != null && params.size() > 0) {
+				// add dieu kien vao cau lenh sql
+				for (int i = 0; i < params.size(); i++) {
+					Object object = params.get(i);
+					preparedStatement.setObject(i + 1, object);
+				}
+			}
 			rs = preparedStatement.executeQuery();
 			if (rs != null) {
 				while (rs.next()) {

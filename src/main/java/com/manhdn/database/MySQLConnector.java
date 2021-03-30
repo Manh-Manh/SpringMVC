@@ -10,7 +10,7 @@ public class MySQLConnector {
 	// Khai bao JDBC driver
 	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
 	// Khai bao database url
-	static final String DB_URL = "jdbc:mysql://localhost:3306/web_dong_ho?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
+	static final String DB_URL = "jdbc:mysql://localhost:3306/web_dong_ho?useUnicode=true&characterEncoding=UTF-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
 
 	// Tai khoan, mat khau database
 	static final String USER = "admin";

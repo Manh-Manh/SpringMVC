@@ -28,26 +28,26 @@ public class HomeController extends CommonController<productEntity> {
 	productService prS;
 	@Autowired(required = false)
 	productDAO dao;
-	@RequestMapping(value = { "/app-view" }, method = RequestMethod.GET)
-	public ModelAndView homePage() throws Exception {
-		prS =new productService();
-		dao =new productDAO();
-		List<productEntity> lst = prS.findAll();
-//		Connection c =new MySQLConnector().getConnection();
-		ModelAndView mav = new ModelAndView("/user/home");
-		mav.addObject("dataList", lst);
-		return mav;
-	}
+//	@RequestMapping(value = { "/app-view" }, method = RequestMethod.GET)
+//	public ModelAndView homePage() throws Exception {
+//		prS =new productService();
+//		dao =new productDAO();
+//		List<productEntity> lst = prS.findAll();
+////		Connection c =new MySQLConnector().getConnection();
+//		ModelAndView mav = new ModelAndView("/user/home");
+//		mav.addObject("dataList", lst);
+//		return mav;
+//	}
 
 	/**
 	 * @author manhdn view detail
 	 * @return
 	 */
-	@RequestMapping(value = { "/app-view/viewDetail" }, method = RequestMethod.GET)
-	public ModelAndView viewDetail() {
-		ModelAndView mav = new ModelAndView("/user/viewDetail");
-		return mav;
-	}
+//	@RequestMapping(value = { "/app-view/viewDetail" }, method = RequestMethod.GET)
+//	public ModelAndView viewDetail() {
+//		ModelAndView mav = new ModelAndView("/user/viewDetail");
+//		return mav;
+//	}
 
 	/**
 	 * Login

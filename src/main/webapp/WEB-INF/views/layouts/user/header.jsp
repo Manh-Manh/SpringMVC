@@ -62,18 +62,13 @@
                                 <nav>
                                     <ul>
                                         <li class="has-dropdown">
-                                            <a class="active main-menu-link" href="index.html">Home <i class="fa fa-angle-down"></i></a>
+                                            <a class="active main-menu-link" href="<c:url value='/app-view/' />">Trang chủ</a>
                                             <!-- Sub Menu -->
-                                            <ul class="sub-menu">
-                                                <li><a href="index.html">Home 1</a></li>
-                                                <li><a href="index-2.html">Home 2</a></li>
-                                                <li><a href="index-3.html">Home 3</a></li>
-                                                <li><a href="index-4.html">Home 4</a></li>
-                                            </ul>
+                                            
                                         </li>
                                         <li class="has-dropdown has-megaitem">
-                                            <a href="product-details-default.html">Shop <i class="fa fa-angle-down"></i></a>
-                                            <!-- Mega Menu -->
+                                            <a href="<c:url value='/app-view/' />">Cửa hàng <!-- <i class="fa fa-angle-down"></i>--></a>
+                                            <%--<!-- Mega Menu -->
                                             <div class="mega-menu">
                                                 <ul class="mega-menu-inner">
                                                     <!-- Mega Menu Sub Link -->
@@ -124,13 +119,15 @@
                                                         </ul>
                                                     </li>
                                                 </ul>
+                                                
                                                 <div class="menu-banner">
                                                     <a href="#" class="menu-banner-link">
                                                         <img class="menu-banner-img" src="assets/images/banner/menu-banner.jpg" alt="">
                                                     </a>
                                                 </div>
-                                            </div>
+                                            </div>--%>
                                         </li>
+                                        <%--
                                         <li class="has-dropdown">
                                             <a href="blog-single-sidebar-left.html">Blog <i class="fa fa-angle-down"></i></a>
                                             <!-- Sub Menu -->
@@ -152,12 +149,12 @@
                                                 <li><a href="privacy-policy.html">Privacy Policy</a></li>
                                                 <li><a href="404.html">404 Page</a></li>
                                             </ul>
+                                        </li> --%>
+                                        <li>
+                                            <a href="about-us.html">Giới thiệu</a>
                                         </li>
                                         <li>
-                                            <a href="about-us.html">About Us</a>
-                                        </li>
-                                        <li>
-                                            <a href="contact-us.html">Contact Us</a>
+                                            <a href="contact-us.html">Liên hệ</a>
                                         </li>
                                     </ul>
                                 </nav>
@@ -166,14 +163,14 @@
                             
                             <!-- Start Header Action Link -->
                             <ul class="header-action-link action-color--black action-hover-color--golden">
-                                <li>
+                                <!-- <li>
                                     <a href="#offcanvas-wishlish" class="offcanvas-toggle">
                                         <i class="icon-heart"></i>
                                         <span class="item-count">3</span>
                                     </a>
-                                </li>
+                                </li> -->
                                 <li>
-                                    <a href="#offcanvas-add-cart" class="offcanvas-toggle">
+                                    <a href="<c:url value='/app-view/cart' />" class="">
                                         <i class="icon-bag"></i>
                                         <span class="item-count">3</span>
                                     </a>
@@ -197,7 +194,7 @@
         </div>
     </header>
     <!-- Start Header Area -->
-
+<%--
     <!-- Start Mobile Header -->
     <div class="mobile-header mobile-header-bg-color--golden section-fluid d-lg-block d-xl-none">
         <div class="container">
@@ -225,14 +222,14 @@
                                     <i class="icon-magnifier"></i>
                                 </a>
                             </li>
-                            <li>
+                            <!--<li>
                                 <a href="#offcanvas-wishlish" class="offcanvas-toggle">
                                     <i class="icon-heart"></i>
                                     <span class="item-count">3</span>
                                 </a>
-                            </li>
+                            </li>-->
                             <li>
-                                <a href="#offcanvas-add-cart" class="offcanvas-toggle">
+                                <a href="<c:url value='/app-view/cart' />" class="offcanvas-toggle">
                                     <i class="icon-bag"></i>
                                     <span class="item-count">3</span>
                                 </a>
@@ -248,9 +245,9 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div>--%>
     <!-- End Mobile Header -->
-
+<%--
     <!--  Start Offcanvas Mobile Menu Section -->
     <div id="mobile-menu-offcanvas" class="offcanvas offcanvas-rightside offcanvas-mobile-menu-section">
         <!-- Start Offcanvas Header -->
@@ -392,7 +389,7 @@
 
         </div> <!-- End Offcanvas Mobile Menu Wrapper -->
     </div> <!-- ...:::: End Offcanvas Mobile Menu Section:::... -->
-
+--%>
     <!-- Start Offcanvas Mobile Menu Section -->
     <div id="offcanvas-about" class="offcanvas offcanvas-rightside offcanvas-mobile-about-section">
         <!-- Start Offcanvas Header -->
@@ -420,7 +417,7 @@
                 </ul>
 
                 <ul class="user-link">
-                    <li><a href="wishlist.html">Wishlist</a></li>
+                    <!-- <li><a href="wishlist.html">Wishlist</a></li> -->
                     <li><a href="cart.html">Cart</a></li>
                     <li><a href="checkout.html">Checkout</a></li>
                 </ul>
@@ -434,7 +431,7 @@
         <div class="offcanvas-header text-right">
             <button class="offcanvas-close"><i class="ion-android-close"></i></button>
         </div> <!-- End Offcanvas Header -->
-
+<%--
         <!-- Start  Offcanvas Addcart Wrapper -->
         <div class="offcanvas-add-cart-wrapper">
             <h4 class="offcanvas-title">Shopping Cart</h4>
@@ -499,7 +496,7 @@
                 <li><a href="cart.html" class="btn btn-block btn-golden">View Cart</a></li>
                 <li><a href="compare.html" class=" btn btn-block btn-golden mt-5">Checkout</a></li>
             </ul>
-        </div> <!-- End  Offcanvas Addcart Wrapper -->
+        </div> <!-- End  Offcanvas Addcart Wrapper -->--%>
 
     </div> <!-- End  Offcanvas Addcart Section -->
 
@@ -510,6 +507,7 @@
             <button class="offcanvas-close"><i class="ion-android-close"></i></button>
         </div> <!-- ENd Offcanvas Header -->
 
+	<%--
         <!-- Start Offcanvas Mobile Menu Wrapper -->
         <div class="offcanvas-wishlist-wrapper">
             <h4 class="offcanvas-title">Wishlist</h4>
@@ -569,10 +567,10 @@
             <ul class="offcanvas-wishlist-action-button">
                 <li><a href="#" class="btn btn-block btn-golden">View wishlist</a></li>
             </ul>
-        </div> <!-- End Offcanvas Mobile Menu Wrapper -->
+        </div> <!-- End Offcanvas Mobile Menu Wrapper --> --%>
 
     </div> <!-- End Offcanvas Mobile Menu Section -->
-
+    
     <!-- Start Offcanvas Search Bar Section -->
     <div id="search" class="search-modal">
         <button type="button" class="close">×</button>

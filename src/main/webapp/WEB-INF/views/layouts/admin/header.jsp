@@ -237,7 +237,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="<c:url value = '#' /> " class="nav-link">
+            <a href="<c:url value = '/admin/manageSupplier' /> " class="nav-link">
               <i class="nav-icon fas fa-copy"></i>
               <p>
                 Quản lý thương hiệu
@@ -248,7 +248,7 @@
             
           </li>
           <li class="nav-item">
-            <a href="<c:url value = '#' /> " class="nav-link">
+            <a href="<c:url value = '/admin/manageOrder' /> " class="nav-link">
               <i class="nav-icon fas fa-copy"></i>
               <p>
                 Quản lý đơn hàng
@@ -268,19 +268,19 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="<c:url value = '#' /> " class="nav-link">
+                <a href="<c:url value = '/admin/manageFace' /> " class="nav-link">
                   <i class="<c:url value = '#' /> "></i>
                   <p>Mặt đồng hồ</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="<c:url value = '#' /> " class="nav-link">
+                <a href="<c:url value = '/admin/manageStrap' /> " class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Dây đồng hồ</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="<c:url value = '#' /> " class="nav-link">
+                <a href="<c:url value = '/admin/manageMachine' /> " class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Bộ máy </p>
                 </a>
@@ -288,7 +288,7 @@
             </ul>
           </li>
           <li class="nav-item">
-            <a href="<c:url value = '#' /> " class="nav-link">
+            <a href="<c:url value = '/admin/manageUser' /> " class="nav-link">
               <i class="nav-icon fas fa-tree"></i>
               <p>
                 Quản lý người dùng

@@ -327,7 +327,7 @@
                                                         </c:url>
                                                             <a href="<c:out value="${url}" /> " class="image-link" >
                                                            
-                                                                <img src="<c:out value ="${ item.productId }" />" alt="">
+                                                               
                                                                 <img src="<c:url value='/assets/images/products/${item.image}' /> " alt="">
                                                             </a>
                                                             <div class="action-link">

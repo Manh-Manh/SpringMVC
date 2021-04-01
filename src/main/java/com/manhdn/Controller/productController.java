@@ -58,7 +58,7 @@ public class productController extends CommonController<productEntity>{
 	@RequestMapping( value = { "/admin/manageProduct"}, method = RequestMethod.GET)
 	public ModelAndView manageProduct() {
 		service = new productService();
-		mav = new ModelAndView("/admin/manageProduct");
+		mav = new ModelAndView("/admin/product/manageProduct");
 		dataList = service.findDaList(0L, null);
 //		mav.addObject("dataList",dataList);;
 //		service.insertOrUpdate(0L, dataSearch);

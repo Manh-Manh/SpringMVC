@@ -37,7 +37,7 @@
                             <h6 class="sidebar-title">Thương hiệu</h6>
                             <div class="sidebar-content">
                                 <ul class="sidebar-menu">
-                                    <li>
+                                    <%---- <li>
                                         <ul class="sidebar-menu-collapse">
                                             <!-- Start Single Menu Collapse List -->
                                            <li class="sidebar-menu-collapse-list">
@@ -55,15 +55,12 @@
                                                </div>
                                            </li> <!-- End Single Menu Collapse List -->
                                        </ul>
-                                    </li>
-                                   <li ><a href="#">Football</a></li>   
-                                   <li ><a href="#"> Men's</a></li>   
-                                   <li ><a href="#"> Portable Audio</a></li>   
-                                   <li ><a href="#"> Smart Watches</a></li>   
-                                   <li ><a href="#">Tennis</a></li>   
-                                   <li ><a href="#"> Uncategorized</a></li>   
-                                   <li ><a href="#"> Video Games</a></li>   
-                                   <li ><a href="#">Women's</a></li>
+                                    </li> --%>
+                                <c:forEach var = "sup" items = "${ supplier }" >
+                                    
+                                   <li ><a href="<c:url value='#' /> "><c:out value="${sup.supplierName}" /></a></li>   
+                                   
+                                </c:forEach>
                                 </ul>
                             </div>
                         </div> <!-- End Single Sidebar Widget -->
@@ -86,36 +83,14 @@
                             <div class="sidebar-content">
                                 <div class="filter-type-select">
                                     <ul>
+                              	<c:forEach var = "machine" items="${ machine }">
                                         <li>
                                             <label class="checkbox-default" for="brakeParts">
-                                                <input type="checkbox" id="brakeParts">
-                                                <span>Brake Parts(6)</span>
+                                                <input type="checkbox" id="machine">
+                                                <span><c:out value = "${ machine.machineName } " /></span>
                                             </label>
                                         </li>
-                                        <li>
-                                            <label class="checkbox-default" for="accessories">
-                                                <input type="checkbox" id="accessories">
-                                                <span>Accessories (10)</span>
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <label class="checkbox-default" for="EngineParts">
-                                                <input type="checkbox" id="EngineParts">
-                                                <span>Engine Parts (4)</span>
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <label class="checkbox-default" for="hermes">
-                                                <input type="checkbox" id="hermes">
-                                                <span>hermes (10)</span>
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <label class="checkbox-default" for="tommyHilfiger">
-                                                <input type="checkbox" id="tommyHilfiger">
-                                                <span>Tommy Hilfiger(7)</span>
-                                            </label>
-                                        </li>
+                                </c:forEach>
                                     </ul>
                                 </div>
                             </div>
@@ -127,36 +102,14 @@
                             <div class="sidebar-content">
                                 <div class="filter-type-select">
                                     <ul>
+                                   <c:forEach var ="strap" items = "${ strap }">
                                         <li>
                                             <label class="checkbox-default" for="black">
-                                                <input type="checkbox" id="black">
-                                                <span>Black (6)</span>
+                                                <input type="checkbox" id="strap">
+                                                <span><c:out value = "${strap.strapName }" /></span>
                                             </label>
                                         </li>
-                                        <li>
-                                            <label class="checkbox-default" for="blue">
-                                                <input type="checkbox" id="blue">
-                                                <span>Blue (8)</span>
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <label class="checkbox-default" for="brown">
-                                                <input type="checkbox" id="brown">
-                                                <span>Brown (10)</span>
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <label class="checkbox-default" for="Green">
-                                                <input type="checkbox" id="Green">
-                                                <span>Green (6)</span>
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <label class="checkbox-default" for="pink">
-                                                <input type="checkbox" id="pink">
-                                                <span>Pink (4)</span>
-                                            </label>
-                                        </li>
+                                   </c:forEach>
                                     </ul>
                                 </div>
                             </div>

@@ -14,7 +14,13 @@ public class supplierDAO {
 	public supplierDAO() {
 		cmd = new CommonDatabase();
 	}
-
+	
+	
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 */
 	public supplierEntity findSupplierById(String id) {
 		supplierEntity result = new supplierEntity();
 		List<Object> params = new ArrayList<Object>();

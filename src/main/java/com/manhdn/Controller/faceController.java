@@ -6,23 +6,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.manhdn.entity.supplierEntity;
-import com.manhdn.service.productService;
-import com.manhdn.service.supplierService;
+import com.manhdn.entity.faceEntity;
+import com.manhdn.service.faceService;
 
 @Controller
-public class supplierController extends CommonController<supplierEntity>{
+public class faceController extends CommonController<faceEntity>{
 	@Autowired
-	supplierService service;
+	faceService service;
 	
 	/**
 	 * 
 	 * @return
 	 */
-	@RequestMapping( value = { "/admin/manageSupplier"}, method = RequestMethod.GET)
-	public ModelAndView manageSupplier() {
-		service = new supplierService();
-		mav = new ModelAndView("/admin/supplier/manageSupplier");
+	@RequestMapping( value = { "/admin/manageFace"}, method = RequestMethod.GET)
+	public ModelAndView manageFace() {
+		service = new faceService();
+		mav = new ModelAndView("/admin/face/manageFace");
 		dataList = service.findDaList(0L, null);
 //		mav.addObject("dataList",dataList);
 //		service.insertOrUpdate(0L, dataSearch);

@@ -1,17 +1,27 @@
 package com.manhdn.entity;
 
-public class userEntity extends CommonEntity<userEntity> {
+import com.manhdn.AppConstants;
+
+public class userEntity extends CommonEntity {
 	private String userId;
 	private String userName;
 	private String password;
 	private String email;
 	private String address;
 	private String phoneNumber;
-	private String status;
+	private Long status;
 	private String avatar;
 	private String birthDate;
 	private String del_flag;
 	private roleEntity role;
+	private userEntity son;
+	public userEntity getSon() {
+		return son;
+	}
+
+	public void setSon(userEntity son) {
+		this.son = son;
+	}
 
 	public roleEntity getRole() {
 		return role;
@@ -69,11 +79,11 @@ public class userEntity extends CommonEntity<userEntity> {
 		this.phoneNumber = phoneNumber;
 	}
 
-	public String getStatus() {
+	public Long getStatus() {
 		return status;
 	}
 
-	public void setStatus(String status) {
+	public void setStatus(Long status) {
 		this.status = status;
 	}
 
@@ -99,5 +109,13 @@ public class userEntity extends CommonEntity<userEntity> {
 
 	public void setDel_flag(String del_flag) {
 		this.del_flag = del_flag;
+	}
+	public String getStatusString() {
+		if(status == 1 || status == null) {
+			return AppConstants.ACTIVE;
+		}
+		else{
+			return AppConstants.BLOCK;
+		}
 	}
 }

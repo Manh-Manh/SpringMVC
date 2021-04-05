@@ -1,6 +1,6 @@
 package com.manhdn.entity;
 
-public class faceEntity extends CommonEntity<faceEntity> {
+public class faceEntity extends CommonEntity {
 	private String faceId;
 	private String faceName;
 	private String thickness;

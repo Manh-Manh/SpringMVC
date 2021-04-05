@@ -1,8 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ page session="true" %>
 <%@include file="/common/taglib.jsp"%>
-	
-	
+<c:if test="${ sessionScope.user != null }" >
+
+<c:out value="${ sessionScope.user.userName }" />
+</c:if>
    <div class="breadcrumb-section breadcrumb-bg-color--golden">
         <div class="breadcrumb-wrapper">
             <div class="container">
@@ -114,7 +117,7 @@
                                 </div>
                             </div>
                         </div> <!-- End Single Sidebar Widget -->
-                        
+                    <%--    
 						<!-- Start Single Sidebar Widget -->
                         <div class="sidebar-single-widget">
                             <h6 class="sidebar-title">Size mặt</h6>
@@ -197,14 +200,14 @@
                             </div>
                         </div> <!-- End Single Sidebar Widget -->
                         <!-- Start Single Sidebar Widget -->
-                        
+                 --%>       
 
                         <!-- Start Single Sidebar Widget -->
                         <div class="sidebar-single-widget">
                             <div class="sidebar-content">
-                                <a href="product-details-default.html" class="sidebar-banner img-hover-zoom">
+                                <!-- <a href="product-details-default.html" class="sidebar-banner img-hover-zoom">
                                     <img class="img-fluid" src="<c:url value='/assets/images/banner/side-banner.jpg'/>" alt="">
-                                </a>
+                                </a>-->
                             </div>
                         </div> <!-- End Single Sidebar Widget -->
 

@@ -2,7 +2,7 @@ package com.manhdn.entity;
 
 import java.text.DecimalFormat;
 
-public class productEntity extends CommonEntity<productEntity> {
+public class productEntity extends CommonEntity {
 
 	private String productName;
 	private Long quantity;

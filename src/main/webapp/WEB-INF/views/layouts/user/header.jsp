@@ -399,16 +399,22 @@
         <!-- Start Offcanvas Mobile Menu Wrapper -->
             <!-- Start Mobile contact Info -->
             <div class="mobile-contact-info">
+            
+            <c:if test="${ sessionScope.user != null }" >
+
                 <div class="logo">
+                <!-- Avatar -->
                   <a href="index.html"><img src="assets/images/logo/logo_white.png" alt=""></a>  
                 </div>
 
                 <address class="address">
-                    <span>Address: 4710-4890 Breckinridge St, Fayettevill</span> 
-                    <span>Call Us: (+800) 345 678, (+800) 123 456</span> 
-                    <span>Email: yourmail@mail.com</span>    
+                    <span><c:out value="${ sessionScope.user.userName }" /></span> 
+                    <span></span> 
+                    <span>Email: <c:out value="${ sessionScope.user.email }" /></span>    
                 </address>
-
+            	
+			
+			</c:if>
                 <ul class="social-link">
                     <li><a href="#"><i class="fa fa-facebook"></i></a></li>
                     <li><a href="#"><i class="fa fa-twitter"></i></a></li>
@@ -418,8 +424,16 @@
 
                 <ul class="user-link">
                     <!-- <li><a href="wishlist.html">Wishlist</a></li> -->
-                    <li><a href="cart.html">Cart</a></li>
-                    <li><a href="checkout.html">Checkout</a></li>
+                    <li><a href="<c:url value="/app-view/cart" />">Giỏ hàng</a></li>
+                    <li><a href="<c:url value="/app-view/checkOut" />">Thanh toán</a></li>
+                    <li>
+                     <c:if test="${ sessionScope.user == null }" >
+            			<button><a href="<c:url value="/app-view/login" /> " >Đăng nhập</a></button>
+            		 </c:if>
+            		 <c:if test="${ sessionScope.user != null }" >
+            			<button><a href="<c:url value="/app-view/logout" /> " >Đăng xuất</a></button>
+            		 </c:if>
+					</li>
                 </ul>
             </div>
             <!-- End Mobile contact Info -->

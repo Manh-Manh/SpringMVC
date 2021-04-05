@@ -8,49 +8,51 @@
                 <!--login area start-->
                 <div class="col-lg-6 col-md-6">
                     <div class="account_form" data-aos="fade-up"  data-aos-delay="0">
-                        <h3>login</h3>
-                        <form action="#" method="POST">
+                        <h3>Đăng nhập</h3>
+  				<form:form method="POST" action="login" modelAttribute="userSearch">   
+                        
                             <div class="default-form-box">
-                                <label>Username or email <span>*</span></label>
-                                <input type="text">
+                                <label>Email <span>*</span></label>
+                                <form:input path="userName" type="text" />
                             </div>
+                                                                                   
                             <div class="default-form-box">
                                 <label>Passwords <span>*</span></label>
-                                <input type="password">
+                                <form:input path="password" type="password" />
                             </div>
                             <div class="login_submit">
-                                <button class="btn btn-md btn-black-default-hover mb-4" type="submit">login</button>
-                                <label class="checkbox-default mb-4" for="offer">
+                                <button class="btn btn-md btn-black-default-hover mb-4" type="submit">Login</button>
+                                <!-- <label class="checkbox-default mb-4" for="offer">
                                     <input type="checkbox" id="offer">
                                     <span>Remember me</span>
-                                </label>
+                                </label>-->
                                 <a href="#">Lost your password?</a>
-
                             </div>
-                        </form>
+                        </form:form>
                     </div>
                 </div>
                 <!--login area start-->
-
+	
                 <!--register area start-->
+          <form:form method="POST" action="register" modelAttribute="userRegister">
                 <div class="col-lg-6 col-md-6">
                     <div class="account_form register" data-aos="fade-up"  data-aos-delay="200">
-                        <h3>Register</h3>
-                        <form action="#">
+                        <h3>Đăng ký</h3>
                             <div class="default-form-box">
-                                <label>Email address <span>*</span></label>
-                                <input type="text">
+                                <label>Email <span>*</span></label>
+                                <form:input path="userName" type="text" />
                             </div>
+                                                                                   
                             <div class="default-form-box">
                                 <label>Passwords <span>*</span></label>
-                                <input type="password">
+                                <form:input path="password" type="password" />
                             </div>
                             <div class="login_submit">
                                 <button class="btn btn-md btn-black-default-hover" type="submit">Register</button>
                             </div>
-                        </form>
                     </div>
                 </div>
+        </form:form>
                 <!--register area end-->
             </div>
         </div>

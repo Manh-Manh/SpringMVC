@@ -8,13 +8,13 @@
             <div class="container">
                 <div class="row">
                     <div class="col-12">
-                        <h3 class="breadcrumb-title">Cart</h3>
+                        <h3 class="breadcrumb-title">Giỏ hàng</h3>
                         <div class="breadcrumb-nav breadcrumb-nav-color--black breadcrumb-nav-hover-color--golden">
                             <nav aria-label="breadcrumb">
                                 <ul>
-                                    <li><a href="index.html">Home</a></li>
-                                    <li><a href="shop-grid-sidebar-left.html">Shop</a></li>
-                                    <li class="active" aria-current="page">Cart</li>
+                                    <li><a href="<c:url value="/app-view" />">Trang chủ</a></li>
+                                    <!-- <li><a href="shop-grid-sidebar-left.html">Shop</a></li>-->
+                                    <li class="active" aria-current="page">Giỏ hàng</li>
                                 </ul>
                             </nav>
                         </div>

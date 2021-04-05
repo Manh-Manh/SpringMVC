@@ -25,4 +25,11 @@ public class userService {
 		dao =new userDAO();
 		return dao.findDataList(userId, dataSearch);
 	}
+
+	public userEntity login(userEntity dataSearch) {
+		// TODO Auto-generated method stub
+		dao =new userDAO();
+		return dao.login(dataSearch);
+		
+	}
 }

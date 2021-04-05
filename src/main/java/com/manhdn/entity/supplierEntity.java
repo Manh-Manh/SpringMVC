@@ -4,7 +4,7 @@ package com.manhdn.entity;
  * supplierEntity
  * thuong hieu
  */
-public class supplierEntity extends CommonEntity<supplierEntity> {
+public class supplierEntity extends CommonEntity {
 	private String supplierId;
 	private String supplierName;
 	private String address;

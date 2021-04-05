@@ -1,6 +1,6 @@
 package com.manhdn.entity;
 
-public class roleEntity extends CommonEntity<roleEntity> {
+public class roleEntity extends CommonEntity {
 	private String roleId;
 	private String roleLevel;
 	private String description;

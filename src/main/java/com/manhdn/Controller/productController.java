@@ -1,9 +1,12 @@
 package com.manhdn.Controller;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -54,7 +57,10 @@ public class productController extends CommonController<productEntity>{
 		addData();
 		return mav;
 	}
-	
+	/**
+	 * QLSP
+	 * @return
+	 */
 	@RequestMapping( value = { "/admin/manageProduct"}, method = RequestMethod.GET)
 	public ModelAndView manageProduct() {
 		service = new productService();
@@ -64,5 +70,31 @@ public class productController extends CommonController<productEntity>{
 //		service.insertOrUpdate(0L, dataSearch);
 		addData();
 		return mav;
+	}
+	/**
+	 * 
+	 * @return
+	 */
+	@RequestMapping( value = { "/admin/addProduct"}, method = RequestMethod.GET)
+	public ModelAndView addProductView() {
+		service = new productService();
+		mav = new ModelAndView("/admin/product/addProduct");
+		dataList = service.findDaList(0L, null);
+		addData();
+		return mav;
+	}
+	
+	@RequestMapping( value = { "/admin/addProduct"}, method = RequestMethod.POST)
+	public ModelAndView addProduct(@ModelAttribute("dataInsert") productEntity dataInsert, HttpSession session) {
+		service = new productService();
+		mav = new ModelAndView("/admin/product/addProduct");
+		service.insertOrUpdate(0L, dataSearch);
+		addData();
+		return mav;
+	}
+	
+	@ModelAttribute("dataInsert")
+	productEntity dataIn() {
+		return new productEntity();
 	}
 }

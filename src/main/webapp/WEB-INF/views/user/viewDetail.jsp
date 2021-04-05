@@ -7,13 +7,13 @@
             <div class="container">
                 <div class="row">
                     <div class="col-12">
-                        <h3 class="breadcrumb-title">Product Details - Default</h3>
+                        <h3 class="breadcrumb-title">Chi tiết sản phẩm</h3>
                         <div class="breadcrumb-nav breadcrumb-nav-color--black breadcrumb-nav-hover-color--golden">
                             <nav aria-label="breadcrumb">
                                 <ul>
-                                    <li><a href="index.html">Home</a></li>
-                                    <li><a href="shop-grid-sidebar-left.html">Shop</a></li>
-                                    <li class="active" aria-current="page">Product Details Default</li>
+                                    <li><a href="<c:url value="/app-view" />">Cửa hàng</a></li>
+                                    <!-- <li><a href="shop-grid-sidebar-left.html">Shop</a></li> -->
+                                    <li class="active" aria-current="page">Chi tiết sản phẩm</li>
                                 </ul>
                             </nav>
                         </div>

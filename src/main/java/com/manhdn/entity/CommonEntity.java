@@ -5,9 +5,8 @@ import java.util.List;
 /*
  * 
  */
-public class CommonEntity<T> {
+public class CommonEntity {
 	private Long id;
-	List<T> dataList;
 
 	public Long getId() {
 		return id;
@@ -15,14 +14,6 @@ public class CommonEntity<T> {
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public List<T> getDataList() {
-		return dataList;
-	}
-
-	public void setDataList(List<T> dataList) {
-		this.dataList = dataList;
 	}
 
 	protected String created_date;

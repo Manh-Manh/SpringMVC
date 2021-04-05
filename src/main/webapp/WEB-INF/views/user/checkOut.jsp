@@ -12,9 +12,9 @@
                         <div class="breadcrumb-nav breadcrumb-nav-color--black breadcrumb-nav-hover-color--golden">
                             <nav aria-label="breadcrumb">
                                 <ul>
-                                    <li><a href="index.html">Home</a></li>
-                                    <li><a href="shop-grid-sidebar-left.html">Shop</a></li>
-                                    <li class="active" aria-current="page">Checkout</li>
+                                    <li><a href="<c:url value="/app-view" />">Trang chủ</a></li>
+                                    <!-- <li><a href="shop-grid-sidebar-left.html">Shop</a></li> -->
+                                    <li class="active" aria-current="page">Thanh toán</li>
                                 </ul>
                             </nav>
                         </div>
@@ -31,11 +31,7 @@
                 <!-- User Quick Action Form -->
                 <div class="col-12">
                     <div class="user-actions accordion" data-aos="fade-up"  data-aos-delay="0">
-                        <h3>
-                            <i class="fa fa-file-o" aria-hidden="true"></i>
-                            Returning customer?
-                            <a class="Returning" href="#" data-bs-toggle="collapse" data-bs-target="#checkout_login" aria-expanded="true">Click here to login</a>
-                        </h3>
+                        
                         <div id="checkout_login" class="collapse" data-parent="#checkout_login">
                             <div class="checkout_info">
                                 <p>If you have shopped with us before, please enter your details in the boxes below. If you are a new customer please proceed to the Billing &amp; Shipping section.</p>
@@ -61,12 +57,7 @@
                         </div>
                     </div>
                     <div class="user-actions accordion" data-aos="fade-up"  data-aos-delay="200">
-                        <h3>
-                            <i class="fa fa-file-o" aria-hidden="true"></i>
-                            Returning customer?
-                            <a class="Returning" href="#" data-bs-toggle="collapse" data-bs-target="#checkout_coupon" aria-expanded="true">Click here to enter your code</a>
-
-                        </h3>
+                        
                         <div id="checkout_coupon" class="collapse checkout_coupon" data-parent="#checkout_coupon">
                             <div class="checkout_info">
                                 <form action="#">

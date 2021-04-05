@@ -1,6 +1,6 @@
 package com.manhdn.entity;
 
-public class machineEntity extends CommonEntity<machineEntity> {
+public class machineEntity extends CommonEntity {
 	private String machineId;
 	private String machineName;
 	private String description;

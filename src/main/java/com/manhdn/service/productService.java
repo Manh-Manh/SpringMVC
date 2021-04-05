@@ -37,4 +37,10 @@ public class productService {
 		prDAO.insert(userId,dataSearch);
 	}
 
+//	public List<productEntity> insert(Long userId, productEntity dataInsert) {
+//		// TODO Auto-generated method stubv
+//		prDAO = new productDAO();
+//		prDAO.insert(userId,dataSearch);
+//	}
+
 }

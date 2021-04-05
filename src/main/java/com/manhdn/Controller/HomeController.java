@@ -52,9 +52,9 @@ public class HomeController extends CommonController<productEntity> {
 	/**
 	 * Login
 	 */
-	@RequestMapping(value = { "/app-view/login" }, method = RequestMethod.GET)
-	public ModelAndView login() {
-		ModelAndView mav = new ModelAndView("/user/login");
-		return mav;
-	}
+//	@RequestMapping(value = { "/app-view/login" }, method = RequestMethod.GET)
+//	public ModelAndView login() {
+//		ModelAndView mav = new ModelAndView("/user/login");
+//		return mav;
+//	}
 }

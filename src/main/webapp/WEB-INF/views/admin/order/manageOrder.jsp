@@ -9,7 +9,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Quản lý người dùng</h1>
+            <h1>Quản lý hóa đơn</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -26,19 +26,17 @@
           <div class="col-12">
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title">Quản lý người dùng</h3>
+                <h3 class="card-title">Quản lý hóa đơn</h3>
               </div>
               <!-- /.card-header -->
               <div class="card-body">
                 <table id="example1" class="table table-bordered table-striped">
                   <thead>
                   <tr>
-                    <th>Mã người dùng</th>
-                    <th>Tên đăng nhập</th>
-                    <th>Ảnh</th>
-                    <th>Email</th>
-                    <th>Địa chỉ</th>
-                    <th>Số điện thoại</th>
+                    <th>Mã hóa đơn</th>
+                    <th>Khách hàng</th>
+                    <th>Ngày đặt</th>
+                    <th>Tổng tiền</th>
                     <th>Trạng thái</th>
                     <th>Hành động</th>
                   </tr>
@@ -46,15 +44,20 @@
                   <tbody>
              <c:forEach var = "item" items="${dataList}">
                   <tr>
-                    <td><c:out value ="${ item.userId }" /></td>
-                    <td><c:out value ="${ item.userName }" /></td>
-                    <td><img src="<c:url value='/assets/images/users/${item.avatar}' />" style="width: 100px" alt="" ></td>
-                    <td><c:out value ="${ item.email }" /></td>
-                    <td><c:out value = "${ item.address }" /></td>
-                    <td><c:out value = "${item.phoneNumber }" /></td>
-                    <td>
-                    	<c:out value ="${ item.statusString }" />                    
-                    </td>
+                    <td><c:out value ="${ item.orderId }" /></td>
+                    <td><c:out value ="${ item.user.userName }" /></td>
+                    <td><c:out value ="${ item.oderDate }" /></td>
+                    <td><c:out value = "${ item.total }" /></td>
+                    <c:if test="${ item.status ==1 }">
+                    	<td><c:out value ="${ AppConstant.ODER_NOT_PROCESS }" /></td>
+                    </c:if>
+                    <c:if test="${ item.status == 2 }">
+                    	<td><c:out value ="${ AppConstant.ODER_PROCESS }" /></td>
+                    </c:if>
+                    <c:if test="${ item.status == 3 }">
+                    	<td><c:out value ="${ AppConstant.ODER_CANCEL }" /></td>
+                    </c:if>
+                    
                     <td>
                     	<a href="<c:url value = '#' /> ">Sửa</a>
                     	<a href="<c:url value = '#' /> ">Xóa</a>

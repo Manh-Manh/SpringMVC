@@ -1,6 +1,6 @@
 package com.manhdn.entity;
 
-public class strapEntity extends CommonEntity<strapEntity> {
+public class strapEntity extends CommonEntity {
 	private String strapId;
 	private String strapName;
 	private String materialStrap;

@@ -59,7 +59,8 @@ public class userController extends CommonController<userEntity> {
 		if (user != null) {
 			session.setAttribute("user", this.dataSearch);
 		}
-		mav = new ModelAndView("/user/home");
+		mav = new ModelAndView("redirect:/app-view/");
+//		return "redirect:/showUser/" ;
 		addData();
 		return mav;
 	}
@@ -68,7 +69,7 @@ public class userController extends CommonController<userEntity> {
 	public ModelAndView logout(HttpSession session) {
 		
 		session.removeAttribute("user");
-		mav = new ModelAndView("/user/home");
+		mav = new ModelAndView("redirect:/app-view/");
 		addData();
 		return mav;
 	}

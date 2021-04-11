@@ -34,31 +34,13 @@
                 <div class="col-lg-3">
                     <!-- Start Sidebar Area -->
                     <div class="siderbar-section" data-aos="fade-up"  data-aos-delay="0">
-
+				<%--
                         <!-- Start Single Sidebar Widget -->
                         <div class="sidebar-single-widget" >
                             <h6 class="sidebar-title">Thương hiệu</h6>
                             <div class="sidebar-content">
                                 <ul class="sidebar-menu">
-                                    <%---- <li>
-                                        <ul class="sidebar-menu-collapse">
-                                            <!-- Start Single Menu Collapse List -->
-                                           <li class="sidebar-menu-collapse-list">
-                                               <div class="accordion">
-                                                   <a href="#" class="accordion-title collapsed" data-bs-toggle="collapse" data-bs-target="#men-fashion" aria-expanded="false">Men <i class="ion-ios-arrow-right"></i></a>
-                                                   <div id="men-fashion" class="collapse">
-                                                       <ul class="accordion-category-list">
-                                                           <li><a href="#">Dresses</a></li>
-                                                           <li><a href="#">Jackets &amp; Coats</a></li>
-                                                           <li><a href="#">Sweaters</a></li>
-                                                           <li><a href="#">Jeans</a></li>
-                                                           <li><a href="#">Blouses &amp; Shirts</a></li>
-                                                       </ul>
-                                                   </div>
-                                               </div>
-                                           </li> <!-- End Single Menu Collapse List -->
-                                       </ul>
-                                    </li> --%>
+                                    
                                 <c:forEach var = "sup" items = "${ supplier }" >
                                     
                                    <li ><a href="<c:url value='#' /> "><c:out value="${sup.supplierName}" /></a></li>   
@@ -66,16 +48,45 @@
                                 </c:forEach>
                                 </ul>
                             </div>
-                        </div> <!-- End Single Sidebar Widget -->
-
+                        </div>--%> <!-- End Single Sidebar Widget -->
+						
+						<div class="sidebar-single-widget">
+                            <h6 class="sidebar-title">Thương hiệu</h6>
+                            <div class="sidebar-content">
+                                <div class="filter-type-select">
+                                    <ul>
+                              	<c:forEach var = "sup" items="${ supplier }">
+                                        <li>
+                                            <label class="checkbox-default" for="brakeParts">
+                                                <input type="checkbox" value = "${ sup.supplierId } " name="supplierId" class="advSearch"
+                                                <c:if test="${mapSearch.size()>0&& mapSearch.get('supplierId')!=null &&  mapSearch.get('supplierId').contains(sup.supplierId) }">
+                                                 	<c:out value="checked" />
+                                                 </c:if>
+                                                >
+                                                <span><c:out value = "${ sup.supplierName } " /></span>
+                                            </label>
+                                        </li>
+                                </c:forEach>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
                         <!-- Start Single Sidebar Widget -->
                         <div class="sidebar-single-widget">
                             <h6 class="sidebar-title">Mức giá</h6>
                             <div class="sidebar-content">
-                                <div id="slider-range"></div>
-                                <div class="filter-type-price">
+                                <div id="slider-range" class= "advSearch"></div>
+                                <div class="filter-type-price" class="advSearch">
                                     <label for="amount">Khoảng giá:</label>
-                                    <input type="text" id="amount">
+                                    <input type="text" id="amount" name="amount" class="advSearch" 
+                                    	<c:if test="${mapSearch.size()>0&& mapSearch.get('amount')!=null&& mapSearch.get('amount').size()>0 }">
+                                              value = "${mapSearch.get('amount').get(0)} - ${mapSearch.get('amount').get(1)}"
+                                              
+                                        </c:if>
+                                    >
+                                    <script type="text/javascript">
+                           	          
+                                    </script>
                                 </div>
                             </div>
                         </div> <!-- End Single Sidebar Widget -->
@@ -86,11 +97,18 @@
                             <div class="sidebar-content">
                                 <div class="filter-type-select">
                                     <ul>
-                              	<c:forEach var = "machine" items="${ machine }">
+                              	<c:forEach var = "m" items="${ machine }">
                                         <li>
                                             <label class="checkbox-default" for="brakeParts">
-                                                <input type="checkbox" id="machine">
-                                                <span><c:out value = "${ machine.machineName } " /></span>
+                                                <input type="checkbox" id="machine" class="advSearch" name="machineId"
+                                                 name="machineId" 
+                                                 value="${ m.machineId }"
+                                                 <c:if test="${mapSearch.size()>0&& mapSearch.get('machineId')!=null &&  mapSearch.get('machineId').contains(m.machineId) }">
+                                                 	<c:out value="checked" />
+                                                 </c:if>
+                                                 
+                                                  >
+                                                <span><c:out value = "${ m.machineName } " /></span>
                                             </label>
                                         </li>
                                 </c:forEach>
@@ -105,11 +123,16 @@
                             <div class="sidebar-content">
                                 <div class="filter-type-select">
                                     <ul>
-                                   <c:forEach var ="strap" items = "${ strap }">
+                                   <c:forEach var ="s" items = "${ strap }">
                                         <li>
                                             <label class="checkbox-default" for="black">
-                                                <input type="checkbox" id="strap">
-                                                <span><c:out value = "${strap.strapName }" /></span>
+                                            	<input type="checkbox" id="strap" name="strapId" value="${ s.strapId } " class="advSearch"
+                                            	<c:if test="${mapSearch.size()>0&& mapSearch.get('strapId')!=null &&  mapSearch.get('strapId').contains(s.strapId) }">
+                                                 	<c:out value="checked" />
+                                                 </c:if>
+                                            	>
+                                                
+                                                <span><c:out value = "${s.strapName}" /></span>
                                             </label>
                                         </li>
                                    </c:forEach>
@@ -233,7 +256,7 @@
 
                                         <!-- Start Page Amount -->
                                         <div class="page-amount ml-2">
-                                            <span>Showing 1–9 of 21 results</span>
+                                            <span>Hiển thị <c:out value="${(page-1)*6+1 }"></c:out>–<c:out value="${((page)*6)>count?count:((page)*6) }"></c:out> trên <c:out value="${count }"></c:out></span>
                                         </div> <!-- End Page Amount -->
                                     </div> <!-- End Sort tab Button -->
 									<%--
@@ -271,6 +294,9 @@
                                         <!-- Start Grid View Product -->
                                         <div class="tab-pane active show sort-layout-single" id="layout-3-grid">
                                             <div class="row">
+                                     <c:if test="${dataList==null || dataList.size()==0 }">
+                                     	<h2>Không có sản phẩm phù hợp</h2>
+                                     </c:if>
                                      <c:forEach var="item" items="${dataList}">
                                                 <div class="col-xl-4 col-sm-6 col-12">                                                
                                                     <!-- Start Product Default Single Item -->
@@ -325,6 +351,11 @@
                                                     <!-- End Product Default Single Item -->
                                                 </div>                                          
                                             </div>
+  <div>
+    <tag:paginate  page="${page}" count="${count}" type="${type}" uri="/SpringMVC/app-view" next="&raquo;" previous="&laquo;"/>
+
+</div>
+                                            
                                         </div> <!-- End Grid View Product -->
                                         <!-- Start List View Product -->
                                         <div class="tab-pane sort-layout-single" id="layout-list">
@@ -360,7 +391,7 @@
                                                     <!-- Start Product Defautlt Single -->
                                                     <div class="product-list-single product-color--golden">
                                                         <a href="product-details-default.html" class="product-list-img-link">
-                                                            <img class="img-fluid" src="<c:url value ='assets/images/product/default/home-1/default-3.jpg' /> " alt="" >
+                                                            <img class="img-fluid" src="<c:url value ='/assets/images/product/default/home-1/default-3.jpg' /> " alt="" >
                                                         </a>
                                                         <div class="product-list-content">
                                                             <h5 class="product-list-link"><a href="product-details-default.html">CONDIMENTUM POSUERE</a></h5>
@@ -387,7 +418,7 @@
                                                     <!-- Start Product Defautlt Single -->
                                                     <div class="product-list-single product-color--golden">
                                                         <a href="product-details-default.html" class="product-list-img-link">
-                                                            <img class="img-fluid" src="<c:url value ='assets/images/product/default/home-1/default-5.jpg'/> " alt="" >
+                                                            <img class="img-fluid" src="<c:url value ='/assets/images/product/default/home-1/default-5.jpg'/> " alt="" >
                                                         </a>
                                                         <div class="product-list-content">
                                                             <h5 class="product-list-link"><a href="product-details-default.html">ALIQUAM LOBORTIS</a></h5>
@@ -414,7 +445,7 @@
                                                     <!-- Start Product Defautlt Single -->
                                                     <div class="product-list-single product-color--golden">
                                                         <a href="product-details-default.html" class="product-list-img-link">
-                                                            <img class="img-fluid" src="<c:url value ='assets/images/product/default/home-1/default-7.jpg'/> " alt="" >
+                                                            <img class="img-fluid" src="<c:url value ='/assets/images/product/default/home-1/default-7.jpg'/> " alt="" >
                                                         </a>
                                                         <div class="product-list-content">
                                                             <h5 class="product-list-link"><a href="product-details-default.html">CONVALLIS QUAM SIT</a></h5>
@@ -441,7 +472,7 @@
                                                     <!-- Start Product Defautlt Single -->
                                                     <div class="product-list-single product-color--golden">
                                                         <a href="product-details-default.html" class="product-list-img-link">
-                                                            <img class="img-fluid" src="<c:url value ='assets/images/product/default/home-1/default-9.jpg'/> " alt="">
+                                                            <img class="img-fluid" src="<c:url value ='/assets/images/product/default/home-1/default-9.jpg'/> " alt="">
                                                          </a>
                                                         <div class="product-list-content">
                                                             <h5 class="product-list-link"><a href="product-details-default.html">DONEC EU LIBERO AC</a></h5>

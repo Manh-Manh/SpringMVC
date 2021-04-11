@@ -28,6 +28,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.manhdn.AppConstants;
+import com.manhdn.FunctionCommon;
 import com.manhdn.database.CommonDatabase;
 import com.manhdn.entity.*;
 
@@ -50,6 +52,8 @@ public class productDAO {
 		StringBuilder sql = new StringBuilder();
 		sql.append("SELECT * FROM products ");
 		List<Object> params = new ArrayList<>();
+
+//		sql.append(" WHERE ").append(cmd.sql_SelectLike("productName", "ÔGi"));
 		List<productEntity> lst = (List<productEntity>) cmd.getListObjByParams(sql, params, productEntity.class);
 //		productEntity pr = lst.get(0);
 //		productEntity e = getDetail("a2");
@@ -57,6 +61,7 @@ public class productDAO {
 	}
 
 	public List<productEntity> findDataList(Long userId, productEntity dataSearch) {
+
 		StringBuilder sql = new StringBuilder();
 		sql.append(" SELECT DISTINCT  p.id, p.productId, p.productName, p.quantity, p.supplierId, p.unitPrice, "
 				+ " p.disCount, p.gender, p.startDate_discount, p.endDate_discount, p.status, p.strapId, "
@@ -67,6 +72,77 @@ public class productDAO {
 				+ " join face f on f.faceId = p.faceId join machine m on m.machineId = p.machineId "
 				+ " WHERE (p.del_flag != 1 or p.del_flag is null) and p.status = 1 ");
 		List<Object> params = new ArrayList<>();
+		List<productEntity> result = new ArrayList<productEntity>();
+		result = (List<productEntity>) cmd.getListObjByParams(sql, params, productEntity.class);
+		if (result.size() > 0) {
+			for (productEntity p : result) {
+				if (null != p) {
+					// Them supplier
+					supplierEntity sup = new supplierEntity();
+					supplierDAO supDAO = new supplierDAO();
+					sup = supDAO.findSupplierById(p.getSupplierId());
+					p.setSupplier(sup);
+					// Them face
+					faceEntity face = new faceEntity();
+					faceDAO faceDAO = new faceDAO();
+					face = faceDAO.findFaceById(p.getFaceId());
+					p.setFace(face);
+					// them machine
+					machineEntity machine = new machineEntity();
+					machineDAO machineDAO = new machineDAO();
+					machine = machineDAO.findMachineById(p.getMachineId());
+					p.setMachine(machine);
+				}
+			}
+		}
+		return result;
+	}
+
+	public List<productEntity> findDataList(Long userId, Map<String, List<String>> mapSearch, Integer page, Integer pageSize) {
+
+		StringBuilder sql = new StringBuilder();
+		List<Object> params = new ArrayList<>();
+		sql.append(" SELECT DISTINCT  p.id, p.productId, p.productName, p.quantity, p.supplierId, p.unitPrice, "
+				+ " p.disCount, p.gender, p.startDate_discount, p.endDate_discount, p.status, p.strapId, "
+				+ " p.faceId, p.machineId, p.material, p.otherFunc, p.image, p.description, p.del_flag, "
+				+ " p.created_date, p.updated_date, p.deleted_date, " + " p.created_by, p.updated_by, p.deleted_by "
+				+ " FROM products p join suppliers sup on p.supplierId = sup.supplierId "
+				+ " join strap s on p.strapId = s.strapId "
+				+ " join face f on f.faceId = p.faceId join machine m on m.machineId = p.machineId "
+				+ " WHERE (p.del_flag != 1 or p.del_flag is null) and p.status = 1 ");
+		// Tìm kiếm nâng cao
+		if (mapSearch != null || mapSearch.size() == 0) {
+			Set<String> keys = mapSearch.keySet();
+			for (String key : keys) {
+				if (key.equals(AppConstants.MAP_SEARCH_PAGE)) {
+					page = Integer.valueOf(mapSearch.get(key).get(0));
+				} else {
+					if (!key.equals(AppConstants.MAP_SEARCH_AMOUNT)) {
+						if (mapSearch.get(key).size() > 0) {
+							sql.append(" AND ( ");
+							sql.append(FunctionCommon.generateSqlIn("p." + key, mapSearch.get(key)));
+							sql.append(" ) ");
+							params.addAll(mapSearch.get(key));
+						}
+					} else if (key.equals(AppConstants.MAP_SEARCH_AMOUNT)) {
+						// Timf kiem theo khoang gia
+						sql.append(" AND ( p.unitPrice BETWEEN ? AND ? )");
+						params.addAll(mapSearch.get(key));
+					}
+				}
+			}
+
+		}
+		sql.append(" ORDER By p.id ");
+		// Page size
+		if (page == null || page < 1) {
+			page = 1;
+		}
+		if (pageSize != null) {
+			sql.append(" LIMIT ?, ? ");
+			params.add((page - 1) * pageSize);
+			params.add(pageSize);
+		}
 		List<productEntity> result = new ArrayList<productEntity>();
 		result = (List<productEntity>) cmd.getListObjByParams(sql, params, productEntity.class);
 		if (result.size() > 0) {
@@ -157,10 +233,37 @@ public class productDAO {
 //			product.setCreated_by(userId);
 //		}
 		cmd = new CommonDatabase();
-		
+
 		return cmd.insertOrUpdateDataBase(sql, params);
 	}
-	
+
+	public List<productEntity> quickSearch(Long userId, String strSearch) {
+		// TODO Auto-generated method stub
+		StringBuilder sql = new StringBuilder();
+		productEntity result = new productEntity();
+		List<Object> params = new ArrayList<Object>();
+
+		sql.append("SELECT * FROM products p " + "WHERE p.productName like ? ");
+
+		sql.append(" and (p.status != 0 or p.status is null) ");
+		params.add("%" + strSearch + "%");
+		List<productEntity> lst = (List<productEntity>) cmd.getListObjByParams(sql, params, productEntity.class);
+		if (null == lst || lst.size() == 0) {
+			return null;
+		}
+		return lst;
+	}
+
+	public Integer countDataList(Long userId, Map<String, List<String>> mapSearch) {
+		// TODO Auto-generated method stub
+		List<productEntity> lst = this.findDataList(userId, mapSearch, null, null);
+		if (lst != null) {
+			return lst.size();
+		} else {
+			return 0;
+		}
+	}
+
 //	public boolean insertF(Long userId, productEntity product) {
 //		StringBuilder sql = new StringBuilder();
 //		List<Object> params = new ArrayList<>();

@@ -429,15 +429,29 @@
     $("#slider-range").slider({
         range: true,
         min: 0,
-        max: 1500,
-        values: [100, 500],
+        max: 999,
+        values: [10, 100],
         slide: function(event, ui) {
-            $("#amount").val("$" + ui.values[0] + " - $" + ui.values[1]);
+            $("#amount").val( ui.values[0] + " Tr - " + ui.values[1] + " Tr" );
         }
     });
-    $("#amount").val("$" + $("#slider-range").slider("values", 0) +
-        " - $" + $("#slider-range").slider("values", 1));
-
+/*    $("#amount").val( $("#slider-range").slider("values", 0) + " Tr"+
+        " - " + $("#slider-range").slider("values", 1) + " Tr" );*/
+	
+	$("#slider-range").each(function() {
+		var data = $("#amount").val();
+		if(data.length>0){	
+			data = data.replaceAll("Tr","").trim();
+			data= data.split("-");
+			$("#slider-range").slider('values',0,1*data[0]/1000000);
+			$("#slider-range").slider('values',1,1*data[1]/1000000);
+		}
+	});
+	
+	$("#amount").each(function(){
+		$("#amount").val( $("#slider-range").slider("values", 0) + " Tr"+
+        " - " + $("#slider-range").slider("values", 1) + " Tr" );
+	});
 
 
     /************************************************

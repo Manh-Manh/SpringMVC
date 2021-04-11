@@ -2,7 +2,9 @@
 	pageEncoding="UTF-8"%>
 <%@include file="/common/taglib.jsp"%>
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,27 +20,24 @@
 
 <!-- ::::::::::::::All CSS Files here :::::::::::::: -->
 <!-- Vendor CSS -->
-<!-- <link rel="stylesheet" href="assets/css/vendor/font-awesome.min.css">
-        <link rel="stylesheet" href="assets/css/vendor/ionicons.css">
-        <link rel="stylesheet" href="assets/css/vendor/simple-line-icons.css">
-        <link rel="stylesheet" href="assets/css/vendor/jquery-ui.min.css"> -->
+		<link rel="stylesheet" href="<c:url value='/assets/css/vendor/font-awesome.min.css' /> ">
+        <link rel="stylesheet" href="<c:url value='/assets/css/vendor/ionicons.css'/> ">
+        <link rel="stylesheet" href="<c:url value='/assets/css/vendor/simple-line-icons.css'/> ">
+        <link rel="stylesheet" href="<c:url value='/assets/css/vendor/jquery-ui.min.css'/> "> 
 
 <!-- Plugin CSS -->
-<!-- <link rel="stylesheet" href="assets/css/plugins/swiper-bundle.min.css">
-        <link rel="stylesheet" href="assets/css/plugins/animate.min.css">
-        <link rel="stylesheet" href="assets/css/plugins/nice-select.css">
-        <link rel="stylesheet" href="assets/css/plugins/venobox.min.css">
-        <link rel="stylesheet" href="assets/css/plugins/jquery.lineProgressbar.css">
-        <link rel="stylesheet" href="assets/css/plugins/aos.min.css"> -->
+		<link rel="stylesheet" href="<c:url value='/assets/css/plugins/swiper-bundle.min.css'/> ">
+        <link rel="stylesheet" href="<c:url value='/assets/css/plugins/animate.min.css'/> ">
+        <link rel="stylesheet" href="<c:url value='/assets/css/plugins/nice-select.css'/> ">
+        <link rel="stylesheet" href="<c:url value='/assets/css/plugins/venobox.min.css'/> ">
+        <link rel="stylesheet" href="<c:url value='/assets/css/plugins/jquery.lineProgressbar.css'/> ">
+        <link rel="stylesheet" href="<c:url value='/assets/css/plugins/aos.min.css'/> ">
 
 <!-- Main CSS -->
 <!-- Use the minified version files listed below for better performance and remove the files listed above -->
-<link href="<c:url value='/assets/css/vendor/vendor.min.css'/>"
-	rel="stylesheet" type="text/css">
-<link href="<c:url value='/assets/css/plugins/plugins.min.css'/>"
-	rel="stylesheet" type="text/css">
-<link href="<c:url value='/assets/css/style.min.css'/>" rel="stylesheet"
-	type="text/css">
+<link href="<c:url value='/assets/css/vendor/vendor.min.css'/> " rel="stylesheet" type="text/css">
+<link href="<c:url value='/assets/css/plugins/plugins.min.css'/> " rel="stylesheet" type="text/css">
+<link href="<c:url value='/assets/css/style.min.css'/> " rel="stylesheet" type="text/css">
 
 
 </head>
@@ -588,10 +587,10 @@
     <!-- Start Offcanvas Search Bar Section -->
     <div id="search" class="search-modal">
         <button type="button" class="close">×</button>
-        <form>
-            <input type="search" placeholder="type keyword(s) here" />
-            <button type="submit" class="btn btn-lg btn-golden">Search</button>
-        </form>
+        <form:form method="POST" action="app-view/quickSearch" modelAttribute="productSearch" >
+            <form:input type="search" path="productName" placeholder="Tên sản phẩm" />
+            <button type="submit" class="btn btn-lg btn-golden">Tìm kiếm</button>
+        </form:form>
     </div>
     <!-- End Offcanvas Search Bar Section -->
 

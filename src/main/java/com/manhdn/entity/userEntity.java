@@ -3,8 +3,9 @@ package com.manhdn.entity;
 import com.manhdn.AppConstants;
 
 public class userEntity extends CommonEntity {
-	private String userId;
+	private Long userId;
 	private String userName;
+	private String fullName;
 	private String password;
 	private String email;
 	private String address;
@@ -12,16 +13,9 @@ public class userEntity extends CommonEntity {
 	private Long status;
 	private String avatar;
 	private String birthDate;
-	private String del_flag;
+	private Integer del_flag;
 	private roleEntity role;
-	private userEntity son;
-	public userEntity getSon() {
-		return son;
-	}
-
-	public void setSon(userEntity son) {
-		this.son = son;
-	}
+	
 
 	public roleEntity getRole() {
 		return role;
@@ -31,11 +25,11 @@ public class userEntity extends CommonEntity {
 		this.role = role;
 	}
 
-	public String getUserId() {
+	public Long getUserId() {
 		return userId;
 	}
 
-	public void setUserId(String userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 
@@ -103,11 +97,11 @@ public class userEntity extends CommonEntity {
 		this.birthDate = birthDate;
 	}
 
-	public String getDel_flag() {
+	public Integer getDel_flag() {
 		return del_flag;
 	}
 
-	public void setDel_flag(String del_flag) {
+	public void setDel_flag(Integer del_flag) {
 		this.del_flag = del_flag;
 	}
 	public String getStatusString() {
@@ -117,5 +111,13 @@ public class userEntity extends CommonEntity {
 		else{
 			return AppConstants.BLOCK;
 		}
+	}
+
+	public String getFullName() {
+		return fullName;
+	}
+
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
 	}
 }

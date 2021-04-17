@@ -2,6 +2,14 @@
     pageEncoding="UTF-8"%>
 <%@include file = '/common/taglib.jsp' %>
 <!-- ...:::: Start Customer Login Section :::... -->
+<br>
+<br>
+<c:if test="${ message != null && message !='' }" >
+	<div class ="breadcrumb-title" >
+		<c:out value="${message }"></c:out>
+	</div>
+	<c:out value="${ sessionScope.user.userName }" />
+</c:if>
      <div class="customer-login">
         <div class="container">
             <div class="row">
@@ -13,12 +21,12 @@
                         
                             <div class="default-form-box">
                                 <label>Email <span>*</span></label>
-                                <form:input path="userName" type="text" />
+                                <form:input path="userName"  required="required" type="text" />
                             </div>
                                                                                    
                             <div class="default-form-box">
                                 <label>Passwords <span>*</span></label>
-                                <form:input path="password" type="password" />
+                                <form:input path="password"  required="required" type="password" />
                             </div>
                             <div class="login_submit">
                                 <button class="btn btn-md btn-black-default-hover mb-4" type="submit">Login</button>
@@ -34,25 +42,31 @@
                 <!--login area start-->
 	
                 <!--register area start-->
-          <form:form method="POST" action="register" modelAttribute="userRegister">
+         
                 <div class="col-lg-6 col-md-6">
+                 <form:form method="POST" action="register" modelAttribute="userRegister">
                     <div class="account_form register" data-aos="fade-up"  data-aos-delay="200">
                         <h3>Đăng ký</h3>
                             <div class="default-form-box">
-                                <label>Email <span>*</span></label>
-                                <form:input path="userName" type="text" />
+                                <label>Tên đăng nhập <span>*</span></label>
+                                <form:input  path="userName"  required="required" type="text" />
                             </div>
-                                                                                   
                             <div class="default-form-box">
-                                <label>Passwords <span>*</span></label>
-                                <form:input path="password" type="password" />
+                                <label>Email <span>*</span></label>
+                                
+                                <form:input  path="email" type="text" required="required" />
+                           </div>                                                                                  
+                            <div class="default-form-box">
+                                <label>Mật khẩu <span>*</span></label>
+                                <form:input  path="password"  required="required" type="password" />
                             </div>
                             <div class="login_submit">
-                                <button class="btn btn-md btn-black-default-hover" type="submit">Register</button>
+                                <button class="btn btn-md btn-black-default-hover" type="submit">Đăng kí</button>
                             </div>
                     </div>
+                      </form:form>
                 </div>
-        </form:form>
+      
                 <!--register area end-->
             </div>
         </div>

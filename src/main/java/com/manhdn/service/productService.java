@@ -58,6 +58,24 @@ public class productService {
 		return prDAO.countDataList(userId,mapSearch);
 	}
 
+	public List<productEntity> findListSale() {
+		// TODO Auto-generated method stub
+		prDAO = new productDAO();
+		return prDAO.findListSale();
+	}
+
+	public List<productEntity> finListNew() {
+		// TODO Auto-generated method stub
+		prDAO = new productDAO();
+		return prDAO.findListNew();
+	}
+
+	public List<productEntity> findListSuggest(productEntity dataSelected) {
+		// TODO Auto-generated method stub
+		prDAO = new productDAO();
+		return prDAO.findListSuggest(dataSelected);
+	}
+
 //	public List<productEntity> insert(Long userId, productEntity dataInsert) {
 //		// TODO Auto-generated method stubv
 //		prDAO = new productDAO();

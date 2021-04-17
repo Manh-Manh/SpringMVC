@@ -38,6 +38,7 @@
 <link href="<c:url value='/assets/css/vendor/vendor.min.css'/> " rel="stylesheet" type="text/css">
 <link href="<c:url value='/assets/css/plugins/plugins.min.css'/> " rel="stylesheet" type="text/css">
 <link href="<c:url value='/assets/css/style.min.css'/> " rel="stylesheet" type="text/css">
+<link href="<c:url value='/assets/css/mycss.css'/> " rel="stylesheet" type="text/css">
 
 
 </head>
@@ -61,12 +62,12 @@
                                 <nav>
                                     <ul>
                                         <li class="has-dropdown">
-                                            <a class="active main-menu-link" href="<c:url value='/app-view/' />">Trang chủ</a>
+                                            <a class="active main-menu-link home-page" href="<c:url value='/app-view/home-page' />">Trang chủ</a>
                                             <!-- Sub Menu -->
                                             
                                         </li>
                                         <li class="has-dropdown has-megaitem">
-                                            <a href="<c:url value='/app-view/' />">Cửa hàng <!-- <i class="fa fa-angle-down"></i>--></a>
+                                            <a class="home-page" href="<c:url value='/app-view/shop' />">Cửa hàng <!-- <i class="fa fa-angle-down"></i>--></a>
                                             <%--<!-- Mega Menu -->
                                             <div class="mega-menu">
                                                 <ul class="mega-menu-inner">
@@ -171,7 +172,9 @@
                                 <li>
                                     <a href="<c:url value='/app-view/cart' />" class="">
                                         <i class="icon-bag"></i>
-                                        <span class="item-count">3</span>
+                                        <span class="item-count">
+                                        <c:out value="${sessionScope.cart.listProduct!=null?sessionScope.cart.listProduct.size():0 }" />
+                                        </span>
                                     </a>
                                 </li>
                                 <li>
@@ -587,10 +590,18 @@
     <!-- Start Offcanvas Search Bar Section -->
     <div id="search" class="search-modal">
         <button type="button" class="close">×</button>
-        <form:form method="POST" action="app-view/quickSearch" modelAttribute="productSearch" >
-            <form:input type="search" path="productName" placeholder="Tên sản phẩm" />
-            <button type="submit" class="btn btn-lg btn-golden">Tìm kiếm</button>
-        </form:form>
+        
+            <!-- <input type="search" path="productName" placeholder="Tên sản phẩm" name="strSearch" > -->
+            <input type="search" id="searchString" placeholder="Tên sản phẩm" name="searchString" 
+            	<c:if test="${mapSearch.size()>0&& mapSearch.get('searchString')!=null&& mapSearch.get('searchString').size()>0 }">
+                   value = "${ mapSearch.get('searchString').get(0) }"                    
+                </c:if>
+             >
+	        
+            <li class="advSearch-link" value="1"><a href="#" class="btn btn-lg btn-golden " >Tìm kiếm</a></li>
+        
+<!--         <input type="search" id="searchString" placeholder="Tên sản phẩm" name="searchString" >
+        <a class="advSearch-link page-num active" value="1" class="btn btn-lg btn-golden">Tìm kiếm</a> -->
     </div>
     <!-- End Offcanvas Search Bar Section -->
 

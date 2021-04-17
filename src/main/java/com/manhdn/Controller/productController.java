@@ -41,8 +41,42 @@ public class productController extends CommonController<productEntity> {
 
 	@Autowired
 	productService service;
-
-	@RequestMapping(value = { "/app-view", "/app-view/homePage" }, method = RequestMethod.GET)
+	List<productEntity> listSale = new ArrayList<productEntity>();
+	List<productEntity> listNew = new ArrayList<productEntity>();
+	List<productEntity> listSuggest = new ArrayList<productEntity>();
+	@RequestMapping(value = { "/app-view/home-page", "/app-view/homePage" }, method = RequestMethod.GET)
+	public @ResponseBody ModelAndView homePage() {
+		service = new productService();
+		mav = new ModelAndView("/user/homePage");
+		refreshMap();
+		count = service.countDataList(0L, mapSearch);
+		dataList = service.findDaList(0L, mapSearch, page, pageSize);
+//		mav.addObject("dataList",dataList);;
+//		service.insertOrUpdate(0L, dataSearch);
+//		mav.addObject("count", 150);
+//		if (page != null) {
+//			this.page = page;
+//		}
+		List<productEntity> dataList2= new ArrayList<productEntity>();
+		dataList2.addAll(dataList);
+		mav.addObject("dataList2",dataList2);
+		addAttribute();
+		return mav;
+	}
+	
+	@RequestMapping(value = { "/app-view/shop" }, method = RequestMethod.GET)
+	public @ResponseBody ModelAndView shop() {
+		service = new productService();
+		mav = new ModelAndView("/user/home");
+		refreshMap();
+		count = service.countDataList(0L, mapSearch);
+		dataList = service.findDaList(0L, mapSearch, page, pageSize);
+		this.page =1;
+		addAttribute();
+		return mav;
+	}
+	
+	@RequestMapping(value = { "/app-view" }, method = RequestMethod.GET)
 	public @ResponseBody ModelAndView home(@RequestParam(value = "page", required = false) Integer page) {
 		service = new productService();
 		mav = new ModelAndView("/user/home");
@@ -50,14 +84,11 @@ public class productController extends CommonController<productEntity> {
 			count = service.countDataList(0L, mapSearch);
 			dataList = service.findDaList(0L, mapSearch, page, pageSize);
 		}
-//		mav.addObject("dataList",dataList);;
-//		service.insertOrUpdate(0L, dataSearch);
-//		mav.addObject("count", 150);
 		if (page != null) {
 			this.page = page;
 		}
 
-		addData();
+		addAttribute();
 		return mav;
 	}
 
@@ -71,19 +102,10 @@ public class productController extends CommonController<productEntity> {
 		service = new productService();
 		dataSelected = service.getProductDetail(id);
 //		smav.addObject("dataSelected", dataSelected);
-		addData();
+		addAttribute();
 		return mav;
 	}
 
-	@RequestMapping(value = { "/app-view/cart" }, method = RequestMethod.GET)
-	public ModelAndView cart() {
-		mav = new ModelAndView("/user/cart");
-//		service = new productService();
-//		dataSelected = service.getProductDetail(id);
-//		smav.addObject("dataSelected", dataSelected);
-		addData();
-		return mav;
-	}
 
 	/**
 	 * 
@@ -92,15 +114,43 @@ public class productController extends CommonController<productEntity> {
 	 * @return
 	 */
 	@RequestMapping(value = { "/app-view/quickSearch" }, method = RequestMethod.POST)
-	public ModelAndView quickSearch(@ModelAttribute("productSearch") productEntity productSearch, HttpSession session) {
+	public String quickSearch(@RequestBody String data) {
 		service = new productService();
-		this.dataSearch = productSearch;
 		this.isReload = false;
+		Gson gson = new GsonBuilder().create();
+		List<ajaxEntity> lstSearch = new ArrayList<ajaxEntity>();
+		JsonParser parser = new JsonParser();
+		JsonElement tradeElement = parser.parse(data);
+		JsonArray arr = tradeElement.getAsJsonArray();
+		for (int i = 0; i < arr.size(); i++) {
+			ajaxEntity o = (ajaxEntity) gson.fromJson(arr.get(i), ajaxEntity.class);
+			lstSearch.add(o);
+		}
+		List<String> supId = new ArrayList<String>();
+		// convert to Map
+
+		for (ajaxEntity e : lstSearch) {
+			if (!FunctionCommon.isEmpty(e.getValue())) {
+				mapSearch.put(e.getName(), e.getValue());
+			} else if (FunctionCommon.isEmpty(e.getValue())) {
+				mapSearch.put(e.getName(), new ArrayList<String>());
+			}
+		}
+		service = new productService();
 		type = "quickSearch";
-		mav = new ModelAndView("redirect:/app-view/");
-		dataList = service.quickSearch(0L, this.dataSearch.getProductName());
-		addData();
-		return mav;
+//		this.dataSearch = productSearch;		
+//		mav = new ModelAndView("/user/home");
+		this.page = Integer.valueOf(mapSearch.get(AppConstants.MAP_SEARCH_PAGE).get(0));
+		if (FunctionCommon.isEmpty(mapSearch.get(AppConstants.MAP_SEARCH_STRING))){
+			this.type = "";
+		}
+		mapSearch.remove("page");
+		count = service.countDataList(0L, mapSearch);
+		dataList = service.findDaList(0L, mapSearch, page, pageSize);
+		this.isReload = false;
+		
+		addAttribute();
+		return "quickSearch";
 	}
 
 	@RequestMapping(value = {
@@ -131,10 +181,11 @@ public class productController extends CommonController<productEntity> {
 		type = "advSearch";
 //		this.dataSearch = productSearch;		
 //		mav = new ModelAndView("/user/home");
-		this.page = Integer.valueOf(mapSearch.get("page").get(0));
+		this.page = Integer.valueOf(mapSearch.get(AppConstants.MAP_SEARCH_PAGE).get(0));
 		if (FunctionCommon.isEmpty(mapSearch.get(AppConstants.MAP_SEARCH_SUPPLIER_ID))
 				&& FunctionCommon.isEmpty(mapSearch.get(AppConstants.MAP_SEARCH_MACHINE_ID))
-				&& FunctionCommon.isEmpty(mapSearch.get(AppConstants.MAP_SEARCH_STRAP_ID))) {
+				&& FunctionCommon.isEmpty(mapSearch.get(AppConstants.MAP_SEARCH_STRAP_ID))
+				&& FunctionCommon.isEmpty(mapSearch.get(AppConstants.MAP_SEARCH_STRING))) {
 			this.type = "";
 		}
 		mapSearch.remove("page");
@@ -142,7 +193,7 @@ public class productController extends CommonController<productEntity> {
 		dataList = service.findDaList(0L, mapSearch, page, pageSize);
 		this.isReload = false;
 		
-		addData();
+		addAttribute();
 		return "advSearch";
 	}
 
@@ -158,7 +209,7 @@ public class productController extends CommonController<productEntity> {
 		dataList = service.findDaList(0L, new productEntity());
 //		mav.addObject("dataList",dataList);;
 //		service.insertOrUpdate(0L, dataSearch);
-		addData();
+		addAttribute();
 		return mav;
 	}
 
@@ -171,7 +222,7 @@ public class productController extends CommonController<productEntity> {
 		service = new productService();
 		mav = new ModelAndView("/admin/product/addProduct");
 		dataList = service.findDaList(0L, new productEntity());
-		addData();
+		addAttribute();
 		return mav;
 	}
 
@@ -180,10 +231,20 @@ public class productController extends CommonController<productEntity> {
 		service = new productService();
 		mav = new ModelAndView("/admin/product/addProduct");
 		service.insertOrUpdate(0L, dataSearch);
-		addData();
+		addAttribute();
 		return mav;
 	}
-
+	
+	private void addAttribute() {
+		listSale = service.findListSale();
+		listSuggest = service.findListSuggest(this.dataSelected);
+		listNew = service.finListNew();
+		map.addAttribute("listSale", listSale);
+		map.addAttribute("listNew", listNew);
+		map.addAttribute("listSuggest", listSuggest);
+		super.addData();
+		
+	}
 	@ModelAttribute("dataInsert")
 	productEntity dataIn() {
 		return new productEntity();

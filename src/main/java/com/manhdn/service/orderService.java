@@ -25,4 +25,17 @@ public class orderService {
 		dao =new orderDAO();
 		return dao.findDataList(orderId, dataSearch);
 	}
+
+	public boolean insertOrUpdate(Long userId, orderEntity cart, Long status) {
+		// TODO Auto-generated method stub
+		dao = new orderDAO();
+		return dao.insertOrUpdate(userId, cart, status);
+		
+	}
+
+	public orderEntity findOderByUserId(Long userId, Integer status) {
+		// TODO Auto-generated method stub
+		dao = new orderDAO();
+		return dao.findOrderByUserId(userId, status);
+	}
 }

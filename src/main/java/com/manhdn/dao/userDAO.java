@@ -1,8 +1,13 @@
 package com.manhdn.dao;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.stereotype.Repository;
+
+import com.manhdn.AppConstants;
+import com.manhdn.FunctionCommon;
 import com.manhdn.database.CommonDatabase;
 import com.manhdn.entity.userEntity;
 import com.mysql.cj.Query;
@@ -47,14 +52,19 @@ public class userDAO {
 		userEntity result = new userEntity();
 		List<Object> params = new ArrayList<Object>();
 		StringBuilder sql = new StringBuilder();
-
+		
+		if (FunctionCommon.isEmpty(dataSearch.getUserName())) {
+			return null;
+		}
+		dataSearch.setEmail(dataSearch.getUserName());
 		sql.append("SELECT * FROM users u "
 				+ " WHERE (u.status = 1 or status is null) ");
-		if(dataSearch.getEmail()!=null) {
-			sql.append("and  ( u.email = ? and u.password = ? )");
-			params.add(dataSearch.getEmail());
-			params.add(dataSearch.getPassword());
-		}
+
+		sql.append(" AND  ( ( u.email = ? and u.password = ? ) OR ( u.userName = ? and u.password = ? ) )");
+		params.add(dataSearch.getUserName());
+		params.add(dataSearch.getPassword());
+		params.add(dataSearch.getUserName());
+		params.add(dataSearch.getPassword());
 		
 		List<userEntity> lst = (List<userEntity>) cmd.getListObjByParams(sql, params, userEntity.class);
 		if (lst != null && lst.size() > 0) {
@@ -65,5 +75,58 @@ public class userDAO {
 		}
 
 		
+	}
+
+	public boolean insertOrUpdate(Long userId, userEntity user) {
+		// TODO Auto-generated method stub
+		List<Object> params = new ArrayList<Object>();
+		StringBuilder sql = new StringBuilder();
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		String dateNow = dtf.format(LocalDateTime.now());
+		user.setCreated_date(dateNow);
+		user.setUpdated_date(dateNow);
+		if(user.getUserId()==null) {
+			Long id = cmd.getMaxId("users", "id") +1;
+			user.setUserId(id);
+		}
+		sql.append("INSERT INTO `users` ( userId, userName, " 
+				+ " fullName, password, email, address, phoneNumber, status, "
+				+ " avatar, del_flag, created_date, updated_date, "
+				+ " created_by, updated_by )"
+//				+ " birthDate ) "
+				+ " VALUES ");
+		
+		sql.append("(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ) ");
+//		sql.append(""+ user.getBirthDate() != null ? (" '"+user.getBirthDate()+"' ") : null);
+//		sql.append(" ) ");
+		sql.append("ON DUPLICATE KEY UPDATE "
+				+ " fullName = VALUES(fullName), "
+				+ " email = VALUES(email), "
+				+ " address = VALUES(address), "
+				+ " phoneNumber = VALUES(phoneNumber), "
+				+ " status = VALUES(status), "
+				+ " avatar = VALUES(avatar), "
+//				+ " birthDate = VALUES(birthDate), "
+				+ " updated_date = VALUES(updated_date), "
+				+ " updated_by = VALUES(updated_by) "
+				+ "");
+		params.add(user.getUserId() != null ? user.getUserId() : "");
+		params.add(user.getUserName() != null ? user.getUserName()
+				: AppConstants.ID_USER + (cmd.getMaxId("users", "id") + 1));
+		params.add(user.getFullName() != null ? user.getFullName() : "");
+		params.add(user.getPassword() != null ? user.getPassword() : "");
+		params.add(user.getEmail() != null ? user.getEmail() : "");
+		params.add(user.getAddress() != null ? user.getAddress() : "");
+		params.add(user.getPhoneNumber() != null ? user.getPhoneNumber() : "");
+		params.add(user.getStatus() != null ? user.getStatus() : AppConstants.STATUS_ACTIVE);
+		params.add(user.getAvatar() != null ? user.getAvatar() : "");
+//		params.add(user.getBirthDate() != null ? user.getBirthDate() : "null");
+		params.add(user.getDel_flag() != null ? user.getDel_flag() : 0);
+		params.add(user.getCreated_date() != null ? user.getCreated_date() : "");
+		params.add(user.getUpdated_date() != null ? user.getUpdated_date() : "");
+		params.add(user.getCreated_by() != null ? user.getCreated_by() : 0);
+		params.add(user.getUpdated_by() != null ? user.getUpdated_by() : 0); 
+		boolean result = cmd.insertOrUpdateDataBase(sql, params);
+		return result;
 	}
 }

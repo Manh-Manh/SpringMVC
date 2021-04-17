@@ -2,7 +2,7 @@
     pageEncoding="UTF-8"%>
 
 <!-- Start Footer Section -->
-    <footer class="footer-section footer-bg">
+    <footer class="footer-section footer-bg section-top-gap-100">
         <div class="footer-wrapper">
         <!-- Start Footer Top -->
         <div class="footer-top">

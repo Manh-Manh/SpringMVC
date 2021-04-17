@@ -37,47 +37,63 @@
                                     <!-- Start Cart Table Head -->
                                     <thead>
                                         <tr>
-                                            <th class="product_remove">Delete</th>
-                                            <th class="product_thumb">Image</th>
-                                            <th class="product_name">Product</th>
-                                            <th class="product-price">Price</th>
-                                            <th class="product_quantity">Quantity</th>
-                                            <th class="product_total">Total</th>
+                                            <th class="product_remove">Xóa</th>
+                                            <th class="product_thumb">Hình ảnh</th>
+                                            <th class="product_name">Tên sản phẩm</th>
+                                            <th class="product-price">Giá</th>
+                                            <th class="product_quantity">Số lượng</th>
+                                            <th class="product_total">Thành tiền</th>
                                         </tr>
                                     </thead> <!-- End Cart Table Head -->
                                     <tbody>
+                                    <c:forEach var ="item" items = "${sessionScope.cart.listProduct }">
                                         <!-- Start Cart Single Item-->
                                         <tr>
-                                            <td class="product_remove"><a href="#"><i class="fa fa-trash-o"></i></a></td>
-                                            <td class="product_thumb"><a href="product-details-default.html"><img src="<c:url value='/assets/images/products/1-95.jpg' /> " alt=""></a></td>
-                                            <td class="product_name"><a href="product-details-default.html">Handbag fringilla</a></td>
-                                            <td class="product-price">$65.00</td>
-                                            <td class="product_quantity"><label>Quantity</label> <input min="1" max="100" value="1" type="number"></td>
-                                            <td class="product_total">$130.00</td>
+                                        <c:url var="url" value="/app-view/viewDetail" >
+                                       		<c:param name="id" value="${item.productId }"/>  
+                                        </c:url>
+                                        	<input name="productId" class="productId" type="text" hidden  value="${item.productId}" >
+                                            <td class="product_remove">
+                                            	<button value="${item.productId}" class="delCart"><i class="fa fa-trash-o"></i></button>
+                                            </td>
+                                            <td class="product_thumb">
+                                             
+                                            	<a href="${url }"><img src="<c:url value='/assets/images/products/${item.image }' /> " alt="">
+                                            	</a>
+                                           	</td>
+                                            <td class="product_name"><a href="${url }"><c:out value="${item.productName }" /></a></td>
+                                            <td class="product-price">
+                                            	<c:if test="${item.discount > 0}">
+							                        <div class="price unitPrice oldPrice">₫ 
+						                            	<s><i><c:out value="${item.stringUnitPrice }"></c:out></i></s>
+						                            </div>
+						                            <div class="price discountPrice newPrice">₫
+						                            	<c:out value="${item.stringDiscountPrice }"></c:out>
+						                            	 <i>(-<c:out value="${item.discount }"></c:out>%) </i>
+						                            </div>
+					                            </c:if>
+					                            <c:if test="${item.discount == null || item.discount <= 0}">
+							                        <div class="price unitPrice">$ 
+						                            	<c:out value="${item.stringUnitPrice }"></c:out>
+						                            </div>
+						                            <!-- <div class="price discountPrice">$ 
+						                            	<out value="${dataSelected.stringDiscountPrice }
+						                            </div> -->
+					                            </c:if>
+                                            
+                                            </td>
+                                            <td class="product_quantity"><label>Quantity</label> 
+                                            	<input name="cartQuantity" min="1" max="${item.quantity }" value="${item.cartQuantity }" type="number">
+                                            </td>
+                                            <td class="product_total"><c:out value="${item.cartTotalString }" /></td>
                                         </tr> <!-- End Cart Single Item-->
                                         <!-- Start Cart Single Item-->
-                                        <tr>
-                                            <td class="product_remove"><a href="#"><i class="fa fa-trash-o"></i></a></td>
-                                            <td class="product_thumb"><a href="product-details-default.html"><img src="<c:url value='/assets/images/products/1-95.jpg' /> " alt=""></a></td>
-                                            <td class="product_name"><a href="product-details-default.html">Handbags justo</a></td>
-                                            <td class="product-price">$90.00</td>
-                                            <td class="product_quantity"><label>Quantity</label> <input min="1" max="100" value="1" type="number"></td>
-                                            <td class="product_total">$180.00</td>
-                                        </tr> <!-- End Cart Single Item-->
-                                        <!-- Start Cart Single Item-->
-                                        <tr>
-                                            <td class="product_remove"><a href="#"><i class="fa fa-trash-o"></i></a></td>
-                                            <td class="product_thumb"><a href="product-details-default.html"><img src="<c:url value='/assets/images/products/1-95.jpg' /> " alt=""></a></td>
-                                            <td class="product_name"><a href="product-details-default.html">Handbag elit</a></td>
-                                            <td class="product-price">$80.00</td>
-                                            <td class="product_quantity"><label>Quantity</label> <input min="1" max="100" value="1" type="number"></td>
-                                            <td class="product_total">$160.00</td>
-                                        </tr> <!-- End Cart Single Item-->
+                                     </c:forEach> 
                                     </tbody>
                                 </table>
                             </div>
                             <div class="cart_submit">
-                                <button class="btn btn-md btn-golden" type="submit">update cart</button>
+                                <button class="btn btn-md btn-golden updateCart" type="submit">Cập nhật giỏ hàng</button>
                             </div>
                         </div>
                     </div>
@@ -94,24 +110,30 @@
                     </div>
                     <div class="col-lg-6 col-md-6">
                         <div class="coupon_code right"  data-aos="fade-up"  data-aos-delay="400">
-                            <h3>Cart Totals</h3>
+                            <h3>Tổng giỏ hàng </h3>
                             <div class="coupon_inner">
                                 <div class="cart_subtotal">
-                                    <p>Subtotal</p>
-                                    <p class="cart_amount">$215.00</p>
+                                    <p>Tổng sản phẩm</p>
+                                    <p class="cart_amount">
+                                    	<c:out value="${sessionScope.cart.listProduct.size() }"></c:out>
+                                    </p>
                                 </div>
                                 <div class="cart_subtotal ">
-                                    <p>Shipping</p>
-                                    <p class="cart_amount"><span>Flat Rate:</span> $255.00</p>
+                                    <p>Tổng tiền</p>
+                                    <p class="cart_amount">
+                                    	<c:out value="${sessionScope.cart.totalString }"></c:out>
+                                    </p>
                                 </div>
-                                <a href="#">Calculate shipping</a>
+                                
 
                                 <div class="cart_subtotal">
-                                    <p>Total</p>
-                                    <p class="cart_amount">$215.00</p>
+                                    <p>Thành tiền</p>
+                                    <p class="cart_amount">
+                                    	<c:out value="${sessionScope.cart.totalString }"></c:out>
+                                    </p>
                                 </div>
                                 <div class="checkout_btn">
-                                    <a href="#" class="btn btn-md btn-golden">Proceed to Checkout</a>
+                                    <a href="<c:url value='/app-view/checkOut' />" class="btn btn-md btn-golden">Thanh toán</a>
                                 </div>
                             </div>
                         </div>

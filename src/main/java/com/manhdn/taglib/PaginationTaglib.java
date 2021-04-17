@@ -10,10 +10,10 @@ import com.manhdn.AppConstants;
 import com.manhdn.FunctionCommon;
 
 public class PaginationTaglib extends SimpleTagSupport {
-	private String uri; //Link
-	private int page = 1;//Trang so
+	private String uri; // Link
+	private int page = 1;// Trang so
 	private int count;// Tổng số bản
-	private int pageSize = AppConstants.PAGE_SIZE;// 
+	private int pageSize = AppConstants.PAGE_SIZE;//
 	private int offset = 10;
 	private int steps = 10;
 	private int max = 10;
@@ -31,47 +31,42 @@ public class PaginationTaglib extends SimpleTagSupport {
 		Writer out = getWriter();
 		int pageNumber = (count % pageSize == 0 ? (count / pageSize) : (count / pageSize + 1));
 		String classs = "";
-		if(!FunctionCommon.isEmpty(type)) {
-			classs = type+"-link";
+		if (!FunctionCommon.isEmpty(type)) {
+			classs = type + "-link";
 //			uri = "#";
 		}
 		try {
 			out.write("<nav>");
-			out.write("<ul class=\"pagination\">");
-			if(page<steps)
-				out.write(constructLink(1, previous, "disabled page-item "+classs, true));
+			out.write("<ul class=\"\">");
+			if (page < steps)
+				out.write(constructLink(1, previous, "disabled " + classs, true, false));
 			else
-				out.write(constructLink(page-steps, previous, null, false));
-			
+				out.write(constructLink(steps * (page / steps - 1) + 1, previous, null, false, false));
+
 			if (pageNumber <= max) {
 				for (int itr = 1; itr <= pageNumber; itr++) {
 					if (page == itr)
-						out.write(constructLink(itr, "" + itr, "page-item active "+classs, true));
+						out.write(constructLink(itr, "" + itr, classs, true, true));
 					else
-						out.write(constructLink(itr, "" + itr, "page-item "+classs, false));
+						out.write(constructLink(itr, "" + itr, " " + classs, false, false));
 				}
 			} else if (pageNumber > max) {
-				if (page <= max) {
-					for (int itr = 1; itr <= pageNumber; itr++) {
-						if (page == itr)
-							out.write(constructLink(itr, "" + itr, "page-item active "+classs, true));
+				
+				int k = page / steps;
+				for (int itr = 1; itr <= max; itr++) {
+					if ((steps * k + itr) <= pageNumber) {
+						if (page == steps * k + itr)
+							out.write(constructLink((steps * k + itr), "" + (steps * k + itr), classs, true, true));
 						else
-							out.write(constructLink(itr, "" + itr, "page-item "+classs, false));
-					}
-				} else {
-					int k = page / max;
-					for (int itr = max * k + 1; itr <= (max * (k + 1) > pageNumber ? pageNumber : max); itr++) {
-						if (page == itr)
-							out.write(constructLink(itr, "" + itr, "page-item active "+classs, true));
-						else
-							out.write(constructLink(itr, "" + itr, "page-item "+classs, false));
+							out.write(constructLink((steps * k + itr), "" + (steps * k + itr), classs, false, false));
 					}
 				}
+				
 			}
 			if (pageNumber <= max * (page / max + 1))
-				out.write(constructLink(page + steps, next, "disabled page-item "+classs, true));
+				out.write(constructLink(steps * (page / steps + 1) + 1, next, "disabled  " + classs, true, false));
 			else
-				out.write(constructLink(page + steps, next, "page-item "+classs, false));
+				out.write(constructLink(steps * (page / steps + 1) + 1, next, " " + classs, false, false));
 			out.write("</ul>");
 			out.write("</nav>");
 		} catch (java.io.IOException ex) {
@@ -79,18 +74,19 @@ public class PaginationTaglib extends SimpleTagSupport {
 		}
 	}
 
-	private String constructLink(int page, String text, String className, boolean disabled) {
+	private String constructLink(int page, String text, String className, boolean disabled, boolean isActive) {
 		StringBuilder link = new StringBuilder("<li");
 		if (className != null) {
 			link.append(" class=\"");
 			link.append(className);
 			link.append("\"");
-			link.append(" value=\""+page+"\"" );
+			link.append(" value=\"" + page + "\"");
 		}
 		if (disabled || !FunctionCommon.isEmpty(this.type))
-			link.append(">").append("<a class= \"page-link page-num\" href=\"#\">" + text + "</a></li>");
+			link.append(">").append("<a class= \" page-num "+ (isActive?" active ":"") +(disabled?" disable ":"") + "\" href=\"#\">" + text + "</a></li>");
 		else
-			link.append(">").append("<a class= \"page-link page-num\" href=\"" + uri + "?page=" + page + "\">" + text + "</a></li>");
+			link.append(">").append("<a class= \" page-num " + (isActive?" active ":"") + "\" href=\"" + uri + "?page=" + page + "\">"
+					+ text + "</a></li>");
 		return link.toString();
 	}
 
@@ -117,8 +113,6 @@ public class PaginationTaglib extends SimpleTagSupport {
 	public void setCount(int count) {
 		this.count = count;
 	}
-
-	
 
 	public String getPrevious() {
 		return previous;
@@ -175,7 +169,5 @@ public class PaginationTaglib extends SimpleTagSupport {
 	public void setType(String type) {
 		this.type = type;
 	}
-
-	
 
 }

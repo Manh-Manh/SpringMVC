@@ -13,6 +13,15 @@ public class supplierEntity extends CommonEntity {
 	private String website;
 	private String status;
 	private String location;
+	private String logo;
+
+	public String getLogo() {
+		return logo;
+	}
+
+	public void setLogo(String logo) {
+		this.logo = logo;
+	}
 
 	public String getLocation() {
 		return location;

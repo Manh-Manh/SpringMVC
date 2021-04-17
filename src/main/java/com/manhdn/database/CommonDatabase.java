@@ -67,7 +67,6 @@ public class CommonDatabase {
 		Field fieldlist[] = T.getDeclaredFields();
 
 		JsonObject json;
-//		StringBuilder s = "SELECT s.stt, s.ten, s.lop as lophoc FROM sinhvien s";
 		List<Object> resultObj = new ArrayList();
 		PreparedStatement preparedStatement;
 		try {
@@ -133,7 +132,7 @@ public class CommonDatabase {
 	}
 
 	/**
-	 * <b>Chen hoac cap nhat ban ghi</b><br>
+	 * Chen hoac cap nhat ban ghi
 	 *
 	 * @param queryString Cau truy van
 	 * @param arrParams   Tham so
@@ -143,7 +142,7 @@ public class CommonDatabase {
 
 		Boolean valueResult = false;
 		try {
-			Date startDateLog = new Date();
+
 			conn = openConnection();
 			PreparedStatement updateSqlStatement = conn.prepareStatement(queryString.toString());
 			if (arrParams != null && arrParams.size() > 0) {
@@ -163,14 +162,36 @@ public class CommonDatabase {
 			updateSqlStatement.close();
 
 		} catch (Exception ex) {
-			System.out.println("insertOrUpdateDataBase(Chen hoac cap nhat ban ghi) - " + "Exception query: "
+			System.out.println("insertOrUpdateDataBase(Chen hoac cap nhat ban ghi) - " + "Loi: "
 					+ queryString + "\nparams: " + arrParams + ex);
 		} finally {
 			closeConnection();
 		}
 		return valueResult;
 	}
-	
-	
-	
+	/**
+	 * 
+	 * @param tableName ten bang
+	 * @param idKey Ten khoa chinh
+	 * @return
+	 * @throws SQLException 
+	 */
+	public synchronized Long getMaxId(String tableName, String idKey) {
+		StringBuilder sql =new StringBuilder();
+		sql.append("SELECT " + idKey + " FROM `" + tableName + "` ORDER BY " + idKey + " desc LIMIT 0,1");
+		conn = openConnection();
+		Long result = 0L;
+		try {
+			PreparedStatement preparedStatement = conn.prepareStatement(sql.toString());
+			rs = preparedStatement.executeQuery();
+			rs.first();
+			result = Long.valueOf(rs.getString(idKey));
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		closeConnection();
+		return result;
+		
+	}
 }

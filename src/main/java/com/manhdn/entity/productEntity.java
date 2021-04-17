@@ -6,6 +6,7 @@ public class productEntity extends CommonEntity {
 
 	private String productName;
 	private Long quantity;
+	private Long cartQuantity = 1L;
 	private String productId;
 	private String supplierId;
 	private Long unitPrice;
@@ -23,14 +24,8 @@ public class productEntity extends CommonEntity {
 	private String image;
 	private Long del_flag;
 	private String description;
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
+	private Long cartTotal;
+	private String cartTotalString;
 
 	// Supplier
 	private supplierEntity supplier;
@@ -127,7 +122,7 @@ public class productEntity extends CommonEntity {
 
 	public String getStringDiscountPrice() {
 		DecimalFormat myFormatter = new DecimalFormat("###,###,###,###");
-		return myFormatter.format(disCountPrice);
+		return myFormatter.format(this.getDisCountPrice());
 	}
 
 	public String getStringUnitPrice() {
@@ -241,5 +236,40 @@ public class productEntity extends CommonEntity {
 
 	public void setDel_flag(Long del_flag) {
 		this.del_flag = del_flag;
+	}
+
+	public Long getCartQuantity() {
+		return cartQuantity;
+	}
+
+	public void setCartQuantity(Long cart_quantity) {
+		this.cartQuantity = cart_quantity;
+	}
+
+	public Long getCartTotal() {
+		return cartQuantity * (getDisCountPrice() > 0 ? getDisCountPrice() : getUnitPrice());
+	}
+
+	public void setCartTotal(Long cartTotal) {
+		this.cartTotal = cartTotal;
+	}
+
+	public String getCartTotalString() {
+		DecimalFormat myFormatter = new DecimalFormat("###,###,###,###");
+		Long total = 0L;
+		total = cartQuantity * (getDisCountPrice() > 0 ? getDisCountPrice() : getUnitPrice());
+		return myFormatter.format(total);
+	}
+
+	public void setCartTotalString(String cartTotalString) {
+		this.cartTotalString = cartTotalString;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 }

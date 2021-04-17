@@ -7,10 +7,12 @@ import java.util.Map;
 
 import org.springframework.data.domain.Page;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.manhdn.AppConstants;
 import com.manhdn.entity.ajaxEntity;
+import com.manhdn.entity.productEntity;
 
 public class CommonController<T> {
 	protected List<T> dataList;
@@ -26,10 +28,12 @@ public class CommonController<T> {
 	protected List<ajaxEntity> lstSearch =new ArrayList<ajaxEntity>();
 	protected ModelAndView mav;
 	protected ModelMap map = new ModelMap();
+	protected String message="";
 
 	public CommonController() {
+		
 		List<String> l =new ArrayList<String>();
-		l.add("10000000");l.add("50000000");
+		l.add("5000000");l.add("15000000");
 		mapSearch.put(AppConstants.MAP_SEARCH_AMOUNT,l);
 		map.addAttribute("dataList", dataList);
 		map.addAttribute("dataSearch", dataSearch);
@@ -39,9 +43,15 @@ public class CommonController<T> {
 		map.addAttribute("page", page);
 		map.addAttribute("count", count);
 		map.addAttribute("type", type);
+		map.addAttribute("message", message);
 		
 	}
-	
+	public void refreshMap() {
+		mapSearch = new HashMap<String, List<String>>();
+		List<String> l =new ArrayList<String>();
+		l.add("5000000");l.add("15000000");
+		mapSearch.put(AppConstants.MAP_SEARCH_AMOUNT,l);
+	}
 	public void addData() {
 		map.addAttribute("dataList", dataList);
 		map.addAttribute("dataSearch", dataSearch);
@@ -51,6 +61,7 @@ public class CommonController<T> {
 		map.addAttribute("page", page);
 		map.addAttribute("count", count);
 		map.addAttribute("type", type);
+		map.addAttribute("message", message);
 		mav.addAllObjects(map);
 	}
 	public T getDataSelected() {
@@ -158,4 +169,12 @@ public class CommonController<T> {
 		this.count = count;
 	}
 
+	@ModelAttribute("productSearch")
+	productEntity productSearch() {
+		return new productEntity();
+	}	
+	@ModelAttribute("prodSelected")
+	public productEntity prodSelected() {
+		return new productEntity();
+	}
 }

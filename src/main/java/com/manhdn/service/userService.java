@@ -32,4 +32,16 @@ public class userService {
 		return dao.login(dataSearch);
 		
 	}
+
+	public boolean insertOrUpdate(Long userId, userEntity userCheckOut) {
+		// TODO Auto-generated method stub
+		dao = new userDAO();
+		return dao.insertOrUpdate(userId,userCheckOut);
+		
+	}
+
+	public boolean register(userEntity dataSearch) {
+		dao = new userDAO();
+		return dao.insertOrUpdate(null, dataSearch);
+	}
 }

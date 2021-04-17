@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -38,7 +39,7 @@ import com.manhdn.entity.*;
 public class productDAO {
 
 	private CommonDatabase cmd;
-
+	private Long priceRange = 5000000L;
 	public productDAO() {
 		cmd = new CommonDatabase();
 	}
@@ -61,7 +62,7 @@ public class productDAO {
 	}
 
 	public List<productEntity> findDataList(Long userId, productEntity dataSearch) {
-
+		
 		StringBuilder sql = new StringBuilder();
 		sql.append(" SELECT DISTINCT  p.id, p.productId, p.productName, p.quantity, p.supplierId, p.unitPrice, "
 				+ " p.disCount, p.gender, p.startDate_discount, p.endDate_discount, p.status, p.strapId, "
@@ -109,31 +110,41 @@ public class productDAO {
 				+ " FROM products p join suppliers sup on p.supplierId = sup.supplierId "
 				+ " join strap s on p.strapId = s.strapId "
 				+ " join face f on f.faceId = p.faceId join machine m on m.machineId = p.machineId "
-				+ " WHERE (p.del_flag != 1 or p.del_flag is null) and p.status = 1 ");
+				+ " WHERE (p.del_flag != 1 or p.del_flag is null) AND p.status = 1 ");
 		// Tìm kiếm nâng cao
 		if (mapSearch != null || mapSearch.size() == 0) {
 			Set<String> keys = mapSearch.keySet();
 			for (String key : keys) {
-				if (key.equals(AppConstants.MAP_SEARCH_PAGE)) {
-					page = Integer.valueOf(mapSearch.get(key).get(0));
-				} else {
-					if (!key.equals(AppConstants.MAP_SEARCH_AMOUNT)) {
-						if (mapSearch.get(key).size() > 0) {
-							sql.append(" AND ( ");
-							sql.append(FunctionCommon.generateSqlIn("p." + key, mapSearch.get(key)));
-							sql.append(" ) ");
-							params.addAll(mapSearch.get(key));
-						}
-					} else if (key.equals(AppConstants.MAP_SEARCH_AMOUNT)) {
-						// Timf kiem theo khoang gia
-						sql.append(" AND ( p.unitPrice BETWEEN ? AND ? )");
+//				if (key.equals(AppConstants.MAP_SEARCH_PAGE)) {
+//					page = Integer.valueOf(mapSearch.get(key).get(0));
+//				} else {
+				if (!key.equals(AppConstants.MAP_SEARCH_AMOUNT) && !key.equals(AppConstants.MAP_SEARCH_STRING)) {
+					if (mapSearch.get(key).size() > 0) {
+						sql.append(" AND ( ");
+						sql.append(FunctionCommon.generateSqlIn("p." + key, mapSearch.get(key)));
+						sql.append(" ) ");
 						params.addAll(mapSearch.get(key));
 					}
 				}
+				if (key.equals(AppConstants.MAP_SEARCH_AMOUNT)) {
+					// Timf kiem theo khoang gia
+					sql.append(" AND ( p.unitPrice BETWEEN ? AND ? )");
+					params.addAll(mapSearch.get(key));
+				}
+				if (key.equals(AppConstants.MAP_SEARCH_STRING)) {
+					if (!FunctionCommon.isEmpty(mapSearch.get(key))) {
+						String sqlLike = FunctionCommon.generateSqlLike("productName",
+								mapSearch.get(key).get(0));
+						if (!FunctionCommon.isEmpty(sqlLike)) {
+							sql.append(" AND ( ");
+							sql.append(sqlLike);
+							sql.append(" ) ");
+						}
+					}
+				}
 			}
-
 		}
-		sql.append(" ORDER By p.id ");
+		sql.append(" ORDER By p.unitPrice ");
 		// Page size
 		if (page == null || page < 1) {
 			page = 1;
@@ -146,8 +157,24 @@ public class productDAO {
 		List<productEntity> result = new ArrayList<productEntity>();
 		result = (List<productEntity>) cmd.getListObjByParams(sql, params, productEntity.class);
 		if (result.size() > 0) {
+			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+			String date = dtf.format(LocalDateTime.now());
 			for (productEntity p : result) {
 				if (null != p) {
+					if (p.getDiscount() != null && p.getDiscount() > 0 && p.getEndDate_discount() != null) {
+
+						try {
+							Date date_now = new SimpleDateFormat("yyyy-MM-dd").parse(date);
+							Date end_discount = new SimpleDateFormat("yyyy-MM-dd").parse(p.getEndDate_discount());
+							Integer i = date_now.compareTo(end_discount);
+							if (i > 0) {
+								p.setDiscount(0D);
+							}
+						} catch (Exception e) {
+							// TODO: handle exception
+							e.printStackTrace();
+						}
+					}
 					// Them supplier
 					supplierEntity sup = new supplierEntity();
 					supplierDAO supDAO = new supplierDAO();
@@ -262,6 +289,81 @@ public class productDAO {
 		} else {
 			return 0;
 		}
+	}
+
+	public List<productEntity> findListSale() {
+		StringBuilder sql = new StringBuilder();
+		productEntity result = new productEntity();
+		List<Object> params = new ArrayList<Object>();
+		sql.append("SELECT * FROM products p " + " WHERE p.discount > 0 AND sysdate() < p.endDate_discount ");
+		sql.append(" AND (p.status != 0 or p.status is null) ");
+		sql.append(" ORDER BY p.unitPrice ");
+		List<productEntity> lst = (List<productEntity>) cmd.getListObjByParams(sql, params, productEntity.class);
+		if (null == lst || lst.size() == 0) {
+			return null;
+		}
+		return lst;
+	}
+
+	public List<productEntity> findListNew() {
+		StringBuilder sql = new StringBuilder();
+		productEntity result = new productEntity();
+		List<Object> params = new ArrayList<Object>();
+		sql.append("SELECT * FROM products p " + " WHERE 1 ");
+		sql.append(" AND (p.status != 0 or p.status is null) ");
+		sql.append(" ORDER BY p.created_date desc LIMIT 0, 12 ");
+		List<productEntity> lst = (List<productEntity>) cmd.getListObjByParams(sql, params, productEntity.class);
+		if (null == lst || lst.size() == 0) {
+			return null;
+		}
+		return lst;
+	}
+
+	/**
+	 * Tìm kiếm sản phẩm liên quan 
+	 * - theo thương hiệu hoặc theo khoảng giá +-5 tr
+	 * @param dataSelected
+	 * @return
+	 */
+	public List<productEntity> findListSuggest(productEntity dataSelected) {
+		if(dataSelected == null) {
+			return null;
+		}
+		StringBuilder sql = new StringBuilder();
+		productEntity result = new productEntity();
+		List<Object> params = new ArrayList<Object>();
+		sql.append(" SELECT * FROM ( "
+				+ " SELECT  p.id, p.productId, p.productName, p.quantity, p.supplierId, p.unitPrice, "
+				+ " p.disCount, p.gender, p.startDate_discount, p.endDate_discount, p.status, p.strapId, "
+				+ " p.faceId, p.machineId, p.material, p.otherFunc, p.image, p.description, p.del_flag, "
+				+ " p.created_date, p.updated_date, p.deleted_date, " + " p.created_by, p.updated_by, p.deleted_by "
+				+ " FROM products p "
+//				+ " join suppliers sup on p.supplierId = sup.supplierId "
+//				+ " join strap s on p.strapId = s.strapId "
+//				+ " join face f on f.faceId = p.faceId join machine m on m.machineId = p.machineId "
+				+ " WHERE (p.del_flag != 1 or p.del_flag is null) AND p.status = 1 ");
+		// Theo thương hiệu
+		if (!FunctionCommon.isEmpty(dataSelected.getSupplierId())) {
+			sql.append(" AND ( ");
+			sql.append(" p.supplierId = ? ");
+			sql.append("  ");
+			params.add(dataSelected.getSupplierId());
+		}
+		// Theo khoangr gia +-5tr
+		if (dataSelected.getUnitPrice() != null) {
+			sql.append(" OR ( p.unitPrice BETWEEN ? AND ? )");
+			params.add(dataSelected.getUnitPrice() - priceRange);
+			params.add(dataSelected.getUnitPrice() + priceRange);
+		}
+		sql.append(" ) ");
+		sql.append(" ORDER BY RAND() LIMIT 0, 12 ) sb ");
+		sql.append(" ORDER BY sb.unitPrice ");
+		
+		List<productEntity> lst = (List<productEntity>) cmd.getListObjByParams(sql, params, productEntity.class);
+		if (null == lst || lst.size() == 0) {
+			return null;
+		}
+		return lst;
 	}
 
 //	public boolean insertF(Long userId, productEntity product) {

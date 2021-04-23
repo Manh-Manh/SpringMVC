@@ -1,17 +1,28 @@
 package com.manhdn.Controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.ModelAndView;
-
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import com.manhdn.AppConstants;
+import com.manhdn.FunctionCommon;
 import com.manhdn.entity.orderEntity;
 import com.manhdn.entity.productEntity;
 import com.manhdn.entity.userEntity;
@@ -54,8 +65,8 @@ public class userController extends CommonController<userEntity> {
 		userEntity user = service.login(this.dataSearch);
 		if (user != null) {
 			session.setAttribute(AppConstants.SESSION_USER, user);
-			orderService orderS = new orderService();
-			orderEntity cart = orderS.findOderByUserId(user.getUserId(), 1);
+			orderEntity cart = this.findCart(user.getUserId());
+			
 			if(cart != null) {
 				session.setAttribute(AppConstants.SESSION_CART, cart);
 			}
@@ -75,8 +86,8 @@ public class userController extends CommonController<userEntity> {
 			userEntity user = service.login(this.dataSearch);
 			if (user != null) {
 				session.setAttribute(AppConstants.SESSION_USER, user);
-				orderService orderS = new orderService();
-				orderEntity cart = orderS.findOderByUserId(user.getUserId(), 1);
+				
+				orderEntity cart = this.findCart(user.getUserId());
 				if (cart != null) {
 					session.setAttribute(AppConstants.SESSION_CART, cart);
 				} else {
@@ -107,9 +118,118 @@ public class userController extends CommonController<userEntity> {
 		return mav;
 	}
 
+	@RequestMapping(value = { "/app-view/myAccount" }, method = RequestMethod.GET)
+	public ModelAndView myAccount(HttpSession session,HttpServletResponse res ) {
+		res.setCharacterEncoding("UTF-8");
+		userEntity user = (userEntity) session.getAttribute(AppConstants.SESSION_USER);
+		if (user == null) {
+			mav = new ModelAndView("redirect:/app-view/login");
+			addData();
+			return mav;
+		}
+		List<orderEntity> listOrders =new ArrayList<orderEntity>();
+		orderService orderS = new orderService();
+		listOrders = (List<orderEntity>) orderS.findOderByUserId(user.getUserId(), null);
+		map.addAttribute("listOrders", listOrders);
+		
+		mav = new ModelAndView("/user/myAccount");
+		addData();
+		return mav;
+	}
+
+	@RequestMapping(value = { "/app-view/updateUser" }, method = RequestMethod.POST)
+	public ModelAndView myAccount(HttpServletRequest request, HttpSession session,
+			@ModelAttribute("userUpdate") userEntity userUpdate) {
+
+		userEntity user = (userEntity) session.getAttribute(AppConstants.SESSION_USER);
+		if (user == null || userUpdate == null) {
+			mav = new ModelAndView("redirect:/app-view/login");
+			addData();
+			return mav;
+		}
+		
+		//upload anh
+		if(userUpdate.getFileAvatar() != null) {
+			String upload = doUpload(request, userUpdate);
+			userUpdate.setAvatar(userUpdate.getFileAvatar()[0].getOriginalFilename());
+		}else {
+			userUpdate.setAvatar(user.getAvatar()!=null?user.getAvatar():"");
+		}
+		service = new userService();
+		boolean result = service.insertOrUpdate(user.getUserId(), userUpdate);
+		if(result) {
+			message = "Cập nhật thành công!";
+			session.setAttribute(AppConstants.SESSION_USER, userUpdate);
+		}
+		mav = new ModelAndView("redirect:/app-view/myAccount");
+		addData();
+		return mav;
+	}	
 	
+
+	private String doUpload(HttpServletRequest request, userEntity userUpload) {
+
+		
+
+		// Thư mục gốc upload file.
+		String uploadRootPath = request.getServletContext().getRealPath("upload");
+//		System.out.println("uploadRootPath=" + uploadRootPath);
+
+		File uploadRootDir = new File(uploadRootPath);
+		//
+		// Tạo thư mục gốc upload nếu nó không tồn tại.
+		if (!uploadRootDir.exists()) {
+			uploadRootDir.mkdirs();
+		}
+		CommonsMultipartFile[] fileDatas = userUpload.getFileAvatar();
+		//
+		List<File> uploadedFiles = new ArrayList<File>();
+		for (CommonsMultipartFile fileData : fileDatas) {
+
+			// Tên file gốc tại Client.
+			String name = fileData.getOriginalFilename();
+//			System.out.println("Client File Name = " + name);
+
+			if (name != null && name.length() > 0) {
+				try {
+					// Tạo file tại Server.
+					String urlDir = "\\..\\WEB-INF\\views\\assets\\images\\user";
+					File serverFile = new File(uploadRootDir.getAbsolutePath()+ urlDir + File.separator + name);
+
+					// Luồng ghi dữ liệu vào file trên Server.
+					BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(serverFile));
+					stream.write(fileData.getBytes());
+					stream.close();
+					//
+					// Tao file vao project
+					urlDir = "D:\\java\\web\\SpringMVC\\src\\main\\webapp\\WEB-INF\\views\\assets\\images\\user";
+					serverFile = new File( urlDir + File.separator + name);
+
+					// Luồng ghi dữ liệu vào file trên Server.
+					stream = new BufferedOutputStream(new FileOutputStream(serverFile));
+					stream.write(fileData.getBytes());
+					stream.close();
+					uploadedFiles.add(serverFile);
+//					System.out.println("Write file: " + serverFile);
+				} catch (Exception e) {
+					System.out.println("Error Write file: " + name);
+					return "Fail";
+				}
+			}
+		}
+		
+		return "Success";
+	}
 	
-	
+	private orderEntity findCart(Long userId) {
+		orderService orderS = new orderService();
+		List<orderEntity> lst = orderS.findOderByUserId(userId, AppConstants.OS_NO_ORDER);
+		orderEntity cart = null;
+		if (lst != null) {
+			cart = lst.get(0);
+		}
+		return cart;
+	}
 	@ModelAttribute("userSearch")
 	public userEntity userSearch() {
 		return new userEntity();
@@ -117,6 +237,11 @@ public class userController extends CommonController<userEntity> {
 
 	@ModelAttribute("userRegister")
 	public userEntity userRegister() {
+		return new userEntity();
+	}
+	
+	@ModelAttribute("userUpdate")
+	public userEntity userUpdate() {
 		return new userEntity();
 	}
 	@ModelAttribute("prodSelected")

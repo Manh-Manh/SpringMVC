@@ -28,6 +28,7 @@
                                 <label>Passwords <span>*</span></label>
                                 <form:input path="password"  required="required" type="password" />
                             </div>
+                            
                             <div class="login_submit">
                                 <button class="btn btn-md btn-black-default-hover mb-4" type="submit">Login</button>
                                 <!-- <label class="checkbox-default mb-4" for="offer">
@@ -59,6 +60,10 @@
                             <div class="default-form-box">
                                 <label>Mật khẩu <span>*</span></label>
                                 <form:input  path="password"  required="required" type="password" />
+                            </div>
+                            <div class="default-form-box">
+                                <label>Ngày sinh</label>
+                                <form:input type="date" name="birthday" required="required"  path="birthDate"/>
                             </div>
                             <div class="login_submit">
                                 <button class="btn btn-md btn-black-default-hover" type="submit">Đăng kí</button>

@@ -37,7 +37,7 @@
 <!-- Use the minified version files listed below for better performance and remove the files listed above -->
 <link href="<c:url value='/assets/css/vendor/vendor.min.css'/> " rel="stylesheet" type="text/css">
 <link href="<c:url value='/assets/css/plugins/plugins.min.css'/> " rel="stylesheet" type="text/css">
-<link href="<c:url value='/assets/css/style.min.css'/> " rel="stylesheet" type="text/css">
+<link href="<c:url value='/assets/css/style.css'/> " rel="stylesheet" type="text/css">
 <link href="<c:url value='/assets/css/mycss.css'/> " rel="stylesheet" type="text/css">
 
 
@@ -403,16 +403,18 @@
             <div class="mobile-contact-info">
             
             <c:if test="${ sessionScope.user != null }" >
-
+				<c:set var ="u" value="${sessionScope.user }"></c:set>
                 <div class="logo">
                 <!-- Avatar -->
-                  <a href="index.html"><img src="assets/images/logo/logo_white.png" alt=""></a>  
+                  <a href="<c:url value='/app-view/myAccount' />" >
+                   	<img class="logo-avatar"  src="<c:url value='/assets/images/user/${u.avatar}' /> " alt="">
+                  </a>  
                 </div>
 
                 <address class="address">
-                    <span><c:out value="${ sessionScope.user.userName }" /></span> 
+                    <span> <a href="<c:url value='/app-view/myAccount' />" ><c:out value="${u.fullName!=null?u.fullName:u.userName }" /></a></span> 
                     <span></span> 
-                    <span>Email: <c:out value="${ sessionScope.user.email }" /></span>    
+                    <span>Email: <c:out value="${ u.email }" /></span>    
                 </address>
             	
 			

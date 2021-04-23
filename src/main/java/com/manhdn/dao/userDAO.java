@@ -91,12 +91,12 @@ public class userDAO {
 		}
 		sql.append("INSERT INTO `users` ( userId, userName, " 
 				+ " fullName, password, email, address, phoneNumber, status, "
-				+ " avatar, del_flag, created_date, updated_date, "
+				+ " avatar, birthDate, del_flag, created_date, updated_date, "
 				+ " created_by, updated_by )"
 //				+ " birthDate ) "
 				+ " VALUES ");
 		
-		sql.append("(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ) ");
+		sql.append("(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ) ");
 //		sql.append(""+ user.getBirthDate() != null ? (" '"+user.getBirthDate()+"' ") : null);
 //		sql.append(" ) ");
 		sql.append("ON DUPLICATE KEY UPDATE "
@@ -106,7 +106,7 @@ public class userDAO {
 				+ " phoneNumber = VALUES(phoneNumber), "
 				+ " status = VALUES(status), "
 				+ " avatar = VALUES(avatar), "
-//				+ " birthDate = VALUES(birthDate), "
+				+ " birthDate = VALUES(birthDate), "
 				+ " updated_date = VALUES(updated_date), "
 				+ " updated_by = VALUES(updated_by) "
 				+ "");
@@ -119,8 +119,8 @@ public class userDAO {
 		params.add(user.getAddress() != null ? user.getAddress() : "");
 		params.add(user.getPhoneNumber() != null ? user.getPhoneNumber() : "");
 		params.add(user.getStatus() != null ? user.getStatus() : AppConstants.STATUS_ACTIVE);
-		params.add(user.getAvatar() != null ? user.getAvatar() : "");
-//		params.add(user.getBirthDate() != null ? user.getBirthDate() : "null");
+		params.add(user.getAvatar() != null ? user.getAvatar() : "default-avatar.png");
+		params.add(user.getBirthDate() != null ? user.getBirthDate() : dateNow);
 		params.add(user.getDel_flag() != null ? user.getDel_flag() : 0);
 		params.add(user.getCreated_date() != null ? user.getCreated_date() : "");
 		params.add(user.getUpdated_date() != null ? user.getUpdated_date() : "");

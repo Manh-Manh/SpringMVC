@@ -2,12 +2,10 @@
 	pageEncoding="UTF-8"%>
 <%@ page session="true" %>
 <%@include file="/common/taglib.jsp"%>
-
-<c:if test="${ message != null }" >
-	
-		<c:out value="${message }"></c:out>
-	
-	<c:out value="${ sessionScope.user.userName }" />
+<c:if test="${sessionScope.message!=null && sessionScope.message!=''  }">
+<script>
+	alert("${ sessionScope.message }");
+</script>
 </c:if>
 <!-- Offcanvas Overlay -->
     <div class="offcanvas-overlay"></div>
@@ -22,7 +20,7 @@
                 <div class="hero-single-slider-item swiper-slide">
                     <!-- Hero Slider Image -->
                     <div class="hero-slider-bg">
-                        <img src="<c:url value='/assets/images/hero-slider/home-1/hero-slider-1.jpg ' /> " alt="">
+                        <img src="<c:url value='/assets/images/hero-slider/seiko-banner.jpg ' /> " alt="">
                     </div>
                     <!-- Hero Slider Content -->
                     <div class="hero-slider-wrapper">
@@ -43,7 +41,7 @@
                 <div class="hero-single-slider-item swiper-slide">
                     <!-- Hero Slider Image -->
                     <div class="hero-slider-bg">
-                        <img src="<c:url value='/assets/images/hero-slider/home-1/hero-slider-2.jpg' /> " alt="">
+                        <img src="<c:url value='/assets/images/hero-slider/orient-banner.jpg' /> " alt="">
                     </div>
                     <!-- Hero Slider Content -->
                     <div class="hero-slider-wrapper">
@@ -79,7 +77,8 @@
                 <div class="row">
                 <c:forEach var="item" items="${supplier }"> 
                     <!-- Start Service Promo Single Item -->
-                    <div class="col-lg-4 col-sm-6 col-12">
+                    <div class="col-lg-4 col-sm-6 col-12 supplierLogo">
+                    <input name="supplierLogo-id" hidden= "true" value="${item.supplierId }" >
                     <a href="#">
                         <div class="service-promo-single-item" data-aos="fade-up"  data-aos-delay="0">
                            <div class="image" style="width:45%">
@@ -93,7 +92,7 @@
                             </div>
                         </div>
                       </a>
-                    </div>
+                   </div>
                 </c:forEach>
                     
                 </div>

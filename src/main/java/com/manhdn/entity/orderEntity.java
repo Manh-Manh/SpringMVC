@@ -67,10 +67,24 @@ public class orderEntity extends CommonEntity {
 			return t;
 		}
 	}
-	
+	// String total
 	public String  getTotalString() {
 		Long t = this.getTotal();
 		DecimalFormat myFormatter = new DecimalFormat("###,###,###,###");
 		return myFormatter.format(t);
+	}
+	// String status
+	public String getStatusString() {
+		if(this.status == 1L) {
+			return "Chưa đặt hàng.";
+		}else if (this.status == 2L) {
+			return "Đang xử lý.";
+		}else if (this.status == 3L) {
+			return "Đã xử lý.";
+		}else if(this.status == 4L) {
+			return "Đã hủy.";
+		}else {
+			return "";
+		}
 	}
 }

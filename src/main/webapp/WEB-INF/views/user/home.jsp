@@ -256,8 +256,11 @@
 
                                         <!-- Start Page Amount -->
                                         <div class="page-amount ml-2">
+                                        <c:if test="${dataList!=null || dataList.size()>0 }">
                                             <span>Hiển thị <c:out value="${(page-1)*6+1 }"></c:out>–<c:out value="${((page)*6)>count?count:((page)*6) }"></c:out> trên <c:out value="${count }"></c:out></span>
-                                        </div> <!-- End Page Amount -->
+                                         <!-- End Page Amount -->
+                                        </c:if>
+                                        </div>
                                     </div> <!-- End Sort tab Button -->
 									<%--
                                     <!-- Start Sort Select Option -->

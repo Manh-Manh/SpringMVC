@@ -8,6 +8,7 @@ public class AppConstants {
 	public static final Long OS_NO_ORDER = 1L;
 	public static final Long OS_ORDERED = 2L;
 	public static final Long OS_ORDER_COMPLETE = 3L;
+	public static final Long OS_ORDER_CANCEL = 4L;
 	// table name
 	public static String SUP = "supplier";
 	public static String FACE = "face";
@@ -39,6 +40,8 @@ public class AppConstants {
 	// Session
 	public static String SESSION_CART = "cart";
 	public static String SESSION_USER = "user";
+	public static String SESSION_MESSAGE = "message";
+	
 	
 	// Sinh ID
 	public static String ID_PRODUCT = "PRO";

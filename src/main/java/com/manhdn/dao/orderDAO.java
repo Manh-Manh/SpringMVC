@@ -102,40 +102,69 @@ public class orderDAO {
 		return (result&&result2);
 	}
 	
-	public orderEntity findOrderByUserId(Long userId, Integer status) {
-		StringBuilder sql = new StringBuilder();
-		List<Object> params = new ArrayList<Object>();
-		sql.append("SELECT * FROM `order` WHERE userId = ? and status = ? ");
-		if(status == null) {
-			status = 1;
-		}
+	public List<orderEntity> findOrderByUserId(Long userId, Long osNoOrder) {
+
 		if(userId == null) {
 			return null;
 		}
+		StringBuilder sql = new StringBuilder();
+		List<Object> params = new ArrayList<Object>();
+		sql.append("SELECT * FROM `order` WHERE userId = ? ");
 		params.add(userId);
-		params.add(status);
+		if(osNoOrder != null) {
+			sql.append(" and status = ? ");
+			params.add(osNoOrder);
+		}
 		List<orderEntity> lst = (List<orderEntity>) cmd.getListObjByParams(sql, params, orderEntity.class);
 		if (lst.size() > 0) {
-			orderEntity cart = lst.get(0);
-			// Tim chi tiet hoa don
-			StringBuilder sql2 = new StringBuilder();
-			List<Object> params2 = new ArrayList<Object>();
-			sql2.append(" SELECT * FROM `products` p WHERE p.status = 1 AND p.productId IN ( "
-					+ "	SELECT od.productId FROM order_detail od WHERE od.orderId = ? " + ")");
-			params2.add(cart.getOrderId());
-			List<productEntity> lstProduct = (List<productEntity>) cmd.getListObjByParams(sql2, params2,
-					productEntity.class);
-			if (lstProduct.size() > 0) {
-				cart.setListProduct(lstProduct);
-				return cart;
-			} else {
-				return null;
+			for(orderEntity o : lst) {
+				// Tim chi tiet hoa don
+				StringBuilder sql2 = new StringBuilder();
+				List<Object> params2 = new ArrayList<Object>();
+				sql2.append(" SELECT * FROM `products` p WHERE p.status = 1 AND p.productId IN ( "
+						+ "	SELECT od.productId FROM order_detail od WHERE od.orderId = ? " + ")");
+				params2.add(o.getOrderId());
+				List<productEntity> lstProduct = (List<productEntity>) cmd.getListObjByParams(sql2, params2,
+						productEntity.class);
+				if (lstProduct.size() > 0) {
+					o.setListProduct(lstProduct);
+				}
 			}
 //			return cart;
 		} else {
 			return null;
 		}
-	
+	return lst;
 	}
+	public orderEntity findOrderByUserId(String orderId) {
+		if(FunctionCommon.isEmpty(orderId)) {
+			return null;
+		}
+		StringBuilder sql = new StringBuilder();
+		List<Object> params = new ArrayList<Object>();
+		sql.append("SELECT * FROM `order` WHERE orderId = ? ");
+		params.add(orderId);
+		List<orderEntity> lst = (List<orderEntity>) cmd.getListObjByParams(sql, params, orderEntity.class);
+		if (lst.size() > 0) {
+			for (orderEntity o : lst) {
+				// Tim chi tiet hoa don
+				StringBuilder sql2 = new StringBuilder();
+				List<Object> params2 = new ArrayList<Object>();
+				sql2.append(" SELECT * FROM `products` p WHERE p.status = 1 AND p.productId IN ( "
+						+ "	SELECT od.productId FROM order_detail od WHERE od.orderId = ? " + ")");
+				params2.add(o.getOrderId());
+				List<productEntity> lstProduct = (List<productEntity>) cmd.getListObjByParams(sql2, params2,
+						productEntity.class);
+				if (lstProduct.size() > 0) {
+					o.setListProduct(lstProduct);
+				}
+			}
+//			return cart;
+		} else {
+			return null;
+		}
+		return lst.get(0);
+	}
+	
 
 }

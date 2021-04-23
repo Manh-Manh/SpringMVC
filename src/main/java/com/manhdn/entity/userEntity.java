@@ -1,5 +1,7 @@
 package com.manhdn.entity;
 
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
+
 import com.manhdn.AppConstants;
 
 public class userEntity extends CommonEntity {
@@ -15,7 +17,15 @@ public class userEntity extends CommonEntity {
 	private String birthDate;
 	private Integer del_flag;
 	private roleEntity role;
-	
+	private CommonsMultipartFile[] fileAvatar;
+
+	public CommonsMultipartFile[] getFileAvatar() {
+		return fileAvatar;
+	}
+
+	public void setFileAvatar(CommonsMultipartFile[] fileAvatar) {
+		this.fileAvatar = fileAvatar;
+	}
 
 	public roleEntity getRole() {
 		return role;

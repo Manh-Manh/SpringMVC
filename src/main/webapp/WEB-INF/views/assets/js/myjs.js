@@ -324,7 +324,7 @@ $(document).ready(function() {
         });
 	});
 	
-	
+	// so luong k dc nho hon 1
 	$("input[name='cartQuantity']").change(function(){
 		var v =$(this).val();
 		if(v<1){
@@ -332,6 +332,76 @@ $(document).ready(function() {
 		}
 	});
 	
+	//
+	$('.supplierLogo').click(function(){
+		
+		var map = new Map();
+		var data = [];
+		var sup = $(this).find("input[name='supplierLogo-id']");
+		$(sup).each(function() {
+			data.push($(this).val());
+		});
+		map.set('supplierId',data);
+		data= new Array();			
+		data.push("1");
+		map.set("page", data);	
+		array = Array.from(map, ([name, value]) => ({ name, value }));
+		
+		$.ajax({
+            type : "POST",
+            contentType : "application/json",
+            url : "/SpringMVC/app-view/advSearch",
+            data : JSON.stringify(array),
+            dataType : 'json',
+			beforeSend: function(xhr) {
+			            xhr.setRequestHeader("Accept", "application/json");
+			            xhr.setRequestHeader("Content-Type", "application/json");
+						xhr.responseType = 'json';
+			        },
+            timeout : 100000,
+            success : function(d) {
+				window.location.href='http://localhost:8088/SpringMVC/app-view';
+				console.log("SEUCCESS");
+                console.log("SUCCESS: ", d);
+            },
+            error : function(e) {
+				//window.location.reload();
+				
+				window.location.href='http://localhost:8088/SpringMVC/app-view';
+                console.log("ERROR: ", e);
+            },
+            done : function(e) {
+                console.log("DONE");
+            }
+        });
+	});
+	
+	// preview anh
+	function readURL(input) {
+	  if (input.files && input.files[0]) {
+	    var reader = new FileReader();
+	    
+	    reader.onload = function(e) {
+		      $('#img-avatar').attr('src', e.target.result);
+		    }
+	    
+	    reader.readAsDataURL(input.files[0]); // convert to base64 string
+	  }
+	}
+
+	$("#fileInput").change(function() {
+	  readURL(this);
+	});
+	
+	$("#urlCancel").click(function(e){
+		if(!confirm('Bạn có chắc muốn hủy không?')){
+			e.preventDefault();
+		}else{
+			$(this).attr('href',$(this).attr('data-url'));	
+		}
+//		alert($(this).attr('data-url'));
+		
+	});
 	//alert($("#slider").slider('values'));
 });
 /*// ajax Search

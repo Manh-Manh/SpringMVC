@@ -59,4 +59,5 @@ public class FunctionCommon {
 	public static boolean isEmpty(List<? extends Object> lst) {
 		return (lst == null || lst.size() == 0);
 	}
+	
 }

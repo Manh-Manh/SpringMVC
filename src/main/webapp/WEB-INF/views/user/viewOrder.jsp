@@ -8,6 +8,7 @@
 	alert("${ sessionScope.message }");
 </script>
 </c:if>
+
 <!-- ...:::: Start Breadcrumb Section:::... -->
     <div class="breadcrumb-section breadcrumb-bg-color--golden">
         <div class="breadcrumb-wrapper">
@@ -20,7 +21,7 @@
                                 <ul>
                                     <li><a href="<c:url value="/app-view" />">Trang chủ</a></li>
                                     <!-- <li><a href="shop-grid-sidebar-left.html">Shop</a></li>-->
-                                    <li class="active" aria-current="page">Giỏ hàng</li>
+                                    <li class="active" aria-current="page">Xem đơn hàng</li>
                                 </ul>
                             </nav>
                         </div>
@@ -52,7 +53,7 @@
                                         </tr>
                                     </thead> <!-- End Cart Table Head -->
                                     <tbody>
-                                    <c:forEach var ="item" items = "${sessionScope.cart.listProduct }">
+                                    <c:forEach var ="item" items = "${dataSelected.listProduct }">
                                         <!-- Start Cart Single Item-->
                                         <tr>
                                         <c:url var="url" value="/app-view/viewDetail" >
@@ -89,7 +90,7 @@
                                             
                                             </td>
                                             <td class="product_quantity"><label></label> 
-                                            	<input name="cartQuantity" min="1" max="${item.quantity }" value="${item.cartQuantity }" type="number">
+                                            	<input disabled="disabled" name="cartQuantity" min="1" max="${item.quantity }" value="${item.cartQuantity }" type="number">
                                             </td>
                                             <td class="product_total"><c:out value="${item.cartTotalString }" /></td>
                                         </tr> <!-- End Cart Single Item-->
@@ -98,9 +99,18 @@
                                     </tbody>
                                 </table>
                             </div>
+                            <c:if test="${item.status == 2 }">
                             <div class="cart_submit">
-                                <button class="btn btn-md btn-golden updateCart" type="submit">Cập nhật giỏ hàng</button>
+                                <button class="btn btn-md btn-golden updateCart" type="button">
+                                	
+             	                       <c:url var="urlCancel" value="/app-view/cancelOrder" >
+                							<c:param name="orderId" value="${item.orderId }"/>  
+                                     </c:url>
+                                   	<a id="urlCancel" data-url="${ urlCancel}" href="#" class="view">Hủy</a>
+                                  	
+                                </button>
                             </div>
+                            </c:if>	
                         </div>
                     </div>
                 </div>
@@ -121,13 +131,13 @@
                                 <div class="cart_subtotal">
                                     <p>Tổng sản phẩm</p>
                                     <p class="cart_amount">
-                                    	<c:out value="${sessionScope.cart.listProduct.size() }"></c:out>
+                                    	<c:out value="${dataSelected.listProduct.size() }"></c:out>
                                     </p>
                                 </div>
                                 <div class="cart_subtotal ">
                                     <p>Tổng tiền</p>
                                     <p class="cart_amount">
-                                    	<c:out value="${sessionScope.cart.totalString }"></c:out>
+                                    	<c:out value="${dataSelected.totalString }"></c:out>
                                     </p>
                                 </div>
                                 
@@ -135,7 +145,7 @@
                                 <div class="cart_subtotal">
                                     <p>Thành tiền</p>
                                     <p class="cart_amount">
-                                    	<c:out value="${sessionScope.cart.totalString }"></c:out>
+                                    	<c:out value="${dataSelected.totalString }"></c:out>
                                     </p>
                                 </div>
                                 <div class="checkout_btn">

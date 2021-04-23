@@ -1,34 +1,15 @@
 package com.manhdn.dao;
 
-import java.io.BufferedReader;
-import java.io.DataInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileReader;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.Set;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import org.w3c.dom.ls.LSInput;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.manhdn.AppConstants;
 import com.manhdn.FunctionCommon;
 import com.manhdn.database.CommonDatabase;
@@ -75,27 +56,28 @@ public class productDAO {
 		List<Object> params = new ArrayList<>();
 		List<productEntity> result = new ArrayList<productEntity>();
 		result = (List<productEntity>) cmd.getListObjByParams(sql, params, productEntity.class);
-		if (result.size() > 0) {
-			for (productEntity p : result) {
-				if (null != p) {
-					// Them supplier
-					supplierEntity sup = new supplierEntity();
-					supplierDAO supDAO = new supplierDAO();
-					sup = supDAO.findSupplierById(p.getSupplierId());
-					p.setSupplier(sup);
-					// Them face
-					faceEntity face = new faceEntity();
-					faceDAO faceDAO = new faceDAO();
-					face = faceDAO.findFaceById(p.getFaceId());
-					p.setFace(face);
-					// them machine
-					machineEntity machine = new machineEntity();
-					machineDAO machineDAO = new machineDAO();
-					machine = machineDAO.findMachineById(p.getMachineId());
-					p.setMachine(machine);
-				}
-			}
-		}
+		fillDataInDataList(result);
+//		if (result.size() > 0) {
+//			for (productEntity p : result) {
+//				if (null != p) {
+//					// Them supplier
+//					supplierEntity sup = new supplierEntity();
+//					supplierDAO supDAO = new supplierDAO();
+//					sup = supDAO.findSupplierById(p.getSupplierId());
+//					p.setSupplier(sup);
+//					// Them face
+//					faceEntity face = new faceEntity();
+//					faceDAO faceDAO = new faceDAO();
+//					face = faceDAO.findFaceById(p.getFaceId());
+//					p.setFace(face);
+//					// them machine
+//					machineEntity machine = new machineEntity();
+//					machineDAO machineDAO = new machineDAO();
+//					machine = machineDAO.findMachineById(p.getMachineId());
+//					p.setMachine(machine);
+//				}
+//			}
+//		}
 		return result;
 	}
 
@@ -156,43 +138,44 @@ public class productDAO {
 		}
 		List<productEntity> result = new ArrayList<productEntity>();
 		result = (List<productEntity>) cmd.getListObjByParams(sql, params, productEntity.class);
-		if (result.size() > 0) {
-			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-			String date = dtf.format(LocalDateTime.now());
-			for (productEntity p : result) {
-				if (null != p) {
-					if (p.getDiscount() != null && p.getDiscount() > 0 && p.getEndDate_discount() != null) {
-
-						try {
-							Date date_now = new SimpleDateFormat("yyyy-MM-dd").parse(date);
-							Date end_discount = new SimpleDateFormat("yyyy-MM-dd").parse(p.getEndDate_discount());
-							Integer i = date_now.compareTo(end_discount);
-							if (i > 0) {
-								p.setDiscount(0D);
-							}
-						} catch (Exception e) {
-							// TODO: handle exception
-							e.printStackTrace();
-						}
-					}
-					// Them supplier
-					supplierEntity sup = new supplierEntity();
-					supplierDAO supDAO = new supplierDAO();
-					sup = supDAO.findSupplierById(p.getSupplierId());
-					p.setSupplier(sup);
-					// Them face
-					faceEntity face = new faceEntity();
-					faceDAO faceDAO = new faceDAO();
-					face = faceDAO.findFaceById(p.getFaceId());
-					p.setFace(face);
-					// them machine
-					machineEntity machine = new machineEntity();
-					machineDAO machineDAO = new machineDAO();
-					machine = machineDAO.findMachineById(p.getMachineId());
-					p.setMachine(machine);
-				}
-			}
-		}
+		fillDataInDataList(result);
+//		if (result.size() > 0) {
+//			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+//			String date = dtf.format(LocalDateTime.now());
+//			for (productEntity p : result) {
+//				if (null != p) {
+//					if (p.getDiscount() != null && p.getDiscount() > 0 && p.getEndDate_discount() != null) {
+//
+//						try {
+//							Date date_now = new SimpleDateFormat("yyyy-MM-dd").parse(date);
+//							Date end_discount = new SimpleDateFormat("yyyy-MM-dd").parse(p.getEndDate_discount());
+//							Integer i = date_now.compareTo(end_discount);
+//							if (i > 0) {
+//								p.setDiscount(0D);
+//							}
+//						} catch (Exception e) {
+//							// TODO: handle exception
+//							e.printStackTrace();
+//						}
+//					}
+//					// Them supplier
+//					supplierEntity sup = new supplierEntity();
+//					supplierDAO supDAO = new supplierDAO();
+//					sup = supDAO.findSupplierById(p.getSupplierId());
+//					p.setSupplier(sup);
+//					// Them face
+//					faceEntity face = new faceEntity();
+//					faceDAO faceDAO = new faceDAO();
+//					face = faceDAO.findFaceById(p.getFaceId());
+//					p.setFace(face);
+//					// them machine
+//					machineEntity machine = new machineEntity();
+//					machineDAO machineDAO = new machineDAO();
+//					machine = machineDAO.findMachineById(p.getMachineId());
+//					p.setMachine(machine);
+//				}
+//			}
+//		}
 		return result;
 	}
 
@@ -224,24 +207,25 @@ public class productDAO {
 		if (null == lst || lst.size() == 0) {
 			return null;
 		}
+		fillDataInDataList(lst);
 		result = lst.get(0);
-		if (null != result) {
-			// Them supplier
-			supplierEntity sup = new supplierEntity();
-			supplierDAO supDAO = new supplierDAO();
-			sup = supDAO.findSupplierById(result.getSupplierId());
-			result.setSupplier(sup);
-			// Them face
-			faceEntity face = new faceEntity();
-			faceDAO faceDAO = new faceDAO();
-			face = faceDAO.findFaceById(result.getFaceId());
-			result.setFace(face);
-			// them machine
-			machineEntity machine = new machineEntity();
-			machineDAO machineDAO = new machineDAO();
-			machine = machineDAO.findMachineById(result.getMachineId());
-			result.setMachine(machine);
-		}
+//		if (null != result) {
+//			// Them supplier
+//			supplierEntity sup = new supplierEntity();
+//			supplierDAO supDAO = new supplierDAO();
+//			sup = supDAO.findSupplierById(result.getSupplierId());
+//			result.setSupplier(sup);
+//			// Them face
+//			faceEntity face = new faceEntity();
+//			faceDAO faceDAO = new faceDAO();
+//			face = faceDAO.findFaceById(result.getFaceId());
+//			result.setFace(face);
+//			// them machine
+//			machineEntity machine = new machineEntity();
+//			machineDAO machineDAO = new machineDAO();
+//			machine = machineDAO.findMachineById(result.getMachineId());
+//			result.setMachine(machine);
+//		}
 		return result;
 	}
 
@@ -278,6 +262,7 @@ public class productDAO {
 		if (null == lst || lst.size() == 0) {
 			return null;
 		}
+		fillDataInDataList(lst);
 		return lst;
 	}
 
@@ -302,6 +287,7 @@ public class productDAO {
 		if (null == lst || lst.size() == 0) {
 			return null;
 		}
+		fillDataInDataList(lst);
 		return lst;
 	}
 
@@ -316,6 +302,7 @@ public class productDAO {
 		if (null == lst || lst.size() == 0) {
 			return null;
 		}
+		fillDataInDataList(lst);
 		return lst;
 	}
 
@@ -363,7 +350,51 @@ public class productDAO {
 		if (null == lst || lst.size() == 0) {
 			return null;
 		}
+		fillDataInDataList(lst);
 		return lst;
+	}
+
+	/**
+	 * them du lieu cho danh sach san pham
+	 * @param lst
+	 */
+	public void fillDataInDataList(List<productEntity> lst) {
+		if (lst.size() > 0) {
+			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+			String date = dtf.format(LocalDateTime.now());
+			for (productEntity p : lst) {
+				if (null != p) {
+					if (p.getDiscount() != null && p.getDiscount() > 0 && p.getEndDate_discount() != null) {
+						try {
+							Date date_now = new SimpleDateFormat("yyyy-MM-dd").parse(date);
+							Date end_discount = new SimpleDateFormat("yyyy-MM-dd").parse(p.getEndDate_discount());
+							Integer i = date_now.compareTo(end_discount);
+							if (i > 0) {
+								p.setDiscount(0D);
+							}
+						} catch (Exception e) {
+							// TODO: handle exception
+							e.printStackTrace();
+						}
+					}
+					// Them supplier
+					supplierEntity sup = new supplierEntity();
+					supplierDAO supDAO = new supplierDAO();
+					sup = supDAO.findSupplierById(p.getSupplierId());
+					p.setSupplier(sup);
+					// Them face
+					faceEntity face = new faceEntity();
+					faceDAO faceDAO = new faceDAO();
+					face = faceDAO.findFaceById(p.getFaceId());
+					p.setFace(face);
+					// them machine
+					machineEntity machine = new machineEntity();
+					machineDAO machineDAO = new machineDAO();
+					machine = machineDAO.findMachineById(p.getMachineId());
+					p.setMachine(machine);
+				}
+			}
+		}
 	}
 
 //	public boolean insertF(Long userId, productEntity product) {

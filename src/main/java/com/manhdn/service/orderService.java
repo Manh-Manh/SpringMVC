@@ -33,9 +33,14 @@ public class orderService {
 		
 	}
 
-	public orderEntity findOderByUserId(Long userId, Integer status) {
+	public List<orderEntity> findOderByUserId(Long userId, Long osNoOrder) {
 		// TODO Auto-generated method stub
 		dao = new orderDAO();
-		return dao.findOrderByUserId(userId, status);
+		return dao.findOrderByUserId(userId, osNoOrder);
+	}
+
+	public orderEntity findOrderById(String orderId) {
+		dao = new orderDAO();
+		return dao.findOrderByUserId(orderId);
 	}
 }

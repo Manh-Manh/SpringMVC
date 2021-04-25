@@ -121,6 +121,7 @@ public class userController extends CommonController<userEntity> {
 	@RequestMapping(value = { "/app-view/myAccount" }, method = RequestMethod.GET)
 	public ModelAndView myAccount(HttpSession session,HttpServletResponse res ) {
 		res.setCharacterEncoding("UTF-8");
+		message="";
 		userEntity user = (userEntity) session.getAttribute(AppConstants.SESSION_USER);
 		if (user == null) {
 			mav = new ModelAndView("redirect:/app-view/login");
@@ -147,7 +148,7 @@ public class userController extends CommonController<userEntity> {
 			addData();
 			return mav;
 		}
-		
+		userUpdate.setPassword(user.getPassword());
 		//upload anh
 		if(userUpdate.getFileAvatar() != null) {
 			String upload = doUpload(request, userUpdate);
@@ -166,6 +167,36 @@ public class userController extends CommonController<userEntity> {
 		return mav;
 	}	
 	
+	@RequestMapping(value = { "/app-view/changePassword" }, method = RequestMethod.POST)
+	public ModelAndView changePassword(HttpServletRequest request, HttpSession session,
+			@ModelAttribute("userUpdate") userEntity userUpdate) {
+		mav = new ModelAndView("redirect:/app-view/myAccount");
+		userEntity user = (userEntity) session.getAttribute(AppConstants.SESSION_USER);
+		if (user == null || userUpdate == null) {
+			mav = new ModelAndView("redirect:/app-view/login");
+			addData();
+			return mav;
+		}
+		if(!userUpdate.getPassword().equals(user.getPassword())) {
+//			userUpdate.setPassword(userUpdate.getNewPassword());
+			message = "Mật khẩu không đúng!";
+			session.setAttribute(AppConstants.SESSION_MESSAGE, message);
+			session.setAttribute(AppConstants.SESSION_USER, user);
+			return mav;
+		}
+		user.setPassword(userUpdate.getNewPassword());
+		service = new userService();
+		boolean result = service.insertOrUpdate(user.getUserId(), user);
+		if(result) {
+			message = "Cập nhật thành công!";
+
+			session.setAttribute(AppConstants.SESSION_MESSAGE, message);
+			session.setAttribute(AppConstants.SESSION_USER, user);
+		}
+		mav = new ModelAndView("redirect:/app-view/myAccount");
+		addData();
+		return mav;
+	}	
 
 	private String doUpload(HttpServletRequest request, userEntity userUpload) {
 
@@ -240,10 +271,7 @@ public class userController extends CommonController<userEntity> {
 		return new userEntity();
 	}
 	
-	@ModelAttribute("userUpdate")
-	public userEntity userUpdate() {
-		return new userEntity();
-	}
+	
 	@ModelAttribute("prodSelected")
 	public productEntity prodSelected() {
 		return new productEntity();

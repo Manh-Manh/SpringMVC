@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.data.domain.Page;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -13,6 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.manhdn.AppConstants;
 import com.manhdn.entity.ajaxEntity;
 import com.manhdn.entity.productEntity;
+import com.manhdn.entity.userEntity;
 
 public class CommonController<T> {
 	protected List<T> dataList;
@@ -176,5 +179,13 @@ public class CommonController<T> {
 	@ModelAttribute("prodSelected")
 	public productEntity prodSelected() {
 		return new productEntity();
+	}
+	@ModelAttribute("userUpdate")
+	public userEntity userUpdate() {
+		return new userEntity();
+	}
+	
+	public void addMessage(String message, HttpSession session) {
+		session.setAttribute(AppConstants.SESSION_MESSAGE, message);
 	}
 }

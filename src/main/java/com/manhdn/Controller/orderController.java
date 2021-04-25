@@ -48,8 +48,6 @@ public class orderController extends CommonController<orderEntity> {
 		service = new orderService();
 		mav = new ModelAndView("/admin/order/manageOrder");
 		dataList = service.findDaList(0L, null);
-//		mav.addObject("dataList",dataList);
-//		service.insertOrUpdate(0L, dataSearch);
 		addData();
 		return mav;
 	}
@@ -63,6 +61,7 @@ public class orderController extends CommonController<orderEntity> {
 	@RequestMapping(value = { "/app-view/cart" }, method = RequestMethod.GET)
 	public ModelAndView viewCart(HttpSession session) {
 		mav = new ModelAndView("/user/cart");
+		message = "";
 		orderEntity cart = (orderEntity) session.getAttribute(AppConstants.SESSION_CART);
 		if (cart == null || cart.getListProduct().size() == 0) {
 			cart = new orderEntity();
@@ -109,13 +108,14 @@ public class orderController extends CommonController<orderEntity> {
 		boolean s = service.insertOrUpdate(user.getUserId(), dataSelected, AppConstants.OS_ORDER_CANCEL);
 		if (s) {
 			message = "Hủy đơn hàng thành công!";
-			session.setAttribute(AppConstants.SESSION_MESSAGE, message);;
+			addMessage(message, session);
 
 		} else {
 			message = "Hủy đơn hàng thất bại!";
-			session.setAttribute(AppConstants.SESSION_MESSAGE, message);;
+			addMessage(message, session);
 
 		}
+		mav = new ModelAndView("redirect:/app-view/myAccount");
 		addData();
 		return mav;
 	}
@@ -212,18 +212,13 @@ public class orderController extends CommonController<orderEntity> {
 		res.setCharacterEncoding("UTF-8");
 		mav = new ModelAndView("/user/checkOut");
 		userEntity user = (userEntity) session.getAttribute(AppConstants.SESSION_USER);
-		String message = (String) session.getAttribute(AppConstants.SESSION_MESSAGE);
-		if (message == null) {
-			session.setAttribute(AppConstants.SESSION_MESSAGE, message);
-		}
+		String message = "";
+
 		if (user == null || user.getUserId() == null) {
 			ModelAndView m = new ModelAndView("redirect:/app-view/login");
 			return m;
 		}
 
-//		service = new productService();
-//		dataSelected = service.getProductDetail(id);
-//		smav.addObject("dataSelected", dataSelected);
 		addData();
 		return mav;
 	}
@@ -233,10 +228,6 @@ public class orderController extends CommonController<orderEntity> {
 	public ModelAndView doCheckOut(@ModelAttribute("userCheckOut") userEntity userCheckOut, HttpSession session) {
 		mav = new ModelAndView("/user/checkOut");
 		userEntity user = (userEntity) session.getAttribute(AppConstants.SESSION_USER);
-		String message = (String) session.getAttribute(AppConstants.SESSION_MESSAGE);
-		if (message == null) {
-			session.setAttribute(AppConstants.SESSION_MESSAGE, message);
-		}
 		message = "";
 		if (user == null || user.getUserId() == null) {
 			ModelAndView m = new ModelAndView("redirect:/app-view/login");
@@ -252,7 +243,7 @@ public class orderController extends CommonController<orderEntity> {
 			boolean updateUser = userS.insertOrUpdate(null, user);
 			if (updateUser == false) {
 				message = "Đặt hàng không thành công!";
-				addData();
+				addMessage(message, session);
 				return mav;
 			}
 		}
@@ -263,11 +254,13 @@ public class orderController extends CommonController<orderEntity> {
 		boolean result = orderS.insertOrUpdate(user.getUserId(), cart, AppConstants.OS_ORDERED);
 		if (!result) {
 			message = "Đặt hàng không thành công!";
+			addMessage(message, session);
 			addData();
 			return mav;
 		}
 		mav = new ModelAndView("redirect:/app-view/homePage");
 		message = "Đặt hàng thành công!";
+		addMessage(message, session);
 		cart.getListProduct().clear();
 		addData();
 		return mav;

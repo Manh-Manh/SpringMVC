@@ -199,7 +199,7 @@
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
           <li class="nav-item">
-            <a href="<c:url value = '#' /> " class="nav-link">
+            <a href="<c:url value = '/app-view/home-page' /> " class="nav-link">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
                 Trang chủ

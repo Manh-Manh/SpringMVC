@@ -13,6 +13,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.manhdn.AppConstants;
+import com.manhdn.entity.ajaxEntity;
 import com.manhdn.entity.faceEntity;
 import com.manhdn.entity.machineEntity;
 import com.manhdn.entity.strapEntity;
@@ -83,6 +84,11 @@ public class menuInterceptor implements HandlerInterceptor {
 			lstStrap.add(e);
 		}
 		request.setAttribute(AppConstants.STRAP, lstStrap);
+		// list gender
+		List<String> lstGender = new ArrayList<String>();
+		lstGender.add("Nam");
+		lstGender.add("Nữ");
+		request.setAttribute(AppConstants.GENDER, lstGender);
 		return true;
 	}
 

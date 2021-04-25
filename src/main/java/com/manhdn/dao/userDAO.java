@@ -22,7 +22,7 @@ public class userDAO {
 		cmd = new CommonDatabase();
 	}
 
-	public userEntity findFaceById(String id) {
+	public userEntity findUserById(Long id) {
 		userEntity result = new userEntity();
 		List<Object> params = new ArrayList<Object>();
 		StringBuilder sql = new StringBuilder();
@@ -101,6 +101,7 @@ public class userDAO {
 //		sql.append(" ) ");
 		sql.append("ON DUPLICATE KEY UPDATE "
 				+ " fullName = VALUES(fullName), "
+				+ " password = VALUES(password), "
 				+ " email = VALUES(email), "
 				+ " address = VALUES(address), "
 				+ " phoneNumber = VALUES(phoneNumber), "
@@ -114,7 +115,7 @@ public class userDAO {
 		params.add(user.getUserName() != null ? user.getUserName()
 				: AppConstants.ID_USER + (cmd.getMaxId("users", "id") + 1));
 		params.add(user.getFullName() != null ? user.getFullName() : "");
-		params.add(user.getPassword() != null ? user.getPassword() : "");
+		params.add(user.getPassword() != null ? user.getPassword() : "123");
 		params.add(user.getEmail() != null ? user.getEmail() : "");
 		params.add(user.getAddress() != null ? user.getAddress() : "");
 		params.add(user.getPhoneNumber() != null ? user.getPhoneNumber() : "");

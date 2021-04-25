@@ -30,7 +30,7 @@
                                     <div class="hero-slider-content">
                                         <h4 class="subtitle">Seiko</h4>
                                         <h2 class="title">Ưu đãi hấp dẫn <br> Uy tín chất lượng </h2>
-                                        <a href="product-details-default.html" class="btn btn-lg btn-outline-golden">Khám phá </a>
+                                        <a href="<c:url value='/app-view/shop' />" class="btn btn-lg btn-outline-golden">Khám phá </a>
                                     </div>
                                 </div>
                             </div>
@@ -51,7 +51,7 @@
                                     <div class="hero-slider-content">
                                         <h4 class="subtitle">Kiểu dáng mới</h4>
                                         <h2 class="title">Thiết kế đẳng cấp <br> Sang trọng </h2>
-                                        <a href="product-details-default.html" class="btn btn-lg btn-outline-golden">Khám phá</a>
+                                        <a href="<c:url value='/app-view/shop' />" class="btn btn-lg btn-outline-golden">Khám phá</a>
                                     </div>
                                 </div>
                             </div>
@@ -111,77 +111,26 @@
                          <!-- Start Banner Single Item -->
                         <div class="banner-single-item banner-style-1 banner-animation img-responsive" data-aos="fade-up"  data-aos-delay="0">
                             <div class="image">
-                                <img src="<c:url value='/assets/images/banner/banner-style-1-img-1.jpg' /> " alt="">
+                                <img src="<c:url value='/assets/images/logo/bst-dong-ho-cho-nam.jpg' /> " alt="">
                             </div>
-                            <div class="content">
-                                <h4 class="title">Mini rechargeable
-                                    Table Lamp - E216</h4>
-                                <h5 class="sub-title">We design your home</h5>
-                                <a href="product-details-default.html" class="btn btn-lg btn-outline-golden icon-space-left"><span class="d-flex align-items-center">discover now <i class="ion-ios-arrow-thin-right"></i></span></a>
+                            <div class="content action-link">
+                                <h3 class="title" style="color: wheat;">Đồng hồ dành cho nam</h3>
+                                <h4><a href="#" class="genderLogo" data-val="Nam" class="btn btn-lg btn-outline-golden icon-space-left"><span class="d-flex align-items-center">Xem ngay <i class="ion-ios-arrow-thin-right"></i></span></a></h4>
                             </div>
                         </div> 
                         <!-- End Banner Single Item -->
                     </div>
                     
                     <div class="col-lg-6 col-12 mb-6">
-                        <div class="row mb-n6">
-                            <!-- Start Banner Single Item -->
-                            <div class="col-lg-6 col-sm-6 mb-6">
-                                <div class="banner-single-item banner-style-2 banner-animation img-responsive" data-aos="fade-up"  data-aos-delay="0">
-                                    <div class="image">
-                                        <img src="<c:url value='/assets/images/banner/banner-style-2-img-1.jpg' /> " alt="">
-                                    </div>
-                                    <div class="content">
-                                        <h4 class="title">Kitchen <br>
-                                            utensils</h4>
-                                        <a href="product-details-default.html" class="link-text"><span>Shop now</span></a>
-                                    </div>
-                                </div>
+                        <div class="banner-single-item banner-style-1 banner-animation img-responsive" data-aos="fade-up"  data-aos-delay="0">
+                            <div class="image">
+                                <img src="<c:url value='/assets/images/logo/bst-danh-cho-nu.jpg' /> " alt="">
                             </div>
-                            <!-- End Banner Single Item -->
-                            <!-- Start Banner Single Item -->
-                            <div class="col-lg-6 col-sm-6 mb-6">
-                                <div class="banner-single-item banner-style-2 banner-animation img-responsive" data-aos="fade-up"  data-aos-delay="200">
-                                    <div class="image">
-                                        <img src="<c:url value='/assets/images/banner/banner-style-2-img-2.jpg' /> " alt="">
-                                    </div>
-                                    <div class="content">
-                                        <h4 class="title">Sofas and <br>
-                                            Armchairs</h4>
-                                        <a href="product-details-default.html" class="link-text"><span>Shop now</span></a>
-                                    </div>
-                                </div>
+                            <div class="content action-link">
+                                <h3 class="title" style="color: black;">Đồng hồ dành cho nữ</h3>
+                                <h4><a href="#" class="genderLogo" data-val="Nữ" class="btn btn-lg btn-outline-golden icon-space-left"><span class="d-flex align-items-center">Xem ngay <i class="ion-ios-arrow-thin-right"></i></span></a></h4>
                             </div>
-                            <!-- End Banner Single Item -->
-                            <!-- Start Banner Single Item -->
-                            <div class="col-lg-6 col-sm-6 mb-6">
-                                <div class="banner-single-item banner-style-2 banner-animation img-responsive" data-aos="fade-up"  data-aos-delay="0">
-                                    <div class="image">
-                                        <img src="<c:url value='/assets/images/banner/banner-style-2-img-3.jpg' /> " alt="">
-                                    </div>
-                                    <div class="content">
-                                        <h4 class="title">Chair & Bar<br>
-                                            stools</h4>
-                                        <a href="product-details-default.html" class="link-text"><span>Shop now</span></a>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- End Banner Single Item -->
-                            <!-- Start Banner Single Item -->
-                            <div class="col-lg-6 col-sm-6 mb-6">
-                                <div class="banner-single-item banner-style-2 banner-animation img-responsive" data-aos="fade-up"  data-aos-delay="200">
-                                    <div class="image">
-                                        <img src="<c:url value='/assets/images/banner/banner-style-2-img-4.jpg' /> " alt="">
-                                    </div>
-                                    <div class="content">
-                                        <h4>Interior <br> 
-                                            lighting</h4>
-                                        <a href="product-details-default.html"><span>Shop now</span></a>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- End Banner Single Item -->
-                        </div>
+                        </div> 
                     </div>
                 </div>
                 
@@ -460,7 +409,7 @@
         </div>
    </div>
    <!-- End Banner Section -->
-
+<%--
    <!-- Start Blog Slider Section -->
    <div class="blog-default-slider-section section-top-gap-100 section-fluid">
         <!-- Start Section Content Text Area -->
@@ -614,9 +563,9 @@
         </div>
    </div> 
    <!-- End Blog Slider Section -->
-
+--%>
    <!-- Start Instagramr Section -->
-   <div class="instagram-section section-top-gap-100 section-inner-bg">
+ <%-->  <div class="instagram-section section-top-gap-100 section-inner-bg">
        <div class="instagram-wrapper" data-aos="fade-up"  data-aos-delay="0">
            <div class="container">
                 <div class="row">
@@ -640,3 +589,4 @@
        </div>
    </div>
    <!-- End Instagramr Section -->
+--%>

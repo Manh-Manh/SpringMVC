@@ -414,7 +414,7 @@
                 <address class="address">
                     <span> <a href="<c:url value='/app-view/myAccount' />" ><c:out value="${u.fullName!=null?u.fullName:u.userName }" /></a></span> 
                     <span></span> 
-                    <span>Email: <c:out value="${ u.email }" /></span>    
+                    <!-- <span>Email: <c:out value="${ u.email }" /></span>    -->
                 </address>
             	
 			

@@ -24,7 +24,12 @@ $(document).ready(function() {
 			data.push($(this).val().trim());
 		});
 		map.set('machineId', data);
-		
+		// gender
+		data= new Array();
+		$("input:checkbox[name='gender']:checked").each(function() {
+			data.push($(this).val().trim());
+		});
+		map.set('gender', data);
 		// Strap
 		data= new Array();
 		$("input:checkbox[name='strapId']:checked").each(function() {
@@ -91,6 +96,12 @@ $(document).ready(function() {
 			data.push(1000000*(am[1].trim()));
 			map.set('amount', data);
 		}
+		// gender
+		data= new Array();
+		$("input:checkbox[name='gender']:checked").each(function() {
+			data.push($(this).val().trim());
+		});
+		map.set('gender', data);
 		// Machine
 		data= new Array();
 		$("input:checkbox[name='machineId']:checked").each(function() {
@@ -170,7 +181,12 @@ $(document).ready(function() {
 		data.push(1000000*(am[0].trim()));
 		data.push(1000000*(am[1].trim()));
 		map.set('amount', data);
-		
+		// gender
+		data= new Array();
+		$("input:checkbox[name='gender']:checked").each(function() {
+			data.push($(this).val().trim());
+		});
+		map.set('gender', data);
 		// Machine
 		data= new Array();
 		$("input:checkbox[name='machineId']:checked").each(function() {
@@ -376,6 +392,49 @@ $(document).ready(function() {
         });
 	});
 	
+	$('.genderLogo').click(function(){
+		
+		var map = new Map();
+		var data = [];
+		var gender = $(this).attr('data-val');
+	/*	$(sup).each(function() {
+			data.push($(this).val());
+		});*/
+		data.push(gender);
+		map.set('gender',data);
+		data= new Array();			
+		data.push("1");
+		map.set("page", data);	
+		array = Array.from(map, ([name, value]) => ({ name, value }));
+		
+		$.ajax({
+            type : "POST",
+            contentType : "application/json",
+            url : "/SpringMVC/app-view/advSearch",
+            data : JSON.stringify(array),
+            dataType : 'json',
+			beforeSend: function(xhr) {
+			            xhr.setRequestHeader("Accept", "application/json");
+			            xhr.setRequestHeader("Content-Type", "application/json");
+						xhr.responseType = 'json';
+			        },
+            timeout : 100000,
+            success : function(d) {
+				window.location.href='http://localhost:8088/SpringMVC/app-view';
+				console.log("SEUCCESS");
+                console.log("SUCCESS: ", d);
+            },
+            error : function(e) {
+				//window.location.reload();
+				
+				window.location.href='http://localhost:8088/SpringMVC/app-view';
+                console.log("ERROR: ", e);
+            },
+            done : function(e) {
+                console.log("DONE");
+            }
+        });
+	});
 	// preview anh
 	function readURL(input) {
 	  if (input.files && input.files[0]) {

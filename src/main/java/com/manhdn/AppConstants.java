@@ -15,6 +15,7 @@ public class AppConstants {
 	public static String MACHINE = "machine";
 	public static String STRAP = "strap";
 	public static String PRICE = "price";
+	public static String GENDER = "gender";
 	// status
 	public static final Long STATUS_ACTIVE = 1L; // user, product, supplier,...
 	public static final Long STATUS_BLOCK = 0L;

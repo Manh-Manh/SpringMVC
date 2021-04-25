@@ -35,6 +35,7 @@
                                     <div class="product-image-large-image swiper-slide zoom-image-hover img-responsive">
                                         <img src="<c:url value='/assets/images/products/${dataSelected.image}' /> " alt="" >
                                     </div>
+                                    <%--
                                     <div class="product-image-large-image swiper-slide zoom-image-hover img-responsive">
                                         <img src="<c:url value='/assets/images/product/default/home-1/default-2.jpg' /> " alt="">
                                     </div>
@@ -50,6 +51,7 @@
                                     <div class="product-image-large-image swiper-slide zoom-image-hover img-responsive">
                                         <img src="<c:url value='/assets/images/product/default/home-1/default-6.jpg'/> " alt="">
                                     </div> 
+                                    --%>
                                 </div>
                         </div>
                         <!-- End Large Image -->
@@ -119,7 +121,9 @@
 	                            </div> -->
                             </c:if>
                             
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam fringilla augue nec est tristique auctor. Donec non est at libero vulputate rutrum. Morbi ornare lectus quis justo gravida semper. Nulla tellus mi, vulputate adipiscing cursus eu, suscipit id nulla.</p>
+                            <p>
+                            	<c:out value="${ dataSelected.description!=null?dataSelected.description:''}"></c:out>
+                            </p>
                         </div> <!-- End  Product Details Text Area-->
                         <!-- Start Product Variable Area -->
                         <div class="product-details-variable">
@@ -200,33 +204,23 @@
 
                         <!-- Start Product Details Tab Button -->
                         <ul class="nav tablist product-details-content-tab-btn d-flex justify-content-center">
-                            <li><a class="nav-link active" data-bs-toggle="tab" href="#description">
-                                    Mô tả sản phẩm
-                                </a></li>
-                            <li><a class="nav-link" data-bs-toggle="tab" href="#specification">
+                            <li><a class="nav-link active" data-bs-toggle="tab" href="#specification" >
                                     Thông số kỹ thuật
                                 </a></li>
+                            <li><a class="nav-link" data-bs-toggle="tab" href="#description" >
+                                    Mô tả
+                                </a></li>
                             <li><a class="nav-link" data-bs-toggle="tab" href="#review">
-                                    Đánh giá (1)
+                                    Đánh giá(<c:out value="${listComment!=null?listComment.size():0}"></c:out>)
                                 </a></li>
                         </ul> <!-- End Product Details Tab Button -->
 
                         <!-- Start Product Details Tab Content -->
                         <div class="product-details-content-tab">
                             <div class="tab-content">
-                                <!-- Start Product Details Tab Content Singel -->
-                                <!-- Descrip tion tab -->
-                                <div class="tab-pane active show" id="description">
-                                    <div class="single-tab-content-item">
-                                        
-                                        <c:out value="${dataSelected.description }"></c:out>
-                                        
-                                    </div>
-                                </div> <!-- End Product Details Tab Content Singel -->
-                                <!-- Start Product Details Tab Content Singel -->
                                 
                                 <!-- Tab chi tiet -->
-                                <div class="tab-pane" id="specification">
+                                <div class="tab-pane active show" id="specification">
                                     <div class="single-tab-content-item">
                                         <table class="table table-bordered mb-20">
                                             <tbody>
@@ -330,26 +324,37 @@
                                                 </c:if>
                                             </tbody>
                                         </table>
-                                        <p>Fashion has been creating well-designed collections since 2010. The brand offers feminine designs delivering stylish separates and statement dresses which have since evolved into a full ready-to-wear collection in which every item is a vital part of a woman's wardrobe. The result? Cool, easy, chic looks with youthful elegance and unmistakable signature style. All the beautiful pieces are made in Italy and manufactured with the greatest attention. Now Fashion extends to a range of accessories including shoes, hats, belts and more!</p>
-                                    </div>
+                                      </div>
                                 </div> <!-- End Product Details Tab Content Singel -->
                                 <!-- Start Product Details Tab Content Singel -->
-                                
+                                <!-- Descrip tion tab -->
+                                <div class="tab-pane " id="description">
+                                    <div class="single-tab-content-item">
+                                        
+                                        <c:out value="${dataSelected.description }"></c:out>
+                                        
+                                    </div>
+                                </div> <!-- End Product Details Tab Content Singel -->
                                 <!-- Tab Comment -->
                                 <div class="tab-pane" id="review">
                                     <div class="single-tab-content-item">
                                         <!-- Start - Review Comment -->
                                         <ul class="comment">
                                             <!-- Start - Review Comment list-->
+                                            <c:forEach var="item" items="${listComment }"> 
                                             <li class="comment-list">
                                                 <div class="comment-wrapper">
+                                                
+                                              
                                                     <div class="comment-img">
-                                                        <img src="<c:url value='/assets/images/user/image-1.png'/> " alt="">
+                                                        <img src="<c:url value='/assets/images/user/${item.user.avatar }'/> " alt="">
                                                     </div>
                                                     <div class="comment-content">
                                                         <div class="comment-content-top">
                                                             <div class="comment-content-left">
-                                                                <h6 class="comment-name">Kaedyn Fraser</h6>
+                                                                <h6 class="comment-name">
+                                                                	<c:out value="${item.user.fullName!=null?item.user.fullName:item.user.userName }"></c:out>
+                                                                </h6>
                                                                 <ul class="review-star">
                                                                     <li class="fill"><i class="ion-android-star"></i></li>
                                                                     <li class="fill"><i class="ion-android-star"></i></li>
@@ -358,18 +363,19 @@
                                                                     <li class="empty"><i class="ion-android-star"></i></li>
                                                                 </ul>
                                                             </div>
-                                                            <div class="comment-content-right">
+<!--                                                             <div class="comment-content-right">
                                                                 <a href="#"><i class="fa fa-reply"></i>Reply</a>
-                                                            </div>
+                                                            </div>-->
                                                         </div>
 
                                                         <div class="para-content">
-                                                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tempora inventore dolorem a unde modi iste odio amet, fugit fuga aliquam, voluptatem maiores animi dolor nulla magnam ea! Dignissimos aspernatur cumque nam quod sint provident modi alias culpa, inventore deserunt accusantium amet earum soluta consequatur quasi eum eius laboriosam, maiores praesentium explicabo enim dolores quaerat! Voluptas ad ullam quia odio sint sunt. Ipsam officia, saepe repellat. </p>
+                                                            <p><c:out value="${item.content }"></c:out> </p>
                                                         </div>
                                                     </div>
+                                                 
                                                 </div>
                                                 <!-- Start - Review Comment Reply-->
-                                                <ul class="comment-reply">
+                                                <%--<ul class="comment-reply">
                                                     <li class="comment-reply-list">
                                                         <div class="comment-wrapper">
                                                             <div class="comment-img">
@@ -391,42 +397,16 @@
                                                             </div>
                                                         </div>
                                                     </li>
-                                                </ul> <!-- End - Review Comment Reply-->
-                                            </li> <!-- End - Review Comment list-->
-                                            <!-- Start - Review Comment list-->
-                                            <li class="comment-list">
-                                                <div class="comment-wrapper">
-                                                    <div class="comment-img">
-                                                        <img src="assets/images/user/image-3.png" alt="">
-                                                    </div>
-                                                    <div class="comment-content">
-                                                        <div class="comment-content-top">
-                                                            <div class="comment-content-left">
-                                                                <h6 class="comment-name">Jaydin Jones</h6>
-                                                                <ul class="review-star">
-                                                                    <li class="fill"><i class="ion-android-star"></i></li>
-                                                                    <li class="fill"><i class="ion-android-star"></i></li>
-                                                                    <li class="fill"><i class="ion-android-star"></i></li>
-                                                                    <li class="fill"><i class="ion-android-star"></i></li>
-                                                                    <li class="empty"><i class="ion-android-star"></i></li>
-                                                                </ul>
-                                                            </div>
-                                                            <div class="comment-content-right">
-                                                                <a href="#"><i class="fa fa-reply"></i>Reply</a>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="para-content">
-                                                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tempora inventore dolorem a unde modi iste odio amet, fugit fuga aliquam, voluptatem maiores animi dolor nulla magnam ea! Dignissimos aspernatur cumque nam quod sint provident modi alias culpa, inventore deserunt accusantium amet earum soluta consequatur quasi eum eius laboriosam, maiores praesentium explicabo enim dolores quaerat! Voluptas ad ullam quia odio sint sunt. Ipsam officia, saepe repellat. </p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </li> <!-- End - Review Comment list-->
+                                                </ul> <!-- End - Review Comment Reply--> --%>
+                                            </li>
+                                            </c:forEach> <!-- End - Review Comment list-->
+                                            
                                         </ul> <!-- End - Review Comment -->
+                                        <hr>
                                         <div class="review-form">
                                             <div class="review-form-text-top">
-                                                <h5>ADD A REVIEW</h5>
-                                                <p>Your email address will not be published. Required fields are marked *</p>
+                                                <h5>Viết đánh giá</h5>
+                                                
                                             </div>
 
                                             <form action="#" method="post">
@@ -475,7 +455,7 @@
 	                    <!-- SAN PHAM LIEN QUAN -->  
 	                            <div class="secton-content">
 	                                <h3 class="section-title">Sản phẩm liên quan</h3>
-	                                <p>Preorder now to receive exclusive deals & gifts</p>
+	                                
 	                            </div>
 		                    
 		                                

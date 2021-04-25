@@ -17,7 +17,7 @@
                         <div class="breadcrumb-nav breadcrumb-nav-color--black breadcrumb-nav-hover-color--golden">
                             <nav aria-label="breadcrumb">
                                 <ul>
-                                    <li><a href="index.html">Trang chủ</a></li>
+                                    <li><a href="<c:url value='/app-view/home-page' /> ">Trang chủ</a></li>
                                     <!-- <li><a href="shop-grid-sidebar-left.html">Shop</a></li> -->
                                     <li class="active" aria-current="page">Tài khoản</li>
                                 </ul>
@@ -109,30 +109,31 @@
                         <div class="tab-pane fade" id="downloads">
                             <h4>Downloads</h4>
                             <div class="table_page table-responsive">
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th>Product</th>
-                                            <th>Downloads</th>
-                                            <th>Expires</th>
-                                            <th>Download</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>Shopnovilla - Free Real Estate PSD Template</td>
-                                            <td>May 10, 2018</td>
-                                            <td><span class="danger">Expired</span></td>
-                                            <td><a href="#" class="view">Click Here To Download Your File</a></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Organic - ecommerce html template</td>
-                                            <td>Sep 11, 2018</td>
-                                            <td>Never</td>
-                                            <td><a href="#" class="view">Click Here To Download Your File</a></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                <form:form action="changePassword" modelAttribute="userUpdate" >
+                                        <c:set var ="u" value="${sessionScope.user }"></c:set>
+                                            
+                                            <br>
+                                                <form:hidden value="${u.fullName }" path="fullName"  />
+                                                <form:hidden  value="${u.userName }" path="userName"  />
+                                                <form:hidden  value="${u.email }" path="email"  />
+                                                <form:hidden  name="birthday" value="${u.birthDate }" path="birthDate"/>
+                                                <form:hidden  name="address" value="${u.address }" path="address"/>
+                                            <div class="default-form-box mb-20">
+                                                <label>Mật khẩu cũ</label>
+                                                <form:input type="password" name="phoneNumber" path="password" />
+                                            </div>
+                                            <div class="default-form-box mb-20">
+                                                <label>Mật khẩu mới</label>
+                                                <form:input type="password" name="phoneNumber" path="newPassword" />
+                                            </div>
+                                            <div class="default-form-box mb-20">
+                                                <label>Nhập lại mật khẩu</label>
+                                                <input type="password" name="phoneNumber"  />
+                                            </div>
+                                            <div class="save_button mt-3">
+                                                <button class="btn btn-md btn-black-default-hover" type="submit">Thay đổi</button>
+                                            </div>
+                                        </form:form>
                             </div>
                         </div>
                         <div class="tab-pane" id="address">

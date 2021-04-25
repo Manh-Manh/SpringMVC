@@ -9,6 +9,7 @@ public class userEntity extends CommonEntity {
 	private String userName;
 	private String fullName;
 	private String password;
+	private String newPassword;
 	private String email;
 	private String address;
 	private String phoneNumber;
@@ -18,6 +19,14 @@ public class userEntity extends CommonEntity {
 	private Integer del_flag;
 	private roleEntity role;
 	private CommonsMultipartFile[] fileAvatar;
+
+	public String getNewPassword() {
+		return newPassword;
+	}
+
+	public void setNewPassword(String newPassword) {
+		this.newPassword = newPassword;
+	}
 
 	public CommonsMultipartFile[] getFileAvatar() {
 		return fileAvatar;

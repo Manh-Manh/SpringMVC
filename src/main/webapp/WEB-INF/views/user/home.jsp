@@ -15,7 +15,7 @@
                         <div class="breadcrumb-nav breadcrumb-nav-color--black breadcrumb-nav-hover-color--golden">
                             <nav aria-label="breadcrumb">
                                 <ul>
-                                    <li><a href="<c:url value='/app-view/' />">Trang chủ</a></li>
+                                    <li><a href="<c:url value='/app-view/home-page' />">Trang chủ</a></li>
                                     <li><a href="<c:url value='/app-view/' />">Cửa hàng</a></li>
                                     <!-- <li class="active" aria-current="page">Shop Grid Left Sidebar</li>-->
                                 </ul>
@@ -117,6 +117,30 @@
                             </div>
                         </div> <!-- End Single Sidebar Widget -->
 
+						<div class="sidebar-single-widget">
+                            <h6 class="sidebar-title">Giới tính</h6>
+                            <div class="sidebar-content">
+                                <div class="filter-type-select">
+                                    <ul>
+                              	<c:forEach var = "m" items="${ gender }">
+                                        <li>
+                                            <label class="checkbox-default" for="brakeParts">
+                                                <input type="checkbox" id="gender" class="advSearch" name="gender"
+                                                 
+                                                 value="${ m }"
+                                                 <c:if test="${mapSearch.size()>0&& mapSearch.get('gender')!=null &&  mapSearch.get('gender').contains(m) }">
+                                                 	<c:out value="checked" />
+                                                 </c:if>
+                                                 
+                                                  >
+                                                <span><c:out value = "${ m } " /></span>
+                                            </label>
+                                        </li>
+                                </c:forEach>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div> <!-- End Single Sidebar Widget -->
                         <!-- Start Single Sidebar Widget -->
                         <div class="sidebar-single-widget">
                             <h6 class="sidebar-title">Loại dây</h6>
@@ -255,12 +279,14 @@
                                         </ul>-->
 
                                         <!-- Start Page Amount -->
+                                        
                                         <div class="page-amount ml-2">
-                                        <c:if test="${dataList!=null || dataList.size()>0 }">
+                                        <c:if test="${dataList!=null && dataList.size()>0 }">
                                             <span>Hiển thị <c:out value="${(page-1)*6+1 }"></c:out>–<c:out value="${((page)*6)>count?count:((page)*6) }"></c:out> trên <c:out value="${count }"></c:out></span>
                                          <!-- End Page Amount -->
                                         </c:if>
                                         </div>
+                                       
                                     </div> <!-- End Sort tab Button -->
 									<%--
                                     <!-- Start Sort Select Option -->
@@ -359,12 +385,13 @@
                                            </c:forEach>
                                                     <!-- End Product Default Single Item -->
                                                 </div>                                          
-  
-  <!-- Phan trangs -->                                          </div>
+                                 </div>
+<!-- Phan trangs -->     
+<c:if test="${dataList!=null && dataList.size()>0 }">
   <div class="page-pagination text-center">
     <tag:paginate  page="${page}" count="${count}" type="${type}" uri="/SpringMVC/app-view" next="&raquo;" previous="&laquo;"/>
   </div>
-                                            
+</c:if>
                                         </div> <!-- End Grid View Product -->
                                         <!-- Start List View Product -->
                                         
@@ -377,8 +404,7 @@
                     <div class="col-12">
                         <div class="section-content-gap">
                             <div class="secton-content">
-                                <h3 class="section-title">THE NEW ARRIVALS</h3>
-                                <p>Preorder now to receive exclusive deals & gifts</p>
+                                <h3 class="section-title">Sản phẩm đang giảm giá</h3>
                             </div>
                         </div>
                     </div>
@@ -398,7 +424,7 @@
                             <!-- Additional required wrapper -->
                             <div class="swiper-wrapper">
                                 <!-- Start Product Default Single Item -->
-                              <c:forEach var="item" items="${dataList }">
+                              <c:forEach var="item" items="${listSale }">
                                 <div class="product-default-single-item product-color--golden swiper-slide">
                                     <div class="image-box">
                                     <c:url var="url" value="/app-view/viewDetail" >

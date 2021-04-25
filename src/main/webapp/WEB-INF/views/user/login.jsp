@@ -30,7 +30,7 @@
                             </div>
                             
                             <div class="login_submit">
-                                <button class="btn btn-md btn-black-default-hover mb-4" type="submit">Login</button>
+                                <button class="btn btn-md btn-black-default-hover mb-4" type="submit">Đăng nhập</button>
                                 <!-- <label class="checkbox-default mb-4" for="offer">
                                     <input type="checkbox" id="offer">
                                     <span>Remember me</span>

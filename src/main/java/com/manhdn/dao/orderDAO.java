@@ -102,7 +102,7 @@ public class orderDAO {
 		return (result&&result2);
 	}
 	
-	public List<orderEntity> findOrderByUserId(Long userId, Long osNoOrder) {
+	public List<orderEntity> findOrderByUserId(Long userId, Long status) {
 
 		if(userId == null) {
 			return null;
@@ -111,10 +111,12 @@ public class orderDAO {
 		List<Object> params = new ArrayList<Object>();
 		sql.append("SELECT * FROM `order` WHERE userId = ? ");
 		params.add(userId);
-		if(osNoOrder != null) {
+		if(status != null) {
 			sql.append(" and status = ? ");
-			params.add(osNoOrder);
+			params.add(status);
 		}
+
+		sql.append(" ORDER BY status ");
 		List<orderEntity> lst = (List<orderEntity>) cmd.getListObjByParams(sql, params, orderEntity.class);
 		if (lst.size() > 0) {
 			for(orderEntity o : lst) {

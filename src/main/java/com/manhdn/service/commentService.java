@@ -19,4 +19,8 @@ public class commentService {
 		dao =new commentDAO();
 		return dao.getAllCommetByProductId(productId);
 	}
+	public boolean insertOrUpdate(Long userId, commentEntity cmt) {
+		dao =new commentDAO();
+		return dao.insertOrUpdate(userId, cmt);
+	}
 }

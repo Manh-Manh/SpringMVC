@@ -2,10 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ page session="true" %>
 <%@include file="/common/taglib.jsp"%>
-<c:if test="${ sessionScope.user != null }" >
 
-<c:out value="${ sessionScope.user.userName }" />
-</c:if>
    <div class="breadcrumb-section breadcrumb-bg-color--golden">
         <div class="breadcrumb-wrapper">
             <div class="container">

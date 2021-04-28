@@ -5,6 +5,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Repository;
 
 import com.manhdn.AppConstants;
@@ -15,6 +16,7 @@ import com.manhdn.entity.productEntity;
 @Repository
 public class orderDAO {
 	CommonDatabase cmd;
+	private Logger logger = Logger.getLogger(orderDAO.class);
 	public orderDAO(){
 		cmd = new CommonDatabase();
 	}
@@ -29,6 +31,7 @@ public class orderDAO {
 		StringBuilder sql = new StringBuilder();
 		List<Object> params = new ArrayList<>();
 		if (userId == null || cart == null) {
+			logger.error("Id or cart null: " + userId +  cart);
 			return false;
 		}
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -70,15 +73,15 @@ public class orderDAO {
 				+ " quantity, unitPrice, discount, status, created_date, "
 				+ " updated_date, created_by, updated_by, del_flag) VALUES "
 				+ "");
-		for(int i =0;i< cart.getListProduct().size();i++) {
-			productEntity p =cart.getListProduct().get(i);
-			sql2.append("(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");		
+		for (int i = 0; i < cart.getListProduct().size(); i++) {
+			productEntity p = cart.getListProduct().get(i);
+			sql2.append("(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 			params2.add(cart.getOrderId());
 			params2.add(p.getProductId());
 			params2.add(p.getCartQuantity());
 			params2.add(p.getUnitPrice());
 			params2.add(p.getDiscount() != null ? p.getDiscount() : 0D);
-			params2.add(1); //Status
+			params2.add(1); // Status
 			params2.add(dateNow);
 			params2.add(dateNow);
 			params2.add(userId);
@@ -87,24 +90,37 @@ public class orderDAO {
 			if (i < cart.getListProduct().size() - 1) {
 				sql2.append(" , ");
 			}
-		}         
-	
-		sql2.append("ON DUPLICATE KEY UPDATE "
-				+ " quantity = VALUES(quantity), "
-				+ " unitPrice = VALUES(unitPrice), "
-				+ " discount = VALUES(discount), "
-				+ " updated_date = VALUES(updated_date), "
+		}
+
+		sql2.append("ON DUPLICATE KEY UPDATE " + " quantity = VALUES(quantity), " + " unitPrice = VALUES(unitPrice), "
+				+ " discount = VALUES(discount), " + " updated_date = VALUES(updated_date), "
 				+ " updated_by = VALUES(updated_by) "
 				+ "");
 		boolean result2 = cmd.insertOrUpdateDataBase(sql2, params2);
-		
-		
+
+		// Update product quantity
+		if (status == AppConstants.OS_ORDERED ) {
+			productDAO prD = new productDAO();
+			for (productEntity p : cart.getListProduct()) {
+				p.setQuantity(p.getQuantity() - p.getCartQuantity());
+				prD.insertOrUpdate(p.getCreated_by(), p);
+			}
+
+		} else if (status == AppConstants.OS_ORDER_CANCEL) {
+			productDAO prD = new productDAO();
+			for (productEntity p : cart.getListProduct()) {
+				p.setQuantity(p.getQuantity() + p.getCartQuantity());
+				prD.insertOrUpdate(p.getCreated_by(), p);
+			}
+		}
+		logger.info("Params: " + params + params2 + "Result: " + result + result2);
 		return (result&&result2);
 	}
 	
 	public List<orderEntity> findOrderByUserId(Long userId, Long status) {
 
 		if(userId == null) {
+			logger.error("Id null"+userId);
 			return null;
 		}
 		StringBuilder sql = new StringBuilder();
@@ -134,12 +150,15 @@ public class orderDAO {
 			}
 //			return cart;
 		} else {
+			logger.info("Params: " + params + "Result: " + lst);
 			return null;
 		}
-	return lst;
+		logger.info("Params: " + params + "Result: " + lst);	
+		return lst;
 	}
 	public orderEntity findOrderByUserId(String orderId) {
 		if(FunctionCommon.isEmpty(orderId)) {
+			logger.error("Id null:" + orderId);
 			return null;
 		}
 		StringBuilder sql = new StringBuilder();
@@ -163,8 +182,10 @@ public class orderDAO {
 			}
 //			return cart;
 		} else {
+			logger.info("Params: " + params + "Result: " + lst);
 			return null;
 		}
+		logger.info("Params: " + params + "Result: " + lst);
 		return lst.get(0);
 	}
 	

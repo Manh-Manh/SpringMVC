@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Repository;
 
 import com.manhdn.AppConstants;
@@ -17,7 +19,7 @@ import com.manhdn.entity.userEntity;
 @Repository
 public class userDAO {
 	private CommonDatabase cmd;
-
+	private Logger logger = Logger.getLogger(userDAO.class);
 	public userDAO() {
 		cmd = new CommonDatabase();
 	}
@@ -31,9 +33,11 @@ public class userDAO {
 		params.add(id);
 		List<userEntity> lst = (List<userEntity>) cmd.getListObjByParams(sql, params, userEntity.class);
 		if (null == lst || lst.size() == 0) {
+			logger.info("Params: " + params + "Result: " + lst);
 			return null;
 		}
 		result = lst.get(0);
+		logger.info("Params: " + params + "Result: " + lst);
 		return result;
 	}
 
@@ -44,6 +48,7 @@ public class userDAO {
 
 		sql.append("SELECT * FROM users u " + " WHERE 1 ");
 		result = (List<userEntity>) cmd.getListObjByParams(sql, params, userEntity.class);
+		logger.info("Params: " + params + "Result: " + result);
 		return result;
 	}
 
@@ -54,6 +59,7 @@ public class userDAO {
 		StringBuilder sql = new StringBuilder();
 		
 		if (FunctionCommon.isEmpty(dataSearch.getUserName())) {
+			logger.error("data null: " + dataSearch);
 			return null;
 		}
 		dataSearch.setEmail(dataSearch.getUserName());
@@ -69,8 +75,10 @@ public class userDAO {
 		List<userEntity> lst = (List<userEntity>) cmd.getListObjByParams(sql, params, userEntity.class);
 		if (lst != null && lst.size() > 0) {
 			result = lst.get(0);
+			logger.info("Params: " + params + "Result: " + lst);
 			return result;
 		}else {
+			logger.info("Params: " + params + "Result: " + lst);
 			return null;
 		}
 
@@ -128,6 +136,7 @@ public class userDAO {
 		params.add(user.getCreated_by() != null ? user.getCreated_by() : 0);
 		params.add(user.getUpdated_by() != null ? user.getUpdated_by() : 0); 
 		boolean result = cmd.insertOrUpdateDataBase(sql, params);
+		logger.info("Params: " + params + "Result: " + result);
 		return result;
 	}
 }

@@ -3,11 +3,7 @@
  
 <%@include file="/common/taglib.jsp"%>
 
-<c:if test="${sessionScope.message!=null && sessionScope.message!=''  }">
-<script>
-	alert("${ sessionScope.message }");
-</script>
-</c:if>
+
 <!-- ...:::: Start Breadcrumb Section:::... -->
     <div class="breadcrumb-section breadcrumb-bg-color--golden">
         <div class="breadcrumb-wrapper">

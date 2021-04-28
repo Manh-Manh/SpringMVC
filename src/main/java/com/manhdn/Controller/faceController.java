@@ -1,5 +1,6 @@
 package com.manhdn.Controller;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,7 +14,7 @@ import com.manhdn.service.faceService;
 public class faceController extends CommonController<faceEntity>{
 	@Autowired
 	faceService service;
-	
+	Logger logger = Logger.getLogger(faceController.class);
 	/**
 	 * 
 	 * @return
@@ -26,6 +27,7 @@ public class faceController extends CommonController<faceEntity>{
 //		mav.addObject("dataList",dataList);
 //		service.insertOrUpdate(0L, dataSearch);
 		addData();
+		logger.info(mav);
 		return mav;
 	}
 }

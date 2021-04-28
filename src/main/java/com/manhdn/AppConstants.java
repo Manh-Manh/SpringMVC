@@ -50,6 +50,7 @@ public class AppConstants {
 	public static String ID_FACE = "F";
 	public static String ID_SUPPLIER = "SUP";
 	public static String ID_ODER = "ORDER";
+	public static String ID_COMMENT = "CMT";
 	public static String ID_USER = "user";
 	// ORDER STATUS
 	

@@ -6,6 +6,7 @@
 <script>
 	alert("${ sessionScope.message }");
 </script>
+<% session.removeAttribute("message"); %>
 </c:if>
 <!-- Offcanvas Overlay -->
     <div class="offcanvas-overlay"></div>

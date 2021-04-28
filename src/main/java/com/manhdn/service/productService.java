@@ -43,7 +43,7 @@ public class productService {
 	public void insertOrUpdate(long userId, productEntity dataSearch) {
 		// TODO Auto-generated method stub
 		prDAO = new productDAO();
-		prDAO.insert(userId,dataSearch);
+		prDAO.insertOrUpdate(userId,dataSearch);
 	}
 
 	public List<productEntity> quickSearch(Long userId, String strSearch) {

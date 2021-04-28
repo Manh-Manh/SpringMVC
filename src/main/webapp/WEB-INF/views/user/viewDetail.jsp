@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
  
 <%@include file="/common/taglib.jsp"%>
+
 <div class="breadcrumb-section breadcrumb-bg-color--golden">
         <div class="breadcrumb-wrapper">
             <div class="container">
@@ -344,10 +345,8 @@
                                             <c:forEach var="item" items="${listComment }"> 
                                             <li class="comment-list">
                                                 <div class="comment-wrapper">
-                                                
-                                              
                                                     <div class="comment-img">
-                                                        <img src="<c:url value='/assets/images/user/${item.user.avatar }'/> " alt="">
+                                                        <img class="cmt-avatar" src="<c:url value='/assets/images/user/${item.user.avatar }'/> " alt="">
                                                     </div>
                                                     <div class="comment-content">
                                                         <div class="comment-content-top">
@@ -371,69 +370,98 @@
                                                         <div class="para-content">
                                                             <p><c:out value="${item.content }"></c:out> </p>
                                                         </div>
+                                                        
                                                     </div>
                                                  
                                                 </div>
                                                 <!-- Start - Review Comment Reply-->
-                                                <%--<ul class="comment-reply">
+                                                <ul class="comment-reply">
+                                                 <c:forEach var="child" items="${item.listCmtReply }">
                                                     <li class="comment-reply-list">
                                                         <div class="comment-wrapper">
                                                             <div class="comment-img">
-                                                                <img src="assets/images/user/image-2.png" alt="">
+                                                                <img class="cmt-avatar" src="<c:url value='/assets/images/user/${child.user.avatar }'/> " alt="">
                                                             </div>
                                                             <div class="comment-content">
                                                                 <div class="comment-content-top">
                                                                     <div class="comment-content-left">
-                                                                        <h6 class="comment-name">Oaklee Odom</h6>
-                                                                    </div>
-                                                                    <div class="comment-content-right">
-                                                                        <a href="#"><i class="fa fa-reply"></i>Reply</a>
+                                                                        <h6 class="comment-name">
+                                                                        <c:out value="${child.user.fullName!=null?child.user.fullName:child.user.userName }"></c:out>
+                                                                        </h6>
                                                                     </div>
                                                                 </div>
 
                                                                 <div class="para-content">
-                                                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tempora inventore dolorem a unde modi iste odio amet, fugit fuga aliquam, voluptatem maiores animi dolor nulla magnam ea! Dignissimos aspernatur cumque nam quod sint provident modi alias culpa, inventore deserunt accusantium amet earum soluta consequatur quasi eum eius laboriosam, maiores praesentium explicabo enim dolores quaerat! Voluptas ad ullam quia odio sint sunt. Ipsam officia, saepe repellat. </p>
+                                                                <p>
+                                                               	 	<c:out value="${child.content }"></c:out>
+                                                                </p>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </li>
-                                                </ul> <!-- End - Review Comment Reply--> --%>
+                                                    </c:forEach>
+                                                </ul> <!-- End - Review Comment Reply-->
+                                                <!-- Repply comment -->
+                                                <hr>
+                                                <div class="inp-reply" >
+                                                <c:if test="${sessionScope.user != null }">
+	                                               	<form:form action="replyComment" method="POST" modelAttribute="comment">
+	                                               	<c:set var ="u" value="${sessionScope.user }"></c:set>
+	                                               		<form:hidden path="productId" value="${dataSelected.productId }"/>
+	                                                   	<form:hidden path="userId" value="${u.userId }"/>
+	                                                   	<form:hidden path="parentId" value="${item.commentId }"/>
+	                                                   	<div class="" style="display: flex;">
+	                                                   	<form:textarea rows="1" id="comment-review-text" placeholder="Trả lời ${item.user.fullName!=null?item.user.fullName:item.user.userName }" path="content" required="required" />
+                                                        <input class="btn btn-md btn-black-default-hover btn-reply" type="submit" value="Gửi">
+                                                    	</div>
+	                                               	</form:form>
+	                                               	</c:if>
+                                               </div>
                                             </li>
                                             </c:forEach> <!-- End - Review Comment list-->
                                             
                                         </ul> <!-- End - Review Comment -->
                                         <hr>
+                                        
                                         <div class="review-form">
+                                            <c:if test="${sessionScope.user == null }">
+                                            <div class="review-form-text-top">
+                                                <h4>Đăng nhập để viết đánh giá của bạn.</h4>
+                                                
+                                            </div>
+                                            <div class="col-12">
+                                                	<a href="<c:url value='/app-view/login' /> " >
+                                                        <input class="btn btn-md btn-black-default-hover" value="Đăng nhập" >
+                                                    </a>
+                                                 </div>
+                                            </c:if>
+                                        
+                                        
+                                        <c:if test="${sessionScope.user != null }">
                                             <div class="review-form-text-top">
                                                 <h5>Viết đánh giá</h5>
                                                 
                                             </div>
-
-                                            <form action="#" method="post">
+							
+                                            <form:form action="comment" method="post" modelAttribute="comment" >
                                                 <div class="row">
-                                                    <div class="col-md-6">
+                                                    
+                                                    <div class="col-12">
                                                         <div class="default-form-box">
-                                                            <label for="comment-name">Your name <span>*</span></label>
-                                                            <input id="comment-name" type="text" placeholder="Enter your name" required>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <div class="default-form-box">
-                                                            <label for="comment-email">Your Email <span>*</span></label>
-                                                            <input id="comment-email" type="email" placeholder="Enter your email" required>
+                                                            <label for="comment-review-text">Đánh giá của bạn<span>*</span></label>
+                                                            <form:textarea id="comment-review-text" placeholder="Viết đánh giá" path="content" required="required" />
+                                                            
+                                                            <form:hidden path="productId" value="${dataSelected.productId }"/>
+                                                            <form:hidden path="userId" value="${sessionScope.user.userId }"/>
+                                                            
                                                         </div>
                                                     </div>
                                                     <div class="col-12">
-                                                        <div class="default-form-box">
-                                                            <label for="comment-review-text">Your review <span>*</span></label>
-                                                            <textarea id="comment-review-text" placeholder="Write a review" required></textarea>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-12">
-                                                        <button class="btn btn-md btn-black-default-hover" type="submit">Submit</button>
+                                                        <button class="btn btn-md btn-black-default-hover" type="submit">Gửi</button>
                                                     </div>
                                                 </div>
-                                            </form>
+                                            </form:form>
+                              </c:if>
                                         </div>
                                     </div>
                                 </div> <!-- End Product Details Tab Content Singel -->

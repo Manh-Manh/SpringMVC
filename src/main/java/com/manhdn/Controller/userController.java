@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
@@ -23,20 +24,23 @@ import java.io.File;
 import java.io.FileOutputStream;
 import com.manhdn.AppConstants;
 import com.manhdn.FunctionCommon;
+import com.manhdn.entity.commentEntity;
 import com.manhdn.entity.orderEntity;
 import com.manhdn.entity.productEntity;
 import com.manhdn.entity.userEntity;
+import com.manhdn.service.commentService;
 import com.manhdn.service.orderService;
 import com.manhdn.service.supplierService;
 import com.manhdn.service.userService;
+import com.mysql.cj.log.Log;
 
 @Controller
 public class userController extends CommonController<userEntity> {
 
 	@Autowired
 	userService service;
+	private Logger logger = Logger.getLogger(userController.class);
 
-		
 	/**
 	 * 
 	 * @return
@@ -49,13 +53,16 @@ public class userController extends CommonController<userEntity> {
 //		mav.addObject("dataList",dataList);
 //		service.insertOrUpdate(0L, dataSearch);
 		addData();
+		logger.info(mav);
 		return mav;
 	}
 
 	@RequestMapping(value = { "/app-view/login" }, method = RequestMethod.GET)
-	public ModelAndView login(HttpSession session) {
+	public ModelAndView login(HttpSession session, HttpServletRequest req) {
+		String url = req.getRequestURL().toString();
 		mav = new ModelAndView("/user/login");
 		mav.addObject(AppConstants.SESSION_USER, new userEntity());
+		logger.info(mav);
 		return mav;
 	}
 
@@ -66,8 +73,8 @@ public class userController extends CommonController<userEntity> {
 		if (user != null) {
 			session.setAttribute(AppConstants.SESSION_USER, user);
 			orderEntity cart = this.findCart(user.getUserId());
-			
-			if(cart != null) {
+
+			if (cart != null) {
 				session.setAttribute(AppConstants.SESSION_CART, cart);
 			}
 		}
@@ -75,18 +82,19 @@ public class userController extends CommonController<userEntity> {
 		mav = new ModelAndView("redirect:/app-view/home-page");
 //		return "redirect:/showUser/" ;
 		addData();
+		logger.info(mav);
 		return mav;
 	}
-	
+
 	@RequestMapping(value = { "/app-view/register" }, method = RequestMethod.POST)
 	public ModelAndView register(@ModelAttribute("userRegister") userEntity dataSearch, HttpSession session) {
 		this.dataSearch = dataSearch;
 		boolean i = service.register(this.dataSearch);
-		if(i) {
+		if (i) {
 			userEntity user = service.login(this.dataSearch);
 			if (user != null) {
 				session.setAttribute(AppConstants.SESSION_USER, user);
-				
+
 				orderEntity cart = this.findCart(user.getUserId());
 				if (cart != null) {
 					session.setAttribute(AppConstants.SESSION_CART, cart);
@@ -97,44 +105,48 @@ public class userController extends CommonController<userEntity> {
 			mav = new ModelAndView("redirect:/app-view/home-page");
 			message = "Đăng kí thành công!";
 			addData();
+			logger.info(mav);
 			return mav;
 
 		} else {
 			mav = new ModelAndView("/user/login");
 			message = "Đăng kí thất bại!";
 			addData();
+			logger.info(mav);
 			return mav;
 		}
 
-
 	}
-	
+
 	@RequestMapping(value = { "/app-view/logout" }, method = RequestMethod.GET)
 	public ModelAndView logout(HttpSession session) {
-		
+
 		session.removeAttribute("user");
 		mav = new ModelAndView("redirect:/app-view/");
 		addData();
+		logger.info(mav);
 		return mav;
 	}
 
 	@RequestMapping(value = { "/app-view/myAccount" }, method = RequestMethod.GET)
-	public ModelAndView myAccount(HttpSession session,HttpServletResponse res ) {
+	public ModelAndView myAccount(HttpSession session, HttpServletResponse res) {
 		res.setCharacterEncoding("UTF-8");
-		message="";
+		message = "";
 		userEntity user = (userEntity) session.getAttribute(AppConstants.SESSION_USER);
 		if (user == null) {
 			mav = new ModelAndView("redirect:/app-view/login");
 			addData();
+			logger.info(mav);
 			return mav;
 		}
-		List<orderEntity> listOrders =new ArrayList<orderEntity>();
+		List<orderEntity> listOrders = new ArrayList<orderEntity>();
 		orderService orderS = new orderService();
 		listOrders = (List<orderEntity>) orderS.findOderByUserId(user.getUserId(), null);
 		map.addAttribute("listOrders", listOrders);
-		
+
 		mav = new ModelAndView("/user/myAccount");
 		addData();
+		logger.info(mav);
 		return mav;
 	}
 
@@ -146,27 +158,29 @@ public class userController extends CommonController<userEntity> {
 		if (user == null || userUpdate == null) {
 			mav = new ModelAndView("redirect:/app-view/login");
 			addData();
+			logger.info(mav);
 			return mav;
 		}
 		userUpdate.setPassword(user.getPassword());
-		//upload anh
-		if(userUpdate.getFileAvatar() != null) {
+		// upload anh
+		if (userUpdate.getFileAvatar() != null) {
 			String upload = doUpload(request, userUpdate);
 			userUpdate.setAvatar(userUpdate.getFileAvatar()[0].getOriginalFilename());
-		}else {
-			userUpdate.setAvatar(user.getAvatar()!=null?user.getAvatar():"");
+		} else {
+			userUpdate.setAvatar(user.getAvatar() != null ? user.getAvatar() : "");
 		}
 		service = new userService();
 		boolean result = service.insertOrUpdate(user.getUserId(), userUpdate);
-		if(result) {
+		if (result) {
 			message = "Cập nhật thành công!";
 			session.setAttribute(AppConstants.SESSION_USER, userUpdate);
 		}
 		mav = new ModelAndView("redirect:/app-view/myAccount");
 		addData();
+		logger.info(mav);
 		return mav;
-	}	
-	
+	}
+
 	@RequestMapping(value = { "/app-view/changePassword" }, method = RequestMethod.POST)
 	public ModelAndView changePassword(HttpServletRequest request, HttpSession session,
 			@ModelAttribute("userUpdate") userEntity userUpdate) {
@@ -175,32 +189,99 @@ public class userController extends CommonController<userEntity> {
 		if (user == null || userUpdate == null) {
 			mav = new ModelAndView("redirect:/app-view/login");
 			addData();
+			logger.info(mav);
 			return mav;
 		}
-		if(!userUpdate.getPassword().equals(user.getPassword())) {
+		if (!userUpdate.getPassword().equals(user.getPassword())) {
 //			userUpdate.setPassword(userUpdate.getNewPassword());
 			message = "Mật khẩu không đúng!";
-			session.setAttribute(AppConstants.SESSION_MESSAGE, message);
+			addMessage(message, session);
 			session.setAttribute(AppConstants.SESSION_USER, user);
+			logger.info(mav);
 			return mav;
 		}
 		user.setPassword(userUpdate.getNewPassword());
 		service = new userService();
 		boolean result = service.insertOrUpdate(user.getUserId(), user);
-		if(result) {
+		if (result) {
 			message = "Cập nhật thành công!";
-
-			session.setAttribute(AppConstants.SESSION_MESSAGE, message);
+			addMessage(message, session);
 			session.setAttribute(AppConstants.SESSION_USER, user);
 		}
 		mav = new ModelAndView("redirect:/app-view/myAccount");
 		addData();
+		logger.info(mav);
 		return mav;
-	}	
+	}
 
+	/**
+	 * commet
+	 * 
+	 * @param session
+	 * @param cmt
+	 * @return
+	 */
+	@RequestMapping(value = { "/app-view/comment", "/app-view/replyComment" }, method = RequestMethod.POST)
+	public ModelAndView doComment(HttpSession session, @ModelAttribute("comment") commentEntity cmt) {
+		if (cmt == null || cmt.getProductId() == null) {
+			mav = new ModelAndView("/app-view/");
+			message = "Liên hệ quản trị hệ thống để được hỗ trợ!";
+			addMessage(message, session);
+			logger.info(mav);
+			return mav;
+		}
+		mav = new ModelAndView("/app-view/viewDetail?id=" + cmt.getProductId());
+		userEntity user = (userEntity) session.getAttribute(AppConstants.SESSION_USER);
+		if (user == null) {
+			mav = new ModelAndView("redirect:/app-view/login");
+			addData();
+			logger.info(mav);
+			return mav;
+		}
+		commentService cmtS = new commentService();
+		boolean i = cmtS.insertOrUpdate(cmt.getUserId(), cmt);
+		if (i) {
+			message = "Cảm ơn bạn đã đánh giá sản phẩm!";
+			addMessage(message, session);
+		} else {
+			message = "Liên hệ quản trị hệ thống để được hỗ trợ!";
+			addMessage(message, session);
+		}
+		mav = new ModelAndView("redirect:/app-view/viewDetail?id=" + cmt.getProductId());
+		addData();
+		logger.info(mav);
+		return mav;
+	}
+
+//	@RequestMapping(value = { "/app-view/replyComment" }, method = RequestMethod.POST)
+//	public ModelAndView doReplyComment( HttpSession session,
+//			@ModelAttribute("comment") commentEntity cmt) {
+//		if(cmt==null ||cmt.getProductId()==null) {
+//			mav = new ModelAndView("/app-view/");
+//			message = "Liên hệ quản trị hệ thống để được hỗ trợ!";
+//			addMessage(message, session);
+//			return mav;
+//		}
+//		userEntity user = (userEntity) session.getAttribute(AppConstants.SESSION_USER);
+//		if (user == null) {
+//			mav = new ModelAndView("redirect:/app-view/login");
+//			addData();
+//			return mav;
+//		}
+//		commentService cmtS = new commentService();
+//		boolean i = cmtS.insertOrUpdate(cmt.getUserId(), cmt);
+//		if(i) {
+//			message = "Cảm ơn bạn đã đánh giá sản phẩm!";
+//			addMessage(message, session);
+//		}else {
+//			message = "Liên hệ quản trị hệ thống để được hỗ trợ!";
+//			addMessage(message, session);
+//		}
+//		mav = new ModelAndView("redirect:/app-view/viewDetail?id="+cmt.getProductId());
+//		addData();
+//		return mav;
+//	}	
 	private String doUpload(HttpServletRequest request, userEntity userUpload) {
-
-		
 
 		// Thư mục gốc upload file.
 		String uploadRootPath = request.getServletContext().getRealPath("upload");
@@ -225,7 +306,7 @@ public class userController extends CommonController<userEntity> {
 				try {
 					// Tạo file tại Server.
 					String urlDir = "\\..\\WEB-INF\\views\\assets\\images\\user";
-					File serverFile = new File(uploadRootDir.getAbsolutePath()+ urlDir + File.separator + name);
+					File serverFile = new File(uploadRootDir.getAbsolutePath() + urlDir + File.separator + name);
 
 					// Luồng ghi dữ liệu vào file trên Server.
 					BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(serverFile));
@@ -234,7 +315,7 @@ public class userController extends CommonController<userEntity> {
 					//
 					// Tao file vao project
 					urlDir = "D:\\java\\web\\SpringMVC\\src\\main\\webapp\\WEB-INF\\views\\assets\\images\\user";
-					serverFile = new File( urlDir + File.separator + name);
+					serverFile = new File(urlDir + File.separator + name);
 
 					// Luồng ghi dữ liệu vào file trên Server.
 					stream = new BufferedOutputStream(new FileOutputStream(serverFile));
@@ -248,10 +329,10 @@ public class userController extends CommonController<userEntity> {
 				}
 			}
 		}
-		
+
 		return "Success";
 	}
-	
+
 	private orderEntity findCart(Long userId) {
 		orderService orderS = new orderService();
 		List<orderEntity> lst = orderS.findOderByUserId(userId, AppConstants.OS_NO_ORDER);
@@ -261,6 +342,7 @@ public class userController extends CommonController<userEntity> {
 		}
 		return cart;
 	}
+
 	@ModelAttribute("userSearch")
 	public userEntity userSearch() {
 		return new userEntity();
@@ -270,8 +352,12 @@ public class userController extends CommonController<userEntity> {
 	public userEntity userRegister() {
 		return new userEntity();
 	}
-	
-	
+
+	@ModelAttribute("comment")
+	public commentEntity comment() {
+		return new commentEntity();
+	}
+
 	@ModelAttribute("prodSelected")
 	public productEntity prodSelected() {
 		return new productEntity();

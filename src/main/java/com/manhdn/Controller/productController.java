@@ -1,15 +1,20 @@
 package com.manhdn.Controller;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.manhdn.AppConstants;
 import com.manhdn.FunctionCommon;
+
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.core.ParameterizedTypeReference;
@@ -47,7 +52,7 @@ import com.manhdn.service.productService;
 @Controller
 @Component
 public class productController extends CommonController<productEntity> {
-
+	private static final Logger logger = Logger.getLogger(productController.class);
 	@Autowired
 	productService service;
 	List<productEntity> listSale = new ArrayList<productEntity>();
@@ -63,10 +68,11 @@ public class productController extends CommonController<productEntity> {
 		count = service.countDataList(0L, mapSearch);
 		dataList = service.findDaList(0L, mapSearch, page, pageSize);
 //		getDataFromLink();
-		List<productEntity> dataList2= new ArrayList<productEntity>();
-		dataList2.addAll(dataList);
-		mav.addObject("dataList2",dataList2);
+//		List<productEntity> dataList2= new ArrayList<productEntity>();
+//		dataList2.addAll(dataList);
+//		mav.addObject("dataList2",dataList2);
 		addAttribute();
+		logger.info(mav);
 		return mav;
 	}
 	
@@ -80,6 +86,7 @@ public class productController extends CommonController<productEntity> {
 		dataList = service.findDaList(0L, mapSearch, page, pageSize);
 		this.page =1;
 		addAttribute();
+		logger.info(mav);
 		return mav;
 	}
 	
@@ -97,6 +104,7 @@ public class productController extends CommonController<productEntity> {
 		}
 
 		addAttribute();
+		logger.info(mav);
 		return mav;
 	}
 
@@ -105,17 +113,18 @@ public class productController extends CommonController<productEntity> {
 	 * @param id
 	 */
 	@RequestMapping(value = { "/app-view/viewDetail" }, method = RequestMethod.GET)
-	public ModelAndView viewDetail(@RequestParam("id") String id) {
+	public ModelAndView viewDetail(@RequestParam("id") String id, HttpServletResponse res) {
 		mav = new ModelAndView("/user/viewDetail");
+		res.setCharacterEncoding("UTF-8");
 		message ="";
 		service = new productService();
 		dataSelected = service.getProductDetail(id);
-//		smav.addObject("dataSelected", dataSelected);
 		List<commentEntity> listCmt = new ArrayList<commentEntity>();
 		commentService cmtS = new commentService();
 		listCmt = cmtS.getAllCommetByProductId(id);
 		map.addAttribute("listComment", listCmt);
 		addAttribute();
+		logger.info(mav);
 		return mav;
 	}
 
@@ -160,8 +169,8 @@ public class productController extends CommonController<productEntity> {
 		count = service.countDataList(0L, mapSearch);
 		dataList = service.findDaList(0L, mapSearch, page, pageSize);
 		this.isReload = false;
-		
 		addAttribute();
+		logger.info(mav);
 		return "quickSearch";
 	}
 
@@ -206,6 +215,7 @@ public class productController extends CommonController<productEntity> {
 		this.isReload = false;
 		
 		addAttribute();
+		logger.info(mav);
 		return "advSearch";
 	}
 
@@ -222,6 +232,7 @@ public class productController extends CommonController<productEntity> {
 //		mav.addObject("dataList",dataList);;
 //		service.insertOrUpdate(0L, dataSearch);
 		addAttribute();
+		logger.info(mav);
 		return mav;
 	}
 
@@ -235,6 +246,7 @@ public class productController extends CommonController<productEntity> {
 		mav = new ModelAndView("/admin/product/addProduct");
 		dataList = service.findDaList(0L, new productEntity());
 		addAttribute();
+		logger.info(mav);
 		return mav;
 	}
 
@@ -244,6 +256,7 @@ public class productController extends CommonController<productEntity> {
 		mav = new ModelAndView("/admin/product/addProduct");
 		service.insertOrUpdate(0L, dataSearch);
 		addAttribute();
+		logger.info(mav);
 		return mav;
 	}
 	
@@ -295,5 +308,8 @@ public class productController extends CommonController<productEntity> {
 	productEntity productSearch() {
 		return new productEntity();
 	}
-
+	@ModelAttribute("comment")
+	public commentEntity comment() {
+		return new commentEntity();
+	}
 }

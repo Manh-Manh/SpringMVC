@@ -40,6 +40,13 @@
 <link href="<c:url value='/assets/css/style.css'/> " rel="stylesheet" type="text/css">
 <link href="<c:url value='/assets/css/mycss.css'/> " rel="stylesheet" type="text/css">
 
+<!-- Alert message -->
+<c:if test="${sessionScope.message!=null && sessionScope.message!=''  }">
+<script>
+	alert("${ sessionScope.message }");
+</script>
+<% session.removeAttribute("message"); %>
+</c:if>
 
 </head>
 <body>
@@ -412,12 +419,10 @@
                 </div>
 
                 <address class="address">
-                    <span> <a href="<c:url value='/app-view/myAccount' />" ><c:out value="${u.fullName!=null?u.fullName:u.userName }" /></a></span> 
+                    <span> <a href="<c:url value='/app-view/myAccount' />" ><c:out value="${(u.fullName!=null||u.fullName.lenght==0)?u.fullName:u.userName }" /></a></span> 
                     <span></span> 
                     <!-- <span>Email: <c:out value="${ u.email }" /></span>    -->
                 </address>
-            	
-			
 			</c:if>
                 <ul class="social-link">
                     <li><a href="#"><i class="fa fa-facebook"></i></a></li>

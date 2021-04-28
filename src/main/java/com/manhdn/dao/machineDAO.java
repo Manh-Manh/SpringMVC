@@ -2,6 +2,8 @@ package com.manhdn.dao;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Repository;
 import com.manhdn.database.CommonDatabase;
 import com.manhdn.entity.machineEntity;
@@ -11,7 +13,7 @@ import com.manhdn.entity.machineEntity;
 @Repository
 public class machineDAO {
 	private CommonDatabase cmd;
-
+	private Logger logger = Logger.getLogger(machineDAO.class);
 	public machineDAO() {
 		cmd = new CommonDatabase();
 	}
@@ -25,9 +27,11 @@ public class machineDAO {
 		params.add(id);
 		List<machineEntity> lst = (List<machineEntity>) cmd.getListObjByParams(sql, params, machineEntity.class);
 		if (null == lst || lst.size() == 0) {
+			logger.info("Params: " + params + "Result: " + lst);
 			return null;
 		}
 		result = lst.get(0);
+		logger.info("Params: " + params + "Result: " + lst);
 		return result;
 	}
 
@@ -39,6 +43,7 @@ public class machineDAO {
 		sql.append("SELECT * FROM machine m " + " WHERE 1 ");
 
 		result = (List<machineEntity>) cmd.getListObjByParams(sql, params, machineEntity.class);
+		logger.info("Params: " + params + "Result: " + result);
 		return result;
 	}
 }

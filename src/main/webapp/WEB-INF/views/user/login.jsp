@@ -4,12 +4,7 @@
 <!-- ...:::: Start Customer Login Section :::... -->
 <br>
 <br>
-<c:if test="${ message != null && message !='' }" >
-	<div class ="breadcrumb-title" >
-		<c:out value="${message }"></c:out>
-	</div>
-	<c:out value="${ sessionScope.user.userName }" />
-</c:if>
+
      <div class="customer-login">
         <div class="container">
             <div class="row">

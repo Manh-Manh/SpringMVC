@@ -16581,7 +16581,7 @@ a.ui-button:active,
 .comment-img img {
     width: 78px;
     height: 78px;
-    border-radius: 5px;
+/*    border-radius: 5px;*/
 }
 
 .comment-content-top {

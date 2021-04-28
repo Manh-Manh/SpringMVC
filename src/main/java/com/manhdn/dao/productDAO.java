@@ -8,6 +8,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import com.manhdn.AppConstants;
@@ -18,7 +20,7 @@ import com.manhdn.entity.*;
 @Repository
 @Transactional
 public class productDAO {
-
+	private Logger logger = Logger.getLogger(productDAO.class);
 	private CommonDatabase cmd;
 	private Long priceRange = 5000000L;
 	public productDAO() {
@@ -39,6 +41,7 @@ public class productDAO {
 		List<productEntity> lst = (List<productEntity>) cmd.getListObjByParams(sql, params, productEntity.class);
 //		productEntity pr = lst.get(0);
 //		productEntity e = getDetail("a2");
+		logger.info("Params: " + params + "Result: " + lst);
 		return lst;
 	}
 
@@ -78,6 +81,7 @@ public class productDAO {
 //				}
 //			}
 //		}
+		logger.info("Params: " + params + "Result: " + result);
 		return result;
 	}
 
@@ -176,6 +180,7 @@ public class productDAO {
 //				}
 //			}
 //		}
+		logger.info("Params: " + params + "Result: " + result);
 		return result;
 	}
 
@@ -205,6 +210,7 @@ public class productDAO {
 		params.add(productId);
 		List<productEntity> lst = (List<productEntity>) cmd.getListObjByParams(sql, params, productEntity.class);
 		if (null == lst || lst.size() == 0) {
+			logger.info("Params: " + params + "Result: " + result);
 			return null;
 		}
 		fillDataInDataList(lst);
@@ -226,6 +232,7 @@ public class productDAO {
 //			machine = machineDAO.findMachineById(result.getMachineId());
 //			result.setMachine(machine);
 //		}
+		logger.info("Params: " + params + "Result: " + result);
 		return result;
 	}
 
@@ -236,22 +243,80 @@ public class productDAO {
 	 * @param product
 	 * @return
 	 */
-	public boolean insert(Long userId, productEntity product) {
+	public boolean insertOrUpdate(Long userId, productEntity product) {
 		StringBuilder sql = new StringBuilder();
 		List<Object> params = new ArrayList<>();
 		List<productEntity> listData = new ArrayList<productEntity>();
 //		if (userId != null) {
 //			product.setCreated_by(userId);
 //		}
-		cmd = new CommonDatabase();
+		if (userId == null || product == null) {
+			logger.error("Id null: "+ userId);
+			return false;
+		}
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		String dateNow = dtf.format(LocalDateTime.now());
+		// Insert or update Order
+		if(product.getProductId() == null) {
+			String productId = AppConstants.ID_PRODUCT + (cmd.getMaxId("products", "id") + 1);
+			product.setProductId(productId);
+		}
+		sql.append("INSERT INTO `products` ( productId, productName, "
+				+ " quantity, supplierId, unitPrice, discount, "
+				+ " gender,  status, strapId, faceId, machineId, material, "
+				+ " otherFunc, image, description, del_flag, created_date,"
+				+ " updated_date, created_by, updated_by ) VALUES ");
+		sql.append(" ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ) ");
+		sql.append(" ON DUPLICATE KEY UPDATE "
+				+ " productName = VALUES(productName), "
+				+ " quantity = VALUES(quantity), "
+				+ " supplierId = VALUES(supplierId), "
+				+ " unitPrice = VALUES(unitPrice), "
+				+ " discount = VALUES(discount), "
+				+ " gender = VALUES(gender), "
+				+ " status = VALUES(status), "
+				+ " strapId = VALUES(strapId), "
+				+ " faceId = VALUES(faceId), "
+				
+				+ " machineId = VALUES(machineId), "
+				+ " material = VALUES(material), "
+				+ " otherFunc = VALUES(otherFunc), "
+				+ " description = VALUES(description), "
+				+ " del_flag = VALUES(del_flag), "
+				
+				+ " updated_date = VALUES(updated_date), "
+				+ " updated_by = VALUES(updated_by) "
+				+ "");
+		params.add(product.getProductId());
+		params.add(product.getProductName());
+		params.add(product.getQuantity());
+		params.add(product.getSupplierId());
+		params.add(product.getUnitPrice());
+		params.add(product.getDiscount());
+		params.add(product.getGender());
+		params.add(product.getStatus());
+		params.add(product.getStrapId());
+		params.add(product.getFaceId());
+		params.add(product.getMachineId());
+		params.add(product.getMaterial());
 
-		return cmd.insertOrUpdateDataBase(sql, params);
+		params.add(product.getOtherFunc()!=null?product.getOtherFunc():"");
+		params.add(product.getImage());
+		params.add(product.getDescription()!=null?product.getDescription():"");
+		params.add(product.getDel_flag()!=null?product.getDel_flag():"0");
+		params.add(dateNow);
+		params.add(dateNow);
+		params.add(userId);
+		params.add(userId);
+		cmd = new CommonDatabase();
+		boolean r = cmd.insertOrUpdateDataBase(sql, params);
+		logger.info("Params: " + params + "Result: " + r);
+		return r;
 	}
 
 	public List<productEntity> quickSearch(Long userId, String strSearch) {
 		// TODO Auto-generated method stub
 		StringBuilder sql = new StringBuilder();
-		productEntity result = new productEntity();
 		List<Object> params = new ArrayList<Object>();
 
 		sql.append("SELECT * FROM products p " + "WHERE p.productName like ? ");
@@ -260,9 +325,11 @@ public class productDAO {
 		params.add("%" + strSearch + "%");
 		List<productEntity> lst = (List<productEntity>) cmd.getListObjByParams(sql, params, productEntity.class);
 		if (null == lst || lst.size() == 0) {
+			logger.info("Params: " + params + "Result: " + lst);
 			return null;
 		}
 		fillDataInDataList(lst);
+		logger.info("Params: " + params + "Result: " + lst);
 		return lst;
 	}
 
@@ -278,16 +345,17 @@ public class productDAO {
 
 	public List<productEntity> findListSale() {
 		StringBuilder sql = new StringBuilder();
-		productEntity result = new productEntity();
 		List<Object> params = new ArrayList<Object>();
 		sql.append("SELECT * FROM products p " + " WHERE p.discount > 0 AND sysdate() < p.endDate_discount ");
 		sql.append(" AND (p.status != 0 or p.status is null) ");
 		sql.append(" ORDER BY p.unitPrice ");
 		List<productEntity> lst = (List<productEntity>) cmd.getListObjByParams(sql, params, productEntity.class);
 		if (null == lst || lst.size() == 0) {
+			logger.info("Params: " + params + "Result: " + lst);
 			return null;
 		}
 		fillDataInDataList(lst);
+		logger.info("Params: " + params + "Result: " + lst);
 		return lst;
 	}
 
@@ -300,9 +368,11 @@ public class productDAO {
 		sql.append(" ORDER BY p.created_date desc LIMIT 0, 12 ");
 		List<productEntity> lst = (List<productEntity>) cmd.getListObjByParams(sql, params, productEntity.class);
 		if (null == lst || lst.size() == 0) {
+			logger.info("Params: " + params + "Result: " + lst);
 			return null;
 		}
 		fillDataInDataList(lst);
+		logger.info("Params: " + params + "Result: " + lst);
 		return lst;
 	}
 
@@ -314,6 +384,7 @@ public class productDAO {
 	 */
 	public List<productEntity> findListSuggest(productEntity dataSelected) {
 		if(dataSelected == null) {
+			logger.error("data null: "+ dataSelected);
 			return null;
 		}
 		StringBuilder sql = new StringBuilder();
@@ -348,9 +419,11 @@ public class productDAO {
 		
 		List<productEntity> lst = (List<productEntity>) cmd.getListObjByParams(sql, params, productEntity.class);
 		if (null == lst || lst.size() == 0) {
+			logger.info("Params: " + params + "Result: " + lst);
 			return null;
 		}
 		fillDataInDataList(lst);
+		logger.info("Params: " + params + "Result: " + lst);
 		return lst;
 	}
 

@@ -1,5 +1,7 @@
 package com.manhdn.entity;
 
+import java.util.List;
+
 public class commentEntity extends CommonEntity {
 
 	private String commentId;
@@ -8,6 +10,24 @@ public class commentEntity extends CommonEntity {
 	private Long status;
 	private String content;
 	private userEntity user;
+	private String parentId;
+	private List<commentEntity> listCmtReply;
+	public List<commentEntity> getListCmtReply() {
+		return listCmtReply;
+	}
+
+	public String getParentId() {
+		return parentId;
+	}
+
+	public void setParentId(String parentId) {
+		this.parentId = parentId;
+	}
+
+	public void setListCmtReply(List<commentEntity> listCmtReply) {
+		this.listCmtReply = listCmtReply;
+	}
+
 	public userEntity getUser() {
 		return user;
 	}

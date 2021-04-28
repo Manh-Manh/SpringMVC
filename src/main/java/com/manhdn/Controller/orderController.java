@@ -6,6 +6,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -38,7 +39,7 @@ public class orderController extends CommonController<orderEntity> {
 
 	@Autowired
 	orderService service;
-
+	Logger logger = Logger.getLogger(orderController.class);
 	/**
 	 * 
 	 * @return
@@ -49,6 +50,7 @@ public class orderController extends CommonController<orderEntity> {
 		mav = new ModelAndView("/admin/order/manageOrder");
 		dataList = service.findDaList(0L, null);
 		addData();
+		logger.info(mav);
 		return mav;
 	}
 
@@ -69,6 +71,7 @@ public class orderController extends CommonController<orderEntity> {
 			mav = new ModelAndView("/user/emptyCart");
 		}
 		addData();
+		logger.info(mav);
 		return mav;
 	}
 
@@ -86,6 +89,7 @@ public class orderController extends CommonController<orderEntity> {
 			mav = new ModelAndView("/user/emptyCart");
 		}
 		addData();
+		logger.info(mav);
 		return mav;
 	}
 
@@ -101,6 +105,7 @@ public class orderController extends CommonController<orderEntity> {
 		userEntity user = (userEntity) session.getAttribute(AppConstants.SESSION_USER);
 		if (user == null || user.getUserId() == null) {
 			mav = new ModelAndView("redirect:/app-view/login");
+			logger.info(mav);
 			return mav;
 		}
 		dataSelected = service.findOrderById(orderId);
@@ -117,6 +122,7 @@ public class orderController extends CommonController<orderEntity> {
 		}
 		mav = new ModelAndView("redirect:/app-view/myAccount");
 		addData();
+		logger.info(mav);
 		return mav;
 	}
 
@@ -137,6 +143,7 @@ public class orderController extends CommonController<orderEntity> {
 			cart.setUserId(user.getUserId());
 			boolean i = service.insertOrUpdate(user.getUserId(), cart, AppConstants.OS_NO_ORDER);
 		}
+		logger.info(mav);
 		return mav;
 
 	}
@@ -158,6 +165,7 @@ public class orderController extends CommonController<orderEntity> {
 			cart.setUserId(user.getUserId());
 			boolean i = service.insertOrUpdate(user.getUserId(), cart, AppConstants.OS_NO_ORDER);
 		}
+		logger.info(mav);
 		return mav;
 	}
 
@@ -220,6 +228,7 @@ public class orderController extends CommonController<orderEntity> {
 		}
 
 		addData();
+		logger.info(mav);
 		return mav;
 	}
 
@@ -244,6 +253,7 @@ public class orderController extends CommonController<orderEntity> {
 			if (updateUser == false) {
 				message = "Đặt hàng không thành công!";
 				addMessage(message, session);
+				logger.info(mav);
 				return mav;
 			}
 		}
@@ -256,6 +266,7 @@ public class orderController extends CommonController<orderEntity> {
 			message = "Đặt hàng không thành công!";
 			addMessage(message, session);
 			addData();
+			logger.info(mav);
 			return mav;
 		}
 		mav = new ModelAndView("redirect:/app-view/homePage");
@@ -263,6 +274,7 @@ public class orderController extends CommonController<orderEntity> {
 		addMessage(message, session);
 		cart.getListProduct().clear();
 		addData();
+		logger.info(mav);
 		return mav;
 
 	}

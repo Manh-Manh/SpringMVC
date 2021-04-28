@@ -20,3 +20,21 @@
     border-radius: 50%;
     object-fit: cover;
 }
+.cmt-avatar{
+	border-radius: 50%;
+    object-fit: cover;
+}
+.inp-reply{
+	margin-left: 100px;
+}
+.inp-reply textarea{
+    margin: 0px auto;
+    width: 80%;
+}
+.btn-reply{
+	width: 12%;
+}
+
+
+
+

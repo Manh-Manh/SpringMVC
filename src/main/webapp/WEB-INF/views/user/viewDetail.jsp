@@ -108,10 +108,22 @@
 		                        <div class="oldPrice price unitPrice " style="color: #929292;">
 	                            	<s><i>₫<c:out value="${dataSelected.stringUnitPrice }"></c:out></i></s>
 	                            </div>
-	                            <div class="price discountPrice newPrice" style="color: red;">₫ 
-	                            	<c:out value="${dataSelected.stringDiscountPrice }"></c:out>
-	                            	 <i>(-<c:out value="${dataSelected.discount }"></c:out>%) </i>
+	                            <div class="price discountPrice newPrice" style="color: red;">₫
+	                            	<c:out value="${dataSelected.stringDiscountPrice } (-${dataSelected.discount }%)"></c:out>
+	                            	 
 	                            </div>
+	                            <!-- Khuyen mai -->
+	                            <hr>
+	                             <h4 class="title" style="font-size:18px;"><b>Giảm giá</b></h4>
+	                             <br>
+	                            	 <c:forEach var="dis" items="${dataSelected.lstDiscount }">
+	                            	 
+		                                <div class="product-stock"> <span class="product-stock-in"><i class="ion-checkmark-circled"></i> </span>
+			                            	 <c:out value="${dis.description }: " />
+			                            	 <span  style="color: red;"><c:out value ="-${dis.discount }% "></c:out> <span>
+		                            	 </div>
+	                            	 </c:forEach>
+	                            
                             </c:if>
                             <c:if test="${dataSelected.discount == null || dataSelected.discount <= 0}">
 		                        <div class="price unitPrice newPrice" style="color: red;">₫ 

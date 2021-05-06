@@ -10,7 +10,9 @@ public class faceEntity extends CommonEntity {
 	private String description;
 	private String status;
 
-	
+	public String getDetailString() {
+		return faceName + " (Dày: "+faceSize+" mm; Rộng: "+thickness+" mm)";
+	}
 	public String getFaceId() {
 		return faceId;
 	}

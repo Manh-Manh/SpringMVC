@@ -20,8 +20,20 @@
   <link rel="stylesheet" href="../../plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="<c:url value='/assets/backend/dist/css/adminlte.min.css'/> ">
+  <link href="<c:url value='/assets/css/mycss.css'/> " rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="<c:url value='/assets/css/vendor/jquery-ui.min.css'/> "> 
+  
 </head>
 <body class="hold-transition sidebar-mini">
+
+<!-- Alert message -->
+<c:if test="${sessionScope.message!=null && sessionScope.message!=''  }">
+<script>
+	alert("${ sessionScope.message }");
+</script>
+<% session.removeAttribute("message"); %>
+</c:if>
+
 <div class="wrapper">
   <!-- Navbar -->
   <nav class="main-header navbar navbar-expand navbar-white navbar-light">

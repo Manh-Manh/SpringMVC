@@ -1,6 +1,11 @@
 package com.manhdn.entity;
 
 import java.text.DecimalFormat;
+import java.util.List;
+
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
+
+import com.manhdn.FunctionCommon;
 
 public class productEntity extends CommonEntity {
 
@@ -11,10 +16,8 @@ public class productEntity extends CommonEntity {
 	private String supplierId;
 	private Long unitPrice;
 	private String gender;
-	private String startDate_discount;
 	private Double discount;
-	private String endDate_discount;
-	private String status;
+	private Long status;
 	private String strapId;
 	private String faceId;
 	private String machineId;
@@ -24,9 +27,10 @@ public class productEntity extends CommonEntity {
 	private String image;
 	private Long del_flag;
 	private String description;
+	private String strLstDiscount;// danh sach discountId - string
 	private Long cartTotal;
 	private String cartTotalString;
-
+	private List<discountEntity> lstDiscount;
 	// Supplier
 	private supplierEntity supplier;
 	// Strap
@@ -34,10 +38,35 @@ public class productEntity extends CommonEntity {
 	private faceEntity face;
 	private machineEntity machine;
 	private Long disCountPrice = 0L;
+	// file image
+	private CommonsMultipartFile[] fileImage;
+	public CommonsMultipartFile[] getFileImage() {
+		return fileImage;
+	}
+
+	public void setFileImage(CommonsMultipartFile[] fileImage) {
+		this.fileImage = fileImage;
+	}
+
+	public String getStrLstDiscount() {
+		return strLstDiscount;
+	}
+
+	public void setStrLstDiscount(String strLstDiscount) {
+		this.strLstDiscount = strLstDiscount;
+	}
+
+	public List<discountEntity> getLstDiscount() {
+		return lstDiscount;
+	}
+
+	public void setLstDiscount(List<discountEntity> lstDiscount) {
+		this.lstDiscount = lstDiscount;
+	}
 
 	public Long getDisCountPrice() {
-		if (unitPrice != null && unitPrice > 0 && discount != null && discount > 0) {
-			disCountPrice = (long) ((1 - 0.01) * discount * unitPrice);
+		if (unitPrice != null && unitPrice > 0 && getDiscount() != null && getDiscount() > 0) {
+			disCountPrice = (long) ((1 - 0.01 * getDiscount()) * unitPrice);
 		}
 		return disCountPrice;
 	}
@@ -142,15 +171,18 @@ public class productEntity extends CommonEntity {
 		this.gender = gender;
 	}
 
-	public String getStartDate_discount() {
-		return startDate_discount;
-	}
-
-	public void setStartDate_discount(String startDate_discount) {
-		this.startDate_discount = startDate_discount;
-	}
 
 	public Double getDiscount() {
+		if (FunctionCommon.isEmpty(lstDiscount)) {
+			return 0D;
+		}
+//		if (discount != null || discount > 0D) {
+//			return discount;
+//		}
+		discount = 0D;
+		for (discountEntity d : lstDiscount) {
+			discount += d.getDiscount();
+		}
 		return discount;
 	}
 
@@ -158,19 +190,12 @@ public class productEntity extends CommonEntity {
 		this.discount = discount;
 	}
 
-	public String getEndDate_discount() {
-		return endDate_discount;
-	}
 
-	public void setEndDate_discount(String endDate_discount) {
-		this.endDate_discount = endDate_discount;
-	}
-
-	public String getStatus() {
+	public Long getStatus() {
 		return status;
 	}
 
-	public void setStatus(String status) {
+	public void setStatus(Long status) {
 		this.status = status;
 	}
 
@@ -271,5 +296,8 @@ public class productEntity extends CommonEntity {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	public String getStatusString() {
+		return this.status==1?"Hoạt động":"Không hoạt động";
 	}
 }

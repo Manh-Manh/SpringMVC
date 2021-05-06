@@ -40,10 +40,10 @@ public class productService {
 		return prDAO.getProductDetail(id);
 	}
 
-	public void insertOrUpdate(long userId, productEntity dataSearch) {
+	public boolean insertOrUpdate(long userId, productEntity dataSearch) {
 		// TODO Auto-generated method stub
 		prDAO = new productDAO();
-		prDAO.insertOrUpdate(userId,dataSearch);
+		return prDAO.insertOrUpdate(userId,dataSearch);
 	}
 
 	public List<productEntity> quickSearch(Long userId, String strSearch) {

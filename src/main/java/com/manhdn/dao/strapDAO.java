@@ -22,7 +22,7 @@ public class strapDAO {
 		List<Object> params = new ArrayList<Object>();
 		StringBuilder sql = new StringBuilder();
 
-		sql.append("SELECT * FROM strap m " + " WHERE m.strapId = ? and (m.status != 0 or m.status is null) ");
+		sql.append("SELECT * FROM strap s " + " WHERE s.strapId = ? and (s.status != 0 or s.status is null) ");
 		params.add(id);
 		List<strapEntity> lst = (List<strapEntity>) cmd.getListObjByParams(sql, params, strapEntity.class);
 		if (null == lst || lst.size() == 0) {

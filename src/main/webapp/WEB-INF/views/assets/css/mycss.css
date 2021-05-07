@@ -34,6 +34,15 @@
 .btn-reply{
 	width: 12%;
 }
+.img-product{
+	max-width: 250px;
+	object-fit: cover;
+}
+.btn-image{
+	height: fit-content;
+    padding: 0px 0px;
+    margin: 10px;
+}
 
 
 

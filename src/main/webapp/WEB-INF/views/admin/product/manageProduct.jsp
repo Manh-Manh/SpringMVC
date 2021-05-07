@@ -38,8 +38,8 @@
                     <th>Hình ảnh</th>
                     <th>Thương hiệu</th>
                     <th>Số lượng</th>
-                    <th>Giá</th>
                     <th>Giảm giá</th>
+                     <th>Giá</th>
                     <th>Hành động</th>
                   </tr>
                   </thead>
@@ -54,8 +54,13 @@
                     <td><c:out value ="${ item.discount }" /></td>
                     <td><c:out value ="${ item.stringUnitPrice }" /> đ</td>
                     <td>
-                    	<a href="<c:url value = '#' /> ">Sửa</a>
-                    	<a href="<c:url value = '#' /> ">Xóa</a>
+                    <c:url var="linkEdit" value="/admin/editProduct" >
+                    		<c:param name="productId" value="${item.productId }"/>
+                    	</c:url>
+                    	<a href="${linkEdit }">Sửa</a>
+                    	
+                    	
+                    	<a href="<c:url value = '/admin/' /> ">Xóa</a>
                     	<%--<a href="<c:url value = '#' /> ">Sửa</a>--%>
                     </td>
                   </tr>  

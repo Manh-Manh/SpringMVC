@@ -1,5 +1,8 @@
 package com.manhdn.Controller;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -35,6 +38,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.Gson;
@@ -42,11 +46,16 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
+import com.manhdn.dao.discountDAO;
 import com.manhdn.dao.productDAO;
 import com.manhdn.entity.ajaxEntity;
 import com.manhdn.entity.commentEntity;
+import com.manhdn.entity.discountEntity;
+import com.manhdn.entity.faceEntity;
 import com.manhdn.entity.productEntity;
+import com.manhdn.entity.userEntity;
 import com.manhdn.service.commentService;
+import com.manhdn.service.faceService;
 import com.manhdn.service.productService;
 
 @Controller
@@ -228,7 +237,7 @@ public class productController extends CommonController<productEntity> {
 	public ModelAndView manageProduct() {
 		service = new productService();
 		mav = new ModelAndView("/admin/product/manageProduct");
-		dataList = service.findDaList(0L, new productEntity());
+		dataList = service.findAll();
 //		mav.addObject("dataList",dataList);;
 //		service.insertOrUpdate(0L, dataSearch);
 		addAttribute();
@@ -241,9 +250,20 @@ public class productController extends CommonController<productEntity> {
 	 * @return
 	 */
 	@RequestMapping(value = { "/admin/addProduct" }, method = RequestMethod.GET)
-	public ModelAndView addProductView() {
+	public ModelAndView addProductView(HttpSession session) {
+		userEntity user = (userEntity) session.getAttribute(AppConstants.SESSION_USER);
+		if(user == null || user.getUserId() ==null) {
+			mav = new ModelAndView("redirect:/app-view");
+			logger.error("Khong co quyen");
+			session.setAttribute(AppConstants.SESSION_MESSAGE, "Liên hệ quản trị hệ thống để được hỗ trợ");
+			return mav;
+		}
 		service = new productService();
 		mav = new ModelAndView("/admin/product/addProduct");
+		discountDAO disD = new discountDAO();
+		List<discountEntity> lstDiscount = disD.findDataList(0L, null);
+		map.addAttribute("lstDiscount", lstDiscount);
+		map.addAttribute("isInsert", 1);
 		dataList = service.findDaList(0L, new productEntity());
 		addAttribute();
 		logger.info(mav);
@@ -259,7 +279,98 @@ public class productController extends CommonController<productEntity> {
 		logger.info(mav);
 		return mav;
 	}
+
+	@RequestMapping(value = { "/admin/addNewProduct" }, method = RequestMethod.POST)
+	public ModelAndView addNewProduct(@ModelAttribute("dataInsert") productEntity dataInsert, HttpSession session,
+			HttpServletRequest request) {
+		userEntity user = (userEntity) session.getAttribute(AppConstants.SESSION_USER);
+		if(user == null || user.getUserId() ==null) {
+			mav = new ModelAndView("redirect:/app-view");
+			logger.error("Khong co quyen");
+			session.setAttribute(AppConstants.SESSION_MESSAGE, "Liên hệ quản trị hệ thống để được hỗ trợ");
+			return mav;
+		}
+		service = new productService();
+		mav = new ModelAndView("/admin/product/addProduct");
+		discountDAO disD = new discountDAO();
+		List<discountEntity> lstDiscount = disD.findDataList(0L, null);
+		
+		// upload Anh
+		if(dataInsert.getFileImage() != null && dataInsert.getFileImage().length >0 ) {
+			if(!FunctionCommon.isEmpty(dataInsert.getFileImage()[0].getOriginalFilename())) {
+				String upload = this.doUpload(request, dataInsert);
+				dataInsert.setImage(dataInsert.getFileImage()[0].getOriginalFilename());
+			}
+		}
+		if(service.insertOrUpdate(0L, dataInsert)) {
+			message = "Cập nhật thành công!";
+		}else {
+			message= AppConstants.MESSAGE_ERROR;
+		}
+		dataSelected = service.getProductDetail(dataInsert.getProductId());
+		mav = new ModelAndView("/admin/product/addProduct");
+		session.setAttribute(AppConstants.SESSION_MESSAGE, message);
+		dataSelected = service.getProductDetail(dataInsert.getProductId());
+		
+		map.addAttribute("lstDiscount", lstDiscount);
+//		dataList = service.findDaList(0L, new productEntity());
+		addAttribute();
+		logger.info(mav);
+		return this.editProductView(session, dataInsert.getProductId());
+//		return mav;
+	}
+
 	
+	@RequestMapping(value = { "/admin/editProduct" }, method = RequestMethod.GET)
+	public ModelAndView editProductView(HttpSession session, @RequestParam("productId") String productId) {
+		userEntity user = (userEntity) session.getAttribute(AppConstants.SESSION_USER);
+		
+		if(user == null || user.getUserId() ==null) {
+			mav = new ModelAndView("redirect:/app-view");
+			logger.error("Khong co quyen");
+			session.setAttribute(AppConstants.SESSION_MESSAGE, "Liên hệ quản trị hệ thống để được hỗ trợ");
+			return mav;
+		}
+		if(productId == null) {
+			mav = new ModelAndView("redirect:/app-view");
+			logger.error("Loi id null");
+			session.setAttribute(AppConstants.SESSION_MESSAGE, "Liên hệ quản trị hệ thống để được hỗ trợ");
+			return mav;
+		}
+		service = new productService();
+		dataSelected = service.getProductDetail(productId);
+		// list Face
+		faceService faceS = new faceService();
+		List<faceEntity> lstFace = new ArrayList<faceEntity>();
+		lstFace = faceS.findDaList(null, null);
+		map.addAttribute("lstFace", lstFace);
+		mav = new ModelAndView("/admin/product/addProduct");
+		discountDAO disD = new discountDAO();
+		List<discountEntity> lstDiscount = disD.findDataList(0L, null);
+		List<discountEntity> lstDiscount2 = new ArrayList<discountEntity>();
+		
+		// remove discount 
+		for(discountEntity d : lstDiscount) {
+			lstDiscount2.add(d);
+		}
+		
+		if(!FunctionCommon.isEmpty(dataSelected.getLstDiscount())) {
+			for(int  i =  0; i< dataSelected.getLstDiscount().size();i++) {
+				String id = dataSelected.getLstDiscount().get(i).getDiscountId();
+				for(int j =0;j< lstDiscount2.size();j++) {
+					if(id.equals(lstDiscount2.get(j).getDiscountId())) {
+						lstDiscount2.remove(j);
+						j--;
+					}
+				}
+			}
+		}
+		map.addAttribute("isInsert", 0);
+		map.addAttribute("lstDiscount", lstDiscount2);
+		addAttribute();
+		logger.info(mav);
+		return mav;
+	}
 	private void addAttribute() {
 		listSale = service.findListSale();
 		listSuggest = service.findListSuggest(this.dataSelected);
@@ -297,7 +408,57 @@ public class productController extends CommonController<productEntity> {
 	    	Class<? extends Object> res = response.getClass();
 	    	
 	}
-	
+	private String doUpload(HttpServletRequest request, productEntity prUpload) {
+
+		// Thư mục gốc upload file.
+		String uploadRootPath = request.getServletContext().getRealPath("upload");
+//		System.out.println("uploadRootPath=" + uploadRootPath);
+
+		File uploadRootDir = new File(uploadRootPath);
+		//
+		// Tạo thư mục gốc upload nếu nó không tồn tại.
+		if (!uploadRootDir.exists()) {
+			uploadRootDir.mkdirs();
+		}
+		CommonsMultipartFile[] fileDatas = prUpload.getFileImage();
+		//
+		List<File> uploadedFiles = new ArrayList<File>();
+		for (CommonsMultipartFile fileData : fileDatas) {
+
+			// Tên file gốc tại Client.
+			String name = fileData.getOriginalFilename();
+//			System.out.println("Client File Name = " + name);
+
+			if (name != null && name.length() > 0) {
+				try {
+					// Tạo file tại Server.
+					String urlDir = "\\..\\WEB-INF\\views\\assets\\images\\products";
+					File serverFile = new File(uploadRootDir.getAbsolutePath() + urlDir + File.separator + name);
+
+					// Luồng ghi dữ liệu vào file trên Server.
+					BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(serverFile));
+					stream.write(fileData.getBytes());
+					stream.close();
+					//
+					// Tao file vao project
+					urlDir = "D:\\java\\web\\SpringMVC\\src\\main\\webapp\\WEB-INF\\views\\assets\\images\\products";
+					serverFile = new File(urlDir + File.separator + name);
+
+					// Luồng ghi dữ liệu vào file trên Server.
+					stream = new BufferedOutputStream(new FileOutputStream(serverFile));
+					stream.write(fileData.getBytes());
+					stream.close();
+					uploadedFiles.add(serverFile);
+//					System.out.println("Write file: " + serverFile);
+				} catch (Exception e) {
+					System.out.println("Error Write file: " + name);
+					return "Fail";
+				}
+			}
+		}
+
+		return "Success";
+	}
 	
 	@ModelAttribute("dataInsert")
 	productEntity dataIn() {

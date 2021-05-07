@@ -25,6 +25,7 @@ public class CommonController<T> {
 	protected Integer pageSize = AppConstants.PAGE_SIZE;
 	protected T dataSearch;
 	protected T dataSelected;
+	protected boolean isInsert= true;
 	protected boolean isCount= true;
 	protected boolean isReload = true;
 	protected Map<String, List<String>> mapSearch = new HashMap<String, List<String>>();

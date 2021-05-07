@@ -5,6 +5,14 @@ public class strapEntity extends CommonEntity {
 	private String strapName;
 	private String materialStrap;
 	private String description;
+	private Long status;
+	public Long getStatus() {
+		return status;
+	}
+
+	public void setStatus(Long status) {
+		this.status = status;
+	}
 
 	public String getStrapId() {
 		return strapId;

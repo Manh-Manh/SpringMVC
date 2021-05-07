@@ -51,8 +51,10 @@ public class AppConstants {
 	public static String ID_SUPPLIER = "SUP";
 	public static String ID_ODER = "ORDER";
 	public static String ID_COMMENT = "CMT";
-	public static String ID_USER = "user";
+	public static String ID_USER = "USER";
+	public static String ID_DISCOUNT = "DIS";
 	// ORDER STATUS
 	
-	
+	//
+	public static String MESSAGE_ERROR = "Liên hệ quản trị hệ thống để được hỗ trợ.";
 }

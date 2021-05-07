@@ -37,6 +37,7 @@
 <script src="<c:url value='/assets/backend/dist/js/adminlte.min.js'/> "></script>
 <!-- AdminLTE for demo purposes -->
 <script src="<c:url value='/assets/backend/dist/js/demo.js'/> "></script>
+    <script src="<c:url value='/assets/js/myjsadmin.js'/>"></script>
 <!-- Page specific script -->
 <script>
   $(function () {

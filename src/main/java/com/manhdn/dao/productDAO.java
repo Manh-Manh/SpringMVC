@@ -23,6 +23,7 @@ public class productDAO {
 	private Logger logger = Logger.getLogger(productDAO.class);
 	private CommonDatabase cmd;
 	private Long priceRange = 5000000L;
+
 	public productDAO() {
 		cmd = new CommonDatabase();
 	}
@@ -46,10 +47,10 @@ public class productDAO {
 	}
 
 	public List<productEntity> findDataList(Long userId, productEntity dataSearch) {
-		
+
 		StringBuilder sql = new StringBuilder();
 		sql.append(" SELECT DISTINCT  p.id, p.productId, p.productName, p.quantity, p.supplierId, p.unitPrice, "
-				+ " p.disCount, p.gender, p.startDate_discount, p.endDate_discount, p.status, p.strapId, "
+				+ " p.gender, p.status, p.strapId, "
 				+ " p.faceId, p.machineId, p.material, p.otherFunc, p.image, p.description, p.del_flag, "
 				+ " p.created_date, p.updated_date, p.deleted_date, " + " p.created_by, p.updated_by, p.deleted_by "
 				+ " FROM products p join suppliers sup on p.supplierId = sup.supplierId "
@@ -85,12 +86,13 @@ public class productDAO {
 		return result;
 	}
 
-	public List<productEntity> findDataList(Long userId, Map<String, List<String>> mapSearch, Integer page, Integer pageSize) {
+	public List<productEntity> findDataList(Long userId, Map<String, List<String>> mapSearch, Integer page,
+			Integer pageSize) {
 
 		StringBuilder sql = new StringBuilder();
 		List<Object> params = new ArrayList<>();
 		sql.append(" SELECT DISTINCT  p.id, p.productId, p.productName, p.quantity, p.supplierId, p.unitPrice, "
-				+ " p.disCount, p.gender, p.startDate_discount, p.endDate_discount, p.status, p.strapId, "
+				+ " p.gender, p.status, p.strapId, "
 				+ " p.faceId, p.machineId, p.material, p.otherFunc, p.image, p.description, p.del_flag, "
 				+ " p.created_date, p.updated_date, p.deleted_date, " + " p.created_by, p.updated_by, p.deleted_by "
 				+ " FROM products p join suppliers sup on p.supplierId = sup.supplierId "
@@ -119,8 +121,7 @@ public class productDAO {
 				}
 				if (key.equals(AppConstants.MAP_SEARCH_STRING)) {
 					if (!FunctionCommon.isEmpty(mapSearch.get(key))) {
-						String sqlLike = FunctionCommon.generateSqlLike("productName",
-								mapSearch.get(key).get(0));
+						String sqlLike = FunctionCommon.generateSqlLike("productName", mapSearch.get(key).get(0));
 						if (!FunctionCommon.isEmpty(sqlLike)) {
 							sql.append(" AND ( ");
 							sql.append(sqlLike);
@@ -206,7 +207,7 @@ public class productDAO {
 //		sql.append("WHERE p.producId = ? and p.status = 1 ");
 		sql.append("SELECT * FROM products p " + "WHERE p.productId = ");
 		sql.append("?");
-		sql.append(" and (p.status != 0 or p.status is null) ");
+//		sql.append(" and (p.status != 0 or p.status is null) ");
 		params.add(productId);
 		List<productEntity> lst = (List<productEntity>) cmd.getListObjByParams(sql, params, productEntity.class);
 		if (null == lst || lst.size() == 0) {
@@ -251,48 +252,43 @@ public class productDAO {
 //			product.setCreated_by(userId);
 //		}
 		if (userId == null || product == null) {
-			logger.error("Id null: "+ userId);
+			logger.error("Id null: " + userId);
 			return false;
 		}
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		String dateNow = dtf.format(LocalDateTime.now());
 		// Insert or update Order
-		if(product.getProductId() == null) {
+		if (product.getProductId() == null) {
 			String productId = AppConstants.ID_PRODUCT + (cmd.getMaxId("products", "id") + 1);
 			product.setProductId(productId);
 		}
-		sql.append("INSERT INTO `products` ( productId, productName, "
-				+ " quantity, supplierId, unitPrice, discount, "
+		sql.append("INSERT INTO `products` ( productId, productName, " + " quantity, supplierId, unitPrice,  "
 				+ " gender,  status, strapId, faceId, machineId, material, "
 				+ " otherFunc, image, description, del_flag, created_date,"
 				+ " updated_date, created_by, updated_by ) VALUES ");
-		sql.append(" ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ) ");
-		sql.append(" ON DUPLICATE KEY UPDATE "
+		sql.append(" ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ) ");
+		sql.append(" ON DUPLICATE KEY UPDATE " 
 				+ " productName = VALUES(productName), "
-				+ " quantity = VALUES(quantity), "
+				+ " quantity = VALUES(quantity), " 
 				+ " supplierId = VALUES(supplierId), "
 				+ " unitPrice = VALUES(unitPrice), "
-				+ " discount = VALUES(discount), "
 				+ " gender = VALUES(gender), "
-				+ " status = VALUES(status), "
+				+ " status = VALUES(status), " 
 				+ " strapId = VALUES(strapId), "
 				+ " faceId = VALUES(faceId), "
-				
-				+ " machineId = VALUES(machineId), "
+				+ " machineId = VALUES(machineId), " 
 				+ " material = VALUES(material), "
-				+ " otherFunc = VALUES(otherFunc), "
+				+ " otherFunc = VALUES(otherFunc), " 
+				+ " image = VALUES(image), " 
 				+ " description = VALUES(description), "
 				+ " del_flag = VALUES(del_flag), "
-				
-				+ " updated_date = VALUES(updated_date), "
-				+ " updated_by = VALUES(updated_by) "
-				+ "");
+
+				+ " updated_date = VALUES(updated_date), " + " updated_by = VALUES(updated_by) " + "");
 		params.add(product.getProductId());
 		params.add(product.getProductName());
 		params.add(product.getQuantity());
 		params.add(product.getSupplierId());
 		params.add(product.getUnitPrice());
-		params.add(product.getDiscount());
 		params.add(product.getGender());
 		params.add(product.getStatus());
 		params.add(product.getStrapId());
@@ -300,10 +296,10 @@ public class productDAO {
 		params.add(product.getMachineId());
 		params.add(product.getMaterial());
 
-		params.add(product.getOtherFunc()!=null?product.getOtherFunc():"");
+		params.add(product.getOtherFunc() != null ? product.getOtherFunc() : "");
 		params.add(product.getImage());
-		params.add(product.getDescription()!=null?product.getDescription():"");
-		params.add(product.getDel_flag()!=null?product.getDel_flag():"0");
+		params.add(product.getDescription() != null ? product.getDescription() : "");
+		params.add(product.getDel_flag() != null ? product.getDel_flag() : "0");
 		params.add(dateNow);
 		params.add(dateNow);
 		params.add(userId);
@@ -311,6 +307,17 @@ public class productDAO {
 		cmd = new CommonDatabase();
 		boolean r = cmd.insertOrUpdateDataBase(sql, params);
 		logger.info("Params: " + params + "Result: " + r);
+		
+		// Update discount
+		discountDAO disD = new discountDAO();
+		List<discountEntity> lstDiscount = disD.findDataList(0L, null);
+		if(!FunctionCommon.isEmpty(product.getStrLstDiscount())) {
+			
+			
+			product.setLstDiscount(lstDiscount);
+			
+			disD.insertOrUpdateProductDiscount(userId, product);
+		}
 		return r;
 	}
 
@@ -346,9 +353,16 @@ public class productDAO {
 	public List<productEntity> findListSale() {
 		StringBuilder sql = new StringBuilder();
 		List<Object> params = new ArrayList<Object>();
-		sql.append("SELECT * FROM products p " + " WHERE p.discount > 0 AND sysdate() < p.endDate_discount ");
+		sql.append("SELECT * FROM products p " 
+				+ " WHERE p.productId IN ( "
+				+ " SELECT pd.productId FROM product_discount pd WHERE pd.discountId IN ( "
+				+ " SELECT d.discountId FROM discount d WHERE d.endDate > SYSDATE() "
+				+ ") "
+				+ ") ");
 		sql.append(" AND (p.status != 0 or p.status is null) ");
+		
 		sql.append(" ORDER BY p.unitPrice ");
+		sql.append(" LIMIT 0, 24 ");
 		List<productEntity> lst = (List<productEntity>) cmd.getListObjByParams(sql, params, productEntity.class);
 		if (null == lst || lst.size() == 0) {
 			logger.info("Params: " + params + "Result: " + lst);
@@ -377,14 +391,14 @@ public class productDAO {
 	}
 
 	/**
-	 * Tìm kiếm sản phẩm liên quan 
-	 * - theo thương hiệu hoặc theo khoảng giá +-5 tr
+	 * Tìm kiếm sản phẩm liên quan - theo thương hiệu hoặc theo khoảng giá +-5 tr
+	 * 
 	 * @param dataSelected
 	 * @return
 	 */
 	public List<productEntity> findListSuggest(productEntity dataSelected) {
-		if(dataSelected == null) {
-			logger.error("data null: "+ dataSelected);
+		if (dataSelected == null) {
+			logger.error("data null: " + dataSelected);
 			return null;
 		}
 		StringBuilder sql = new StringBuilder();
@@ -392,7 +406,7 @@ public class productDAO {
 		List<Object> params = new ArrayList<Object>();
 		sql.append(" SELECT * FROM ( "
 				+ " SELECT  p.id, p.productId, p.productName, p.quantity, p.supplierId, p.unitPrice, "
-				+ " p.disCount, p.gender, p.startDate_discount, p.endDate_discount, p.status, p.strapId, "
+				+ " p.gender, p.status, p.strapId, "
 				+ " p.faceId, p.machineId, p.material, p.otherFunc, p.image, p.description, p.del_flag, "
 				+ " p.created_date, p.updated_date, p.deleted_date, " + " p.created_by, p.updated_by, p.deleted_by "
 				+ " FROM products p "
@@ -416,7 +430,7 @@ public class productDAO {
 		sql.append(" ) ");
 		sql.append(" ORDER BY RAND() LIMIT 0, 12 ) sb ");
 		sql.append(" ORDER BY sb.unitPrice ");
-		
+
 		List<productEntity> lst = (List<productEntity>) cmd.getListObjByParams(sql, params, productEntity.class);
 		if (null == lst || lst.size() == 0) {
 			logger.info("Params: " + params + "Result: " + lst);
@@ -429,6 +443,7 @@ public class productDAO {
 
 	/**
 	 * them du lieu cho danh sach san pham
+	 * 
 	 * @param lst
 	 */
 	public void fillDataInDataList(List<productEntity> lst) {
@@ -437,38 +452,50 @@ public class productDAO {
 			String date = dtf.format(LocalDateTime.now());
 			for (productEntity p : lst) {
 				if (null != p) {
-					if (p.getDiscount() != null && p.getDiscount() > 0 && p.getEndDate_discount() != null) {
-						try {
-							Date date_now = new SimpleDateFormat("yyyy-MM-dd").parse(date);
-							Date end_discount = new SimpleDateFormat("yyyy-MM-dd").parse(p.getEndDate_discount());
-							Integer i = date_now.compareTo(end_discount);
-							if (i > 0) {
-								p.setDiscount(0D);
-							}
-						} catch (Exception e) {
-							// TODO: handle exception
-							e.printStackTrace();
-						}
+					try {
+						Date date_now = new SimpleDateFormat("yyyy-MM-dd").parse(date);
+//						Integer i = date_now.compareTo(end_discount);
+					} catch (Exception e) {
+						// TODO: handle exception
 					}
-					// Them supplier
-					supplierEntity sup = new supplierEntity();
-					supplierDAO supDAO = new supplierDAO();
-					sup = supDAO.findSupplierById(p.getSupplierId());
-					p.setSupplier(sup);
-					// Them face
-					faceEntity face = new faceEntity();
-					faceDAO faceDAO = new faceDAO();
-					face = faceDAO.findFaceById(p.getFaceId());
-					p.setFace(face);
-					// them machine
-					machineEntity machine = new machineEntity();
-					machineDAO machineDAO = new machineDAO();
-					machine = machineDAO.findMachineById(p.getMachineId());
-					p.setMachine(machine);
+				}
+				// Them supplier
+				supplierEntity sup = new supplierEntity();
+				supplierDAO supDAO = new supplierDAO();
+				sup = supDAO.findSupplierById(p.getSupplierId());
+				p.setSupplier(sup);
+				// Them face
+				faceEntity face = new faceEntity();
+				faceDAO faceDAO = new faceDAO();
+				face = faceDAO.findFaceById(p.getFaceId());
+				p.setFace(face);
+				// them machine
+				machineEntity machine = new machineEntity();
+				machineDAO machineDAO = new machineDAO();
+				machine = machineDAO.findMachineById(p.getMachineId());
+				p.setMachine(machine);
+				// them strap
+				strapEntity strap = new strapEntity();
+				strapDAO strapD = new strapDAO();
+				strap = strapD.findstrapById(p.getStrapId());
+				p.setStrap(strap);
+				// Tim danh sach giam gia
+				List<discountEntity> lstDiscount = new ArrayList<discountEntity>();
+				discountDAO disD = new discountDAO();
+				lstDiscount = disD.findListDiscountByProductId(p.getProductId());
+				p.setLstDiscount(lstDiscount);
+				// Them string giam gia
+				StringBuilder str = new StringBuilder();
+				if(!FunctionCommon.isEmpty(lstDiscount)) {
+					for (discountEntity d : lstDiscount) {
+						str.append(d.getDiscountId()).append(", ");
+					}
+					p.setStrLstDiscount(str.toString());
 				}
 			}
 		}
 	}
+}
 
 //	public boolean insertF(Long userId, productEntity product) {
 //		StringBuilder sql = new StringBuilder();
@@ -562,5 +589,5 @@ public class productDAO {
 //		s = s.replace("m", "");
 //		return s.replace("M", "");
 //	}
-
-}
+//}
+//}

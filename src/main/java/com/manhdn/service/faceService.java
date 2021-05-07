@@ -21,8 +21,23 @@ public class faceService {
 	 * @param dataSearch
 	 * @return
 	 */
-	public List<faceEntity> findDaList(Long userId, productEntity dataSearch) {
+	public List<faceEntity> findDaList(Long userId, faceEntity dataSearch) {
 		dao =new faceDAO();
 		return dao.findDataList(userId, dataSearch);
+	}
+	
+	public List<faceEntity> getAllFace() {
+		dao =new faceDAO();
+		return dao.getAllFace();
+	}
+
+	public faceEntity getDetail(String faceId) {
+		dao =new faceDAO();
+		return dao.getDetail(faceId);
+	}
+
+	public boolean insertOrUpdate(long userId, faceEntity dataInsert) {
+		dao =new faceDAO();
+		return dao.insertOrUpdate(userId, dataInsert);
 	}
 }

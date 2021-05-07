@@ -3,13 +3,16 @@ package com.manhdn.entity;
 public class faceEntity extends CommonEntity {
 	private String faceId;
 	private String faceName;
-	private String thickness;
-	private String faceSize;
+	private Double thickness;
+	private Double faceSize;
 	private String glass;
-	private String waterProof;
+	private Double waterProof;
 	private String description;
-	private String status;
-
+	private Long status;
+	
+	public String getStatusString() {
+		return this.status==1?"Hoạt động":"Không hoạt động";
+	}
 	public String getDetailString() {
 		return faceName + " (Dày: "+faceSize+" mm; Rộng: "+thickness+" mm)";
 	}
@@ -25,16 +28,16 @@ public class faceEntity extends CommonEntity {
 	public void setFaceName(String faceName) {
 		this.faceName = faceName;
 	}
-	public String getThickness() {
+	public Double getThickness() {
 		return thickness;
 	}
-	public void setThickness(String thickness) {
+	public void setThickness(Double thickness) {
 		this.thickness = thickness;
 	}
-	public String getFaceSize() {
+	public Double getFaceSize() {
 		return faceSize;
 	}
-	public void setFaceSize(String faceSize) {
+	public void setFaceSize(Double faceSize) {
 		this.faceSize = faceSize;
 	}
 	public String getGlass() {
@@ -43,10 +46,10 @@ public class faceEntity extends CommonEntity {
 	public void setGlass(String glass) {
 		this.glass = glass;
 	}
-	public String getWaterProof() {
+	public Double getWaterProof() {
 		return waterProof;
 	}
-	public void setWaterProof(String waterProof) {
+	public void setWaterProof(Double waterProof) {
 		this.waterProof = waterProof;
 	}
 	public String getDescription() {
@@ -55,10 +58,10 @@ public class faceEntity extends CommonEntity {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public String getStatus() {
+	public Long getStatus() {
 		return status;
 	}
-	public void setStatus(String status) {
+	public void setStatus(Long status) {
 		this.status = status;
 	}
 	

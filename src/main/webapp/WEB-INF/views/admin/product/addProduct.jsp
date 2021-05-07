@@ -149,7 +149,11 @@
                 <label for="inputDescription">Số lượng</label>
                 <form:input type="number" id="inputName" required="required" path="quantity" value="${dataSelected.quantity}" class="form-control" ></form:input>
               </div>
-              
+              <!-- Mô tả -->
+               <div class="form-group">
+                <label for="inputDescription">Loại kính</label>
+                <form:textarea path="description" value="${dataSelected.description}" class="form-control" ></form:textarea>>
+              </div>
             </div>
             <!-- /.card-body -->
           </div>

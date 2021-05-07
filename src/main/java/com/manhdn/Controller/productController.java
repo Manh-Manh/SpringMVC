@@ -252,12 +252,12 @@ public class productController extends CommonController<productEntity> {
 	@RequestMapping(value = { "/admin/addProduct" }, method = RequestMethod.GET)
 	public ModelAndView addProductView(HttpSession session) {
 		userEntity user = (userEntity) session.getAttribute(AppConstants.SESSION_USER);
-//		if(user == null || user.getUserId() ==null) {
-//			mav = new ModelAndView("redirect:/app-view");
-//			logger.error("Khong co quyen");
-//			session.setAttribute(AppConstants.SESSION_MESSAGE, "Liên hệ quản trị hệ thống để được hỗ trợ");
-//			return mav;
-//		}
+		if(user == null || user.getUserId() ==null) {
+			mav = new ModelAndView("redirect:/app-view");
+			logger.error("Khong co quyen");
+			session.setAttribute(AppConstants.SESSION_MESSAGE, "Liên hệ quản trị hệ thống để được hỗ trợ");
+			return mav;
+		}
 		service = new productService();
 		mav = new ModelAndView("/admin/product/addProduct");
 		discountDAO disD = new discountDAO();
@@ -284,12 +284,12 @@ public class productController extends CommonController<productEntity> {
 	public ModelAndView addNewProduct(@ModelAttribute("dataInsert") productEntity dataInsert, HttpSession session,
 			HttpServletRequest request) {
 		userEntity user = (userEntity) session.getAttribute(AppConstants.SESSION_USER);
-//		if(user == null || user.getUserId() ==null) {
-//			mav = new ModelAndView("redirect:/app-view");
-//			logger.error("Khong co quyen");
-//			session.setAttribute(AppConstants.SESSION_MESSAGE, "Liên hệ quản trị hệ thống để được hỗ trợ");
-//			return mav;
-//		}
+		if(user == null || user.getUserId() ==null) {
+			mav = new ModelAndView("redirect:/app-view");
+			logger.error("Khong co quyen");
+			session.setAttribute(AppConstants.SESSION_MESSAGE, "Liên hệ quản trị hệ thống để được hỗ trợ");
+			return mav;
+		}
 		service = new productService();
 		mav = new ModelAndView("/admin/product/addProduct");
 		discountDAO disD = new discountDAO();
@@ -325,12 +325,12 @@ public class productController extends CommonController<productEntity> {
 	public ModelAndView editProductView(HttpSession session, @RequestParam("productId") String productId) {
 		userEntity user = (userEntity) session.getAttribute(AppConstants.SESSION_USER);
 		
-//		if(user == null || user.getUserId() ==null) {
-//			mav = new ModelAndView("redirect:/app-view");
-//			logger.error("Khong co quyen");
-//			session.setAttribute(AppConstants.SESSION_MESSAGE, "Liên hệ quản trị hệ thống để được hỗ trợ");
-//			return mav;
-//		}
+		if(user == null || user.getUserId() ==null) {
+			mav = new ModelAndView("redirect:/app-view");
+			logger.error("Khong co quyen");
+			session.setAttribute(AppConstants.SESSION_MESSAGE, "Liên hệ quản trị hệ thống để được hỗ trợ");
+			return mav;
+		}
 		if(productId == null) {
 			mav = new ModelAndView("redirect:/app-view");
 			logger.error("Loi id null");

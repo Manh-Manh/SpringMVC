@@ -13,7 +13,7 @@
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Thêm mới</a></li>
+              <li class="breadcrumb-item"><a href="<c:url value = '/admin/addFace' />">Thêm mới</a></li>
             </ol>
           </div>
         </div>
@@ -52,8 +52,14 @@
                     <td><c:out value = "${item.waterProof }" /></td>
                     <td><c:out value = "${item.glass }" /></td>
                     <td>
-                    	<a href="<c:url value = '#' /> ">Sửa</a>
-                    	<a href="<c:url value = '#' /> ">Xóa</a>
+                    <c:url var="urlEdit" value='/admin/editFace'>
+                    	<c:param name="faceId" value="${item.faceId}"></c:param>
+                    </c:url>
+                    <c:url var="urlDel" value='/admin/deleteFace'>
+                    	<c:param name="faceId" value="${item.faceId}"></c:param>
+                    </c:url>
+                    	<a href="${urlEdit }">Sửa</a>
+                    	<a href="${urlDel }">Xóa</a>
                     	<%--<a href="<c:url value = '#' /> ">Sửa</a>--%>
                     </td>
                   </tr>  

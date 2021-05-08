@@ -172,7 +172,18 @@ public class CommonController<T> {
 	public void setCount(Integer count) {
 		this.count = count;
 	}
-
+	
+	boolean isAdmin(HttpSession session) {
+		userEntity user = (userEntity) session.getAttribute(AppConstants.SESSION_USER);
+		if(user == null || user.getUserId() ==null) {
+			
+			return false;
+		}
+		if(user.getRole()!=null) {
+			
+		}
+		return true;
+	}
 	@ModelAttribute("productSearch")
 	productEntity productSearch() {
 		return new productEntity();

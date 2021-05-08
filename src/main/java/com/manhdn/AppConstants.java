@@ -36,6 +36,7 @@ public class AppConstants {
 	public static String MAP_SEARCH_PRODUCT_ID = "productId";
 	public static String MAP_SEARCH_CART_QUANTITY = "cartQuantity";
 	public static final String MAP_SEARCH_PAGE = "page";
+	
 	public static String MAP_SEARCH_STRING = "searchString"; // string quickSearch
 	
 	// Session
@@ -48,6 +49,7 @@ public class AppConstants {
 	public static String ID_PRODUCT = "PRO";
 	public static String ID_MACHINE = "M";
 	public static String ID_FACE = "F";
+	public static final String ID_STRAP = "S";
 	public static String ID_SUPPLIER = "SUP";
 	public static String ID_ODER = "ORDER";
 	public static String ID_COMMENT = "CMT";

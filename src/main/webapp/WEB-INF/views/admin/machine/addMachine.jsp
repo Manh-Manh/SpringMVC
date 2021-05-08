@@ -2,15 +2,16 @@
     pageEncoding="UTF-8"%>
 
 <%@include file="/common/taglib.jsp"%>
+    
 <div class="content-wrapper">
-<form:form method="POST" action="addNewFace" modelAttribute="dataInsert" enctype="multipart/form-data" > 
-<form:hidden path="faceId" value="${dataSelected.faceId }"/>
+<form:form method="POST" action="addNewMachine" modelAttribute="dataInsert" enctype="multipart/form-data" > 
+<form:hidden path="machineId" value="${dataSelected.machineId }"/>
 	<section class="content">
       <div class="row">
         <div class="col-md-12">
           <div class="card card-primary">
             <div class="card-header">
-              <h3 class="card-title">Chi tiết mặt đồng hồ</h3>
+              <h3 class="card-title">Chi tiết bộ máy</h3>
 
               <div class="card-tools">
                 <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
@@ -20,8 +21,8 @@
             </div>
             <div class="card-body">
               <div class="form-group">
-                <label for="inputName">Tên mặt đồng hồ</label>
-                <form:input type="text" path="faceName" required="required" value="${dataSelected.faceName}" class="form-control" ></form:input>
+                <label for="inputName">Tên kiểu máy</label>
+                <form:input type="text" path="machineName" required="required" value="${dataSelected.machineName}" class="form-control" ></form:input>
             
               </div>
               
@@ -35,26 +36,6 @@
                     <form:option value="1" label="Hoạt động" ></form:option>
 					<form:option value="0" label="Không hoạt động" ></form:option>
                 </form:select>            
-              </div>
-              <!-- Do day -->
-              <div class="form-group">
-                <label for="supplier">Độ dày <i>(mm)</i></label>
-                <form:input pattern="^\d*(\.\d{0,2})?$" placeholder="1.23" class="inpNumber form-control" path="thickness" required="required" value="${dataSelected.thickness }"/>
-              </div>
-              <!-- Do rong -->
-               <div class="form-group">
-                <label for="inputDescription">Độ rộng <i>(mm)</i></label>
-                <form:input pattern="^\d*(\.\d{0,2})?$" placeholder="1.23" class="inpNumber form-control" required="required" path="faceSize" value="${dataSelected.faceSize}"  ></form:input>
-              </div>
-               <!-- Do chiu nuoc -->
-               <div class="form-group">
-                <label for="inputDescription">Độ chịu nước <i>(m)</i></label>
-                <form:input pattern="^\d*(\.\d{0,2})?$" placeholder="1.23" class="inpNumber form-control" path="waterProof" value="${dataSelected.waterProof}" ></form:input>
-              </div>
-               <!-- Loại kính -->
-               <div class="form-group">
-                <label for="inputDescription">Loại kính</label>
-                <form:input  path="glass" value="${dataSelected.glass}" class="form-control" ></form:input>
               </div>
               
               <!-- Mô tả -->

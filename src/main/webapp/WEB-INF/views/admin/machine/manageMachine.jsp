@@ -13,7 +13,7 @@
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Thêm mới</a></li>
+              <li class="breadcrumb-item"><a href="<c:url value='/admin/addMachine' </c:url>">Thêm mới</a></li>
             </ol>
           </div>
         </div>
@@ -47,9 +47,14 @@
                     <td><c:out value ="${ item.machineName }" /></td>
                     <td><c:out value = "${ item.description }" /></td>
                     <td>
-                    	<a href="<c:url value = '#' /> ">Sửa</a>
-                    	<a href="<c:url value = '#' /> ">Xóa</a>
-                    	<%--<a href="<c:url value = '#' /> ">Sửa</a>--%>
+                    <c:url var="urlEdit" value='/admin/editMachine'>
+                    	<c:param name="faceId" value="${item.machineId}"></c:param>
+                    </c:url>
+                    <c:url var="urlDel" value='/admin/deleteMachine'>
+                    	<c:param name="machineId" value="${item.machineId}"></c:param>
+                    </c:url>
+                    	<a href="${urlEdit }">Sửa</a>
+                    	<a href="${urlDel }">Xóa</a>
                     </td>
                   </tr>  
               </c:forEach>                

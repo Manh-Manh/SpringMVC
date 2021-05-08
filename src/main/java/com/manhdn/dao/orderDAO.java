@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import com.manhdn.AppConstants;
 import com.manhdn.FunctionCommon;
 import com.manhdn.database.CommonDatabase;
+import com.manhdn.entity.machineEntity;
 import com.manhdn.entity.orderEntity;
 import com.manhdn.entity.productEntity;
 @Repository
@@ -26,6 +27,22 @@ public class orderDAO {
 		return null;
 	}
 
+	public List<orderEntity> getAllOrder() {
+		List<orderEntity> result = new ArrayList<orderEntity>();
+		List<Object> params = new ArrayList<Object>();
+		StringBuilder sql = new StringBuilder();
+
+		sql.append("SELECT * FROM order o " + " WHERE 1 ORDER BY o.orderId ");
+//					+ "(f.status != 0 or f.status is null) ");
+		result = (List<orderEntity>) cmd.getListObjByParams(sql, params, machineEntity.class);
+		if(!FunctionCommon.isEmpty(result)) {
+			for(orderEntity o : result) {
+				o.setListProduct(getOrderDetail(o));
+			}
+		}
+		return result;
+
+	}
 	public boolean insertOrUpdate(Long userId, orderEntity cart, Long status) {
 		// TODO Auto-generated method stub
 		StringBuilder sql = new StringBuilder();
@@ -91,7 +108,6 @@ public class orderDAO {
 				sql2.append(" , ");
 			}
 		}
-
 		sql2.append("ON DUPLICATE KEY UPDATE " + " quantity = VALUES(quantity), " + " unitPrice = VALUES(unitPrice), "
 				+ " discount = VALUES(discount), " + " updated_date = VALUES(updated_date), "
 				+ " updated_by = VALUES(updated_by) "
@@ -169,16 +185,7 @@ public class orderDAO {
 		if (lst.size() > 0) {
 			for (orderEntity o : lst) {
 				// Tim chi tiet hoa don
-				StringBuilder sql2 = new StringBuilder();
-				List<Object> params2 = new ArrayList<Object>();
-				sql2.append(" SELECT * FROM `products` p WHERE p.status = 1 AND p.productId IN ( "
-						+ "	SELECT od.productId FROM order_detail od WHERE od.orderId = ? " + ")");
-				params2.add(o.getOrderId());
-				List<productEntity> lstProduct = (List<productEntity>) cmd.getListObjByParams(sql2, params2,
-						productEntity.class);
-				if (lstProduct.size() > 0) {
-					o.setListProduct(lstProduct);
-				}
+				o.setListProduct(getOrderDetail(o));
 			}
 //			return cart;
 		} else {
@@ -189,5 +196,21 @@ public class orderDAO {
 		return lst.get(0);
 	}
 	
+	public List<productEntity> getOrderDetail(orderEntity order) {
+		if (order == null) {
+			return null;
+		}
+		StringBuilder sql2 = new StringBuilder();
+		List<Object> params2 = new ArrayList<Object>();
+		sql2.append(" SELECT * FROM `products` p WHERE p.status = 1 AND p.productId IN ( "
+				+ "	SELECT od.productId FROM order_detail od WHERE od.orderId = ? " + ")");
+		params2.add(order.getOrderId());
+		List<productEntity> lstProduct = (List<productEntity>) cmd.getListObjByParams(sql2, params2,
+				productEntity.class);
+//		if (lstProduct.size() > 0) {
+//			return lstProduct;
+//		}
+		return lstProduct;
+	}
 
 }

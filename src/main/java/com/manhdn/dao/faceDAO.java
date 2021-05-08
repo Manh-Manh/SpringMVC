@@ -26,7 +26,6 @@ public class faceDAO {
 		List<faceEntity>  result = new ArrayList<faceEntity>();
 		List<Object> params = new ArrayList<Object>();
 		StringBuilder sql = new StringBuilder();
-		
 		sql.append("SELECT * FROM face f "
 				+ " WHERE 1 ORDER BY f.faceId " );
 //				+ "(f.status != 0 or f.status is null) ");

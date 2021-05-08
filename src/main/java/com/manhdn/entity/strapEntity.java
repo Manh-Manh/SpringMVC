@@ -9,7 +9,9 @@ public class strapEntity extends CommonEntity {
 	public Long getStatus() {
 		return status;
 	}
-
+	public String getStatusString() {
+		return this.status==1?"Hoạt động":"Không hoạt động";
+	}
 	public void setStatus(Long status) {
 		this.status = status;
 	}

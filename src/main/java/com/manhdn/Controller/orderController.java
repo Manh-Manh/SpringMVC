@@ -45,10 +45,17 @@ public class orderController extends CommonController<orderEntity> {
 	 * @return
 	 */
 	@RequestMapping(value = { "/admin/manageOrder" }, method = RequestMethod.GET)
-	public ModelAndView manageOrder() {
+	public ModelAndView manageOrder(HttpSession session) {
+		userEntity user = (userEntity) session.getAttribute(AppConstants.SESSION_USER);
+		if(!isAdmin(session)) {
+			mav = new ModelAndView("redirect:/app-view");
+			logger.error("Khong co quyen");
+			session.setAttribute(AppConstants.SESSION_MESSAGE, "Liên hệ quản trị hệ thống để được hỗ trợ");
+			return mav;
+		}
 		service = new orderService();
 		mav = new ModelAndView("/admin/order/manageOrder");
-		dataList = service.findDaList(0L, null);
+		dataList = service.getAllOrder();
 		addData();
 		logger.info(mav);
 		return mav;

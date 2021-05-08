@@ -13,7 +13,7 @@
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Thêm mới</a></li>
+              <li class="breadcrumb-item"><a href="<c:url value='/admin/addStrap' </c:url>">Thêm mới</a></li>
             </ol>
           </div>
         </div>
@@ -48,9 +48,14 @@
                     <td><c:out value ="${ item.materialStrap }" /></td>
                     <td><c:out value = "${ item.description }" /></td>
                     <td>
-                    	<a href="<c:url value = '#' /> ">Sửa</a>
-                    	<a href="<c:url value = '#' /> ">Xóa</a>
-                    	<a href="<c:url value = '#' /> ">Xem</a>
+             	    <c:url var="urlEdit" value='/admin/editStrap'>
+                    	<c:param name="strapId" value="${item.strapId}"></c:param>
+                    </c:url>
+                    <c:url var="urlDel" value='/admin/deleteStrap'>
+                    	<c:param name="strapId" value="${item.strapId}"></c:param>
+                    </c:url>
+                    	<a href="${urlEdit }">Sửa</a>
+                    	<a href="${urlDel }">Xóa</a>
                     </td>
                   </tr>  
               </c:forEach>                

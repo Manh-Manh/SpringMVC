@@ -5,7 +5,9 @@ public class machineEntity extends CommonEntity {
 	private String machineName;
 	private String description;
 	private Long status;
-
+	public String getStatusString() {
+		return this.status==1?"Hoạt động":"Không hoạt động";
+	}
 	public String getMachineId() {
 		return machineId;
 	}

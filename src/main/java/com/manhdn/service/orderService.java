@@ -26,6 +26,11 @@ public class orderService {
 		return dao.findDataList(orderId, dataSearch);
 	}
 
+	public List<orderEntity> getAllOrder() {
+		dao =new orderDAO();
+		return dao.getAllOrder();
+	}
+	
 	public boolean insertOrUpdate(Long userId, orderEntity cart, Long status) {
 		// TODO Auto-generated method stub
 		dao = new orderDAO();

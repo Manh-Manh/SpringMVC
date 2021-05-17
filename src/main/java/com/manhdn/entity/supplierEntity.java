@@ -1,5 +1,7 @@
 package com.manhdn.entity;
 
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
+
 /*
  * supplierEntity
  * thuong hieu
@@ -8,13 +10,23 @@ public class supplierEntity extends CommonEntity {
 	private String supplierId;
 	private String supplierName;
 	private String address;
-	private String phoneNunber;
+	private String phoneNumber;
 	private String email;
 	private String website;
-	private String status;
+	private Long status;
 	private String location;
 	private String logo;
-
+	// file logo
+	private CommonsMultipartFile[] fileLogo;
+	public CommonsMultipartFile[] getFileLogo() {
+		return fileLogo;
+	}
+	public void setFileLogo(CommonsMultipartFile[] fileLogo) {
+		this.fileLogo = fileLogo;
+	}
+	public String getStatusString() {
+		return this.status==1?"Hoạt động":"Không hoạt động";
+	}
 	public String getLogo() {
 		return logo;
 	}
@@ -62,12 +74,12 @@ public class supplierEntity extends CommonEntity {
 		this.address = address;
 	}
 
-	public String getPhoneNunber() {
-		return phoneNunber;
+	public String getPhoneNumber() {
+		return phoneNumber;
 	}
 
-	public void setPhoneNunber(String phoneNunber) {
-		this.phoneNunber = phoneNunber;
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
 	}
 
 	public String getEmail() {
@@ -86,11 +98,11 @@ public class supplierEntity extends CommonEntity {
 		this.website = website;
 	}
 
-	public String getStatus() {
+	public Long getStatus() {
 		return status;
 	}
 
-	public void setStatus(String status) {
+	public void setStatus(Long status) {
 		this.status = status;
 	}
 

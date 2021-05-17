@@ -16,7 +16,6 @@ public class userEntity extends CommonEntity {
 	private Long status;
 	private String avatar;
 	private String birthDate;
-	private Integer del_flag;
 	private roleEntity role;
 	private CommonsMultipartFile[] fileAvatar;
 
@@ -116,13 +115,6 @@ public class userEntity extends CommonEntity {
 		this.birthDate = birthDate;
 	}
 
-	public Integer getDel_flag() {
-		return del_flag;
-	}
-
-	public void setDel_flag(Integer del_flag) {
-		this.del_flag = del_flag;
-	}
 	public String getStatusString() {
 		if(status == 1 || status == null) {
 			return AppConstants.ACTIVE;

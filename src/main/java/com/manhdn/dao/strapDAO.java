@@ -120,4 +120,26 @@ public class strapDAO {
 		logger.info("Params: " + params + "Result: " + result);
 		return result;
 	}
+
+	public boolean delete(Long userId, String strapId) {
+		if(null == userId) {
+			logger.error("Id null ");
+			return false;
+		}
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		String dateNow = dtf.format(LocalDateTime.now());
+		boolean  result = false;
+		List<Object> params = new ArrayList<Object>();
+		StringBuilder sql = new StringBuilder();
+		sql.append(" UPDATE `strap` s SET s.del_flag = 1, "
+				+ " s.updated_by = ? , s.updated_date = ? "
+				+ " WHERE f.faceId = ? " );
+		
+		params.add(userId);
+		params.add(dateNow);
+		params.add(strapId);
+		result = cmd.insertOrUpdateDataBase(sql, params);
+		logger.info("Params: " + params + "Result: " + result);
+		return result;
+	}
 }

@@ -1,5 +1,13 @@
 package com.manhdn.entity;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+
+import com.manhdn.AppConstants;
+
 public class discountEntity extends CommonEntity {
 
 	private String discountId;
@@ -12,7 +20,28 @@ public class discountEntity extends CommonEntity {
 	public String getProductId() {
 		return productId;
 	}
-
+	public String getStringActive() {
+		if(AppConstants.STATUS_BLOCK == status) {
+			 return "Không áp dụng";
+		}
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		String dateNow = dtf.format(LocalDateTime.now());
+        try {
+			Date dateN = sdf.parse(dateNow);
+			Date dateEnd = sdf.parse(endDate);
+			if(dateN.compareTo(dateEnd) <= 0) {
+				return "Đang áp dụng";
+			}
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+        return "Không áp dụng";
+        
+	}
+	public String getStatusString() {
+		return this.status==1?"Đang hoạt động":"Không hoạt động";
+	}
 	public void setProductId(String productId) {
 		this.productId = productId;
 	}

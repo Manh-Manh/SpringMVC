@@ -14,6 +14,7 @@ import com.manhdn.database.CommonDatabase;
 import com.manhdn.entity.machineEntity;
 import com.manhdn.entity.orderEntity;
 import com.manhdn.entity.productEntity;
+import com.manhdn.entity.userEntity;
 @Repository
 public class orderDAO {
 	CommonDatabase cmd;
@@ -23,25 +24,22 @@ public class orderDAO {
 	}
 	public List<orderEntity> findDataList(Long orderId, productEntity dataSearch) {
 		// TODO Auto-generated method stub
-		
 		return null;
 	}
-
 	public List<orderEntity> getAllOrder() {
 		List<orderEntity> result = new ArrayList<orderEntity>();
 		List<Object> params = new ArrayList<Object>();
 		StringBuilder sql = new StringBuilder();
-
-		sql.append("SELECT * FROM order o " + " WHERE 1 ORDER BY o.orderId ");
-//					+ "(f.status != 0 or f.status is null) ");
-		result = (List<orderEntity>) cmd.getListObjByParams(sql, params, machineEntity.class);
+		sql.append("SELECT * FROM `order` o WHERE status > 1 ORDER BY o.status, updated_date ASC ");
+		result = (List<orderEntity>) cmd.getListObjByParams(sql, params, orderEntity.class);
 		if(!FunctionCommon.isEmpty(result)) {
 			for(orderEntity o : result) {
 				o.setListProduct(getOrderDetail(o));
+				userDAO uD = new userDAO();
+				o.setUser(uD.findUserById(o.getUserId()));
 			}
 		}
 		return result;
-
 	}
 	public boolean insertOrUpdate(Long userId, orderEntity cart, Long status) {
 		// TODO Auto-generated method stub
@@ -152,6 +150,8 @@ public class orderDAO {
 		List<orderEntity> lst = (List<orderEntity>) cmd.getListObjByParams(sql, params, orderEntity.class);
 		if (lst.size() > 0) {
 			for(orderEntity o : lst) {
+				userDAO uD = new userDAO();
+				o.setUser(uD.findUserById(o.getUserId()));
 				// Tim chi tiet hoa don
 				StringBuilder sql2 = new StringBuilder();
 				List<Object> params2 = new ArrayList<Object>();
@@ -172,7 +172,7 @@ public class orderDAO {
 		logger.info("Params: " + params + "Result: " + lst);	
 		return lst;
 	}
-	public orderEntity findOrderByUserId(String orderId) {
+	public orderEntity findOrderByOrderId(String orderId) {
 		if(FunctionCommon.isEmpty(orderId)) {
 			logger.error("Id null:" + orderId);
 			return null;
@@ -186,6 +186,9 @@ public class orderDAO {
 			for (orderEntity o : lst) {
 				// Tim chi tiet hoa don
 				o.setListProduct(getOrderDetail(o));
+				// them user
+				userDAO uD = new userDAO();
+				o.setUser(uD.findUserById(o.getUserId()));
 			}
 //			return cart;
 		} else {
@@ -196,6 +199,11 @@ public class orderDAO {
 		return lst.get(0);
 	}
 	
+	/**
+	 * Laasy chi tiet hoa don
+	 * @param order
+	 * @return
+	 */
 	public List<productEntity> getOrderDetail(orderEntity order) {
 		if (order == null) {
 			return null;
@@ -208,7 +216,9 @@ public class orderDAO {
 		List<productEntity> lstProduct = (List<productEntity>) cmd.getListObjByParams(sql2, params2,
 				productEntity.class);
 //		if (lstProduct.size() > 0) {
-//			return lstProduct;
+//			for(orderEntity o : lstProduct) {
+//				
+//			}
 //		}
 		return lstProduct;
 	}

@@ -41,4 +41,9 @@ public class strapService {
 		dao =new strapDAO();
 		return dao.insertOrUpdate(userId, dataInsert);
 	}
+
+	public boolean delete(Long userId, String strapId) {
+		dao =new strapDAO();
+		return dao.delete(userId, strapId);
+	}
 }

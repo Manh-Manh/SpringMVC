@@ -13,7 +13,7 @@
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Thêm mới</a></li>
+              <!-- <li class="breadcrumb-item"><a href="#">Thêm mới</a></li> -->
             </ol>
           </div>
         </div>
@@ -26,13 +26,13 @@
           <div class="col-12">
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title">Quản lý hóa đơn</h3>
               </div>
               <!-- /.card-header -->
               <div class="card-body">
                 <table id="example1" class="table table-bordered table-striped">
                   <thead>
                   <tr>
+                  	<th>Số thứ tự</th>
                     <th>Mã hóa đơn</th>
                     <th>Khách hàng</th>
                     <th>Ngày đặt</th>
@@ -42,26 +42,35 @@
                   </tr>
                   </thead>
                   <tbody>
+             <c:set var="stt" value="0"></c:set>
              <c:forEach var = "item" items="${dataList}">
                   <tr>
+					<td><c:out value ="${ stt=stt+1 }" /></td>
                     <td><c:out value ="${ item.orderId }" /></td>
                     <td><c:out value ="${ item.user.userName }" /></td>
-                    <td><c:out value ="${ item.oderDate }" /></td>
+                    <td><c:out value ="${ item.updated_date }" /></td>
                     <td><c:out value = "${ item.total }" /></td>
-                    <c:if test="${ item.status ==1 }">
-                    	<td><c:out value ="${ AppConstant.ODER_NOT_PROCESS }" /></td>
-                    </c:if>
-                    <c:if test="${ item.status == 2 }">
-                    	<td><c:out value ="${ AppConstant.ODER_PROCESS }" /></td>
-                    </c:if>
-                    <c:if test="${ item.status == 3 }">
-                    	<td><c:out value ="${ AppConstant.ODER_CANCEL }" /></td>
-                    </c:if>
+                    <td><c:out value = "${ item.statusString }" /></td>
                     
-                    <td>
-                    	<a href="<c:url value = '#' /> ">Sửa</a>
-                    	<a href="<c:url value = '#' /> ">Xóa</a>
-                    	<%--<a href="<c:url value = '#' /> ">Sửa</a>--%>
+                    <td class="text-center py-0 align-middle">
+                    	<c:url var="urlView" value='/admin/viewOrder'>
+                    		<c:param name="orderId" value="${item.orderId}"></c:param>
+	                    </c:url>	
+	                    <c:url var="urlAccept" value='/admin/acceptOrder'>
+	                    	<c:param name="orderId" value="${item.orderId}"></c:param>
+	                    </c:url>
+	                    <c:url var="urlReject" value='/admin/rejectOrder'>
+	                    	<c:param name="orderId" value="${item.orderId}"></c:param>
+	                    </c:url>
+	                    <div class="btn-group btn-group-sm">
+                     
+                    	<a href="${urlView }" class="btn btn-info" data-toggle="tooltip" data-placement="bottom" title="Xem"><i class="fas fa-eye"></i></a>
+                       
+                    	<c:if test="${item.status == 2 }">
+                    		<a class="urlConfirm btn btn-info"  data-toggle="tooltip" data-placement="bottom" title="Xác nhận" href="#" data-url="${urlAccept }"><i class="fas fa-check"></i></a>
+	                    	<a class="urlConfirm btn btn-danger" data-toggle="tooltip" data-placement="bottom" title="Từ chối"  href="#" data-url="${urlReject }"><i class="fas fa-trash"></i></a>
+                    	</c:if>
+						 </div>	 
                     </td>
                   </tr>  
               </c:forEach>                

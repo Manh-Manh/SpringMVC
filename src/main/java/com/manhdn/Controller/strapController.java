@@ -15,6 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.manhdn.AppConstants;
 import com.manhdn.entity.strapEntity;
 import com.manhdn.entity.userEntity;
+import com.manhdn.service.faceService;
 import com.manhdn.service.strapService;
 @Controller
 public class strapController extends CommonController<strapEntity>{
@@ -118,6 +119,35 @@ public class strapController extends CommonController<strapEntity>{
 		logger.info(mav);
 		return this.editStrapView(session, dataInsert.getStrapId());
 //		return mav;
+	}
+	
+	@RequestMapping(value = { "/admin/deleteStrap" }, method = RequestMethod.GET)
+	public ModelAndView deleteStrap(HttpSession session, @RequestParam("strapId") String strapId) {
+		
+		if(!isAdmin(session)) {
+			mav = new ModelAndView("redirect:/app-view");
+			logger.error("Khong co quyen");
+			session.setAttribute(AppConstants.SESSION_MESSAGE, AppConstants.MESSAGE_ERROR);
+			return mav;
+		}
+		if(strapId == null) {
+			mav = new ModelAndView("redirect:/app-view");
+			logger.error("Loi id null");
+			session.setAttribute(AppConstants.SESSION_MESSAGE, AppConstants.MESSAGE_ERROR);
+			return mav;
+		}
+		service = new strapService();
+		mav = new ModelAndView("/admin/strap/manageStrap");
+		dataSelected = service.getDetail(strapId);
+		if(!service.delete(user.getUserId(), strapId)) {
+			session.setAttribute(AppConstants.SESSION_MESSAGE, AppConstants.MESSAGE_ERROR);
+			return mav;
+		}
+		session.setAttribute(AppConstants.SESSION_MESSAGE,"Xóa thành công");
+		map.addAttribute("isInsert", 0);
+		addData();
+		logger.info(mav);
+		return manageStrap(session);
 	}
 	@ModelAttribute("dataInsert")
 	public strapEntity dataInsert() {

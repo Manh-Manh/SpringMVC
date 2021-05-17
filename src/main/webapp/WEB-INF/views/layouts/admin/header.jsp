@@ -16,13 +16,26 @@
   <link rel="stylesheet" href="<c:url value='/assets/backend/plugins/fontawesome-free/css/all.min.css'/> ">
   <!-- DataTables -->
   <link rel="stylesheet" href="<c:url value='/assets/backend/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css'/> ">
-  <link rel="stylesheet" href="<c:url value='/assets/backend/plugins/datatables-responsive/css/responsive.bootstrap4.min.css'/> ">
-  <link rel="stylesheet" href="../../plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+  <link rel="stylesheet" href="<c:url value='/assets/backend/plugins/datatables-responsive/css/responsive.bootstrap4.min.css' /> ">
+  <link rel="stylesheet" href="<c:url value='/assets/backend/plugins/datatables-buttons/css/buttons.bootstrap4.min.css' /> " >
   <!-- Theme style -->
-  <link rel="stylesheet" href="<c:url value='/assets/backend/dist/css/adminlte.min.css'/> ">
+  <link rel="stylesheet" href="<c:url value='/assets/backend/dist/css/adminlte.min.css' /> ">
   <link href="<c:url value='/assets/css/mycss.css'/> " rel="stylesheet" type="text/css">
   <link rel="stylesheet" href="<c:url value='/assets/css/vendor/jquery-ui.min.css'/> "> 
-  
+   <link rel="stylesheet" href="<c:url value='/assets/css/mycssAdmin.css'/> "> 
+   
+   <link rel="stylesheet" href="<c:url value='/assets/backend/plugins/icheck-bootstrap/icheck-bootstrap.min.css' /> ">
+ 
+ <link rel="stylesheet" href="<c:url value='/assets/backend/plugins/select2/css/select2.min.css' /> " >
+  <link rel="stylesheet" href="<c:url value='/assets/backend/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css' />" >
+  <!-- Bootstrap4 Duallistbox -->
+  <link rel="stylesheet" href="<c:url value='/assets/backend/plugins/bootstrap4-duallistbox/bootstrap-duallistbox.min.css' />" >
+  <!-- BS Stepper -->
+  <link rel="stylesheet" href="<c:url value='/assets/backend/plugins/bs-stepper/css/bs-stepper.min.css' />" >
+  <!-- dropzonejs -->
+  <link rel="stylesheet" href="<c:url value='/assets/backend/plugins/dropzone/min/dropzone.min.css' />" >
+  <!-- Theme style -->
+  <link rel="stylesheet" href="<c:url value='/assets/backend/dist/css/adminlte.min.css' />" >
 </head>
 <body class="hold-transition sidebar-mini">
 

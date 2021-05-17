@@ -212,9 +212,14 @@
                                                 </ul>
                                             </div>
                                             <div class="content-right">
-                                                <span class="price">
-                                               	<c:out value="${item.stringUnitPrice }"></c:out>
-                                               </span>
+                                            <c:if test="${item.discount!=null&&item.discount>0 }">
+						                        <div class="oldPrice price unitPrice " style="color: #929292;">
+					                            	<s><i><c:out value="${dataSelected.stringUnitPrice }"></c:out></i></s>
+					                            </div>
+					                            <div class="price discountPrice newPrice" style="color: red;">
+					                            	<c:out value="${dataSelected.stringDiscountPrice } (-${dataSelected.discount }%)"></c:out>
+					                            </div>
+                       					     </c:if>			
                                             </div>
                                         </div>
                                     </div>

@@ -25,7 +25,6 @@ public class productEntity extends CommonEntity {
 	private String material;
 	private String otherFunc;
 	private String image;
-	private Long del_flag;
 	private String description;
 	private String strLstDiscount;// danh sach discountId - string
 	private Long cartTotal;
@@ -255,14 +254,6 @@ public class productEntity extends CommonEntity {
 		this.image = image;
 	}
 
-	public Long getDel_flag() {
-		return del_flag;
-	}
-
-	public void setDel_flag(Long del_flag) {
-		this.del_flag = del_flag;
-	}
-
 	public Long getCartQuantity() {
 		return cartQuantity;
 	}
@@ -270,7 +261,9 @@ public class productEntity extends CommonEntity {
 	public void setCartQuantity(Long cart_quantity) {
 		this.cartQuantity = cart_quantity;
 	}
-
+	public Long getSubCartTotal() {
+		return cartQuantity *  getUnitPrice();
+	}
 	public Long getCartTotal() {
 		return cartQuantity * (getDisCountPrice() > 0 ? getDisCountPrice() : getUnitPrice());
 	}

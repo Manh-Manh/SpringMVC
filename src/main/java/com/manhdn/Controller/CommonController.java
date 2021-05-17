@@ -33,6 +33,7 @@ public class CommonController<T> {
 	protected ModelAndView mav;
 	protected ModelMap map = new ModelMap();
 	protected String message="";
+	protected userEntity user;
 
 	public CommonController() {
 		
@@ -174,7 +175,7 @@ public class CommonController<T> {
 	}
 	
 	boolean isAdmin(HttpSession session) {
-		userEntity user = (userEntity) session.getAttribute(AppConstants.SESSION_USER);
+		user = (userEntity) session.getAttribute(AppConstants.SESSION_USER);
 		if(user == null || user.getUserId() ==null) {
 			
 			return false;

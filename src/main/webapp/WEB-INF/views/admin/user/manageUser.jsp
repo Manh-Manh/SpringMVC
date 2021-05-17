@@ -33,6 +33,7 @@
                 <table id="example1" class="table table-bordered table-striped">
                   <thead>
                   <tr>
+                  	<th>Số thứ tự</th>
                     <th>Mã người dùng</th>
                     <th>Tên đăng nhập</th>
                     <th>Ảnh</th>
@@ -44,8 +45,10 @@
                   </tr>
                   </thead>
                   <tbody>
+                  <c:set value="0" var="stt"></c:set>
              <c:forEach var = "item" items="${dataList}">
                   <tr>
+                  <td><c:out value ="${ stt=stt+1 }" /></td>
                     <td><c:out value ="${ item.userId }" /></td>
                     <td><c:out value ="${ item.userName }" /></td>
                     <td><img src="<c:url value='/assets/images/users/${item.avatar}' />" style="width: 100px" alt="" ></td>

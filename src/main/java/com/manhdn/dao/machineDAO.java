@@ -76,7 +76,7 @@ public class machineDAO {
 		StringBuilder sql = new StringBuilder();
 		
 		sql.append("SELECT * FROM machine m "
-				+ " WHERE 1 ORDER BY m.machineId " );
+				+ " WHERE 1 ORDER BY m.id " );
 //				+ "(f.status != 0 or f.status is null) ");
 		result = (List<machineEntity>) cmd.getListObjByParams(sql, params, machineEntity.class);
 		return result;
@@ -115,6 +115,28 @@ public class machineDAO {
 		params.add(userId);
 		params.add(userId); 
 		boolean result = cmd.insertOrUpdateDataBase(sql, params);
+		logger.info("Params: " + params + "Result: " + result);
+		return result;
+	}
+
+	public boolean delete(Long userId, String machineId) {
+		if(null == userId) {
+			logger.error("Id null ");
+			return false;
+		}
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		String dateNow = dtf.format(LocalDateTime.now());
+		boolean  result = false;
+		List<Object> params = new ArrayList<Object>();
+		StringBuilder sql = new StringBuilder();
+		sql.append(" UPDATE `machine` m SET m.del_flag = 1, "
+				+ " m.updated_by = ? , m.updated_date = ? "
+				+ " WHERE m.machineId = ? " );
+		
+		params.add(userId);
+		params.add(dateNow);
+		params.add(machineId);
+		result = cmd.insertOrUpdateDataBase(sql, params);
 		logger.info("Params: " + params + "Result: " + result);
 		return result;
 	}

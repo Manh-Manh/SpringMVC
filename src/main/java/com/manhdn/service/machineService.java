@@ -42,4 +42,9 @@ public class machineService {
 		dao =new machineDAO();
 		return dao.insertOrUpdate(userId, dataInsert);
 	}
+
+	public boolean delete(Long userId, String machineId) {
+		dao =new machineDAO();
+		return dao.delete(userId, machineId);
+	}
 }

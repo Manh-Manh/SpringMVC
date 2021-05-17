@@ -46,7 +46,6 @@ public class orderController extends CommonController<orderEntity> {
 	 */
 	@RequestMapping(value = { "/admin/manageOrder" }, method = RequestMethod.GET)
 	public ModelAndView manageOrder(HttpSession session) {
-		userEntity user = (userEntity) session.getAttribute(AppConstants.SESSION_USER);
 		if(!isAdmin(session)) {
 			mav = new ModelAndView("redirect:/app-view");
 			logger.error("Khong co quyen");
@@ -91,7 +90,7 @@ public class orderController extends CommonController<orderEntity> {
 	@RequestMapping(value = { "/app-view/viewOrder" }, method = RequestMethod.GET)
 	public ModelAndView viewOrder(@RequestParam("orderId") String orderId) {
 		mav = new ModelAndView("/user/viewOrder");
-		dataSelected = service.findOrderById(orderId);
+		dataSelected = service.findOrderByOrderId(orderId);
 		if (dataSelected == null || dataSelected.getListProduct().size() == 0) {
 			mav = new ModelAndView("/user/emptyCart");
 		}
@@ -99,7 +98,84 @@ public class orderController extends CommonController<orderEntity> {
 		logger.info(mav);
 		return mav;
 	}
+	
+	@RequestMapping(value = { "/admin/viewOrder" }, method = RequestMethod.GET)
+	public ModelAndView viewOrderAdmin(@RequestParam("orderId") String orderId, HttpSession session) {
+		mav = new ModelAndView("/admin/order/viewOrder");
+		if(!isAdmin(session)) {
+			mav = new ModelAndView("redirect:/app-view");
+			logger.error("Khong co quyen");
+			session.setAttribute(AppConstants.SESSION_MESSAGE, "Liên hệ quản trị hệ thống để được hỗ trợ");
+			return mav;
+		}
+		dataSelected = service.findOrderByOrderId(orderId);
+		if (dataSelected == null || dataSelected.getListProduct().size() == 0) {
+			session.setAttribute(AppConstants.SESSION_MESSAGE, "Liên hệ quản trị hệ thống để được hỗ trợ");
+			return mav;
+		}
+		addData();
+		logger.info(mav);
+		return mav;
+	}
+	
+	
+	@RequestMapping(value = { "/admin/acceptOrder" }, method = RequestMethod.GET)
+	public ModelAndView acceptOrder(@RequestParam("orderId") String orderId, HttpSession session) {
+		mav = new ModelAndView("/admin/order/manageOrder");
+		if(!isAdmin(session)) {
+			mav = new ModelAndView("redirect:/app-view");
+			logger.error("Khong co quyen");
+			session.setAttribute(AppConstants.SESSION_MESSAGE, "Liên hệ quản trị hệ thống để được hỗ trợ");
+			return mav;
+		}
+		service = new orderService();
+		// update cart
+		orderEntity order = service.findOrderByOrderId(orderId);
+		orderService orderS = new orderService();
+		boolean result = orderS.insertOrUpdate(user.getUserId(), order, AppConstants.OS_ORDER_COMPLETE);
+		if (!result) {
+			message = AppConstants.MESSAGE_ERROR;
+			addMessage(message, session);
+			addData();
+			logger.info(mav);
+			return mav;
+		}
+		message = "Xác nhận thành công đơn hàng!";
+		addMessage(message, session);
+		addData();
+		logger.info(mav);
+		return mav;
 
+	}
+	@RequestMapping(value = { "/admin/rejectOrder" }, method = RequestMethod.GET)
+	public ModelAndView rejectOrder(@RequestParam("orderId") String orderId, HttpSession session) {
+		mav = new ModelAndView("/admin/order/manageOrder");
+		if(!isAdmin(session)) {
+			mav = new ModelAndView("redirect:/app-view");
+			logger.error("Khong co quyen");
+			session.setAttribute(AppConstants.SESSION_MESSAGE, "Liên hệ quản trị hệ thống để được hỗ trợ");
+			return mav;
+		}
+
+		// update cart
+		orderEntity order = service.findOrderByOrderId(orderId);
+		orderService orderS = new orderService();
+		boolean result = orderS.insertOrUpdate(user.getUserId(), order, AppConstants.OS_ORDER_CANCEL);
+		if (!result) {
+			message = AppConstants.MESSAGE_ERROR;
+			addMessage(message, session);
+			addData();
+			logger.info(mav);
+			return mav;
+		}
+		mav = new ModelAndView("redirect:/app-view/homePage");
+		message = "Đã hủy đơn hàng!";
+		addMessage(message, session);
+		addData();
+		logger.info(mav);
+		return mav;
+
+	}
 	/**
 	 * Huy don hang
 	 * 

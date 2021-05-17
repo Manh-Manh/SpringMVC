@@ -46,6 +46,11 @@ public class orderService {
 
 	public orderEntity findOrderById(String orderId) {
 		dao = new orderDAO();
-		return dao.findOrderByUserId(orderId);
+		return dao.findOrderByOrderId(orderId);
+	}
+
+	public orderEntity findOrderByOrderId(String orderId) {
+		dao = new orderDAO();
+		return dao.findOrderByOrderId(orderId);
 	}
 }

@@ -15414,11 +15414,14 @@ input {
 .product-default-single-item .image-link {
     display: block;
     position: relative;
+    width: 270px;
+    height: 270px;
 }
 .product-default-single-item .image-link img {
     width: 100%;
     height: 100%;
     transition: all 0.5s ease;
+    object-fit: cover;
 }
 .product-default-single-item .image-link img:nth-child(2) {
     position: absolute;
@@ -16412,23 +16415,23 @@ a.ui-button:active,
 * Components - Breadcrumb
 *****************************/
 .breadcrumb-wrapper {
-    padding-top: 60px;
-    padding-bottom: 60px;
-    margin-bottom: 60px;
+    padding-top: 40px;
+    padding-bottom: 40px;
+    margin-bottom: 40px;
     text-align: center;
 }
 @media (min-width: 768px) {
     .breadcrumb-wrapper {
-        margin-bottom: 80px;
+      /*  margin-bottom: 80px;
         padding-top: 90px;
-        padding-bottom: 90px;
+        padding-bottom: 90px;*/
     }
 }
 @media (min-width: 992px) {
     .breadcrumb-wrapper {
-        margin-bottom: 100px;
+        /*margin-bottom: 100px;
         padding-top: 120px;
-        padding-bottom: 120px;
+        padding-bottom: 120px;*/
     }
 }
 
@@ -16449,7 +16452,7 @@ a.ui-button:active,
 }
 @media (min-width: 1200px) {
     .breadcrumb-title {
-        font-size: 42px;
+        font-size: 32px;
     }
 }
 

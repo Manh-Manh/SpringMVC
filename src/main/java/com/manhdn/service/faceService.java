@@ -40,4 +40,9 @@ public class faceService {
 		dao =new faceDAO();
 		return dao.insertOrUpdate(userId, dataInsert);
 	}
+
+	public boolean delete(Long userId, String faceId) {
+		dao =new faceDAO();
+		return dao.delete(userId, faceId);
+	}
 }

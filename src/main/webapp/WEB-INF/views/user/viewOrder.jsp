@@ -74,7 +74,7 @@
 						                            </div>
 					                            </c:if>
 					                            <c:if test="${item.discount == null || item.discount <= 0}">
-							                        <div class="price unitPrice">$ 
+							                        <div class="price unitPrice">₫
 						                            	<c:out value="${item.stringUnitPrice }"></c:out>
 						                            </div>
 						                            <%-- <div class="price discountPrice">$ 

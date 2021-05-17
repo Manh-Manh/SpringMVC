@@ -21,4 +21,20 @@ $(".inpNumber").change(function(){
 			$(this).val(0);
 		}
 	});
-	
+
+$(".inpDiscount").change(function(){
+		var v =$(this).val();
+		if(v>100){
+			$(this).val(100);
+		}
+	});
+
+$(".urlConfirm").click(function(e){
+		if(!confirm('Bạn chắc chắn muốn thực hiện chứ?')){
+			e.preventDefault();
+		}else{
+			$(this).attr('href',$(this).attr('data-url'));	
+		}
+//		alert($(this).attr('data-url'));
+		
+	});

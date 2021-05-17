@@ -15,6 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.manhdn.AppConstants;
 import com.manhdn.entity.machineEntity;
 import com.manhdn.entity.userEntity;
+import com.manhdn.service.faceService;
 import com.manhdn.service.machineService;
 
 @Controller
@@ -120,6 +121,36 @@ public class machineController extends CommonController<machineEntity>{
 		return this.editMachineView(session, dataInsert.getMachineId());
 //		return mav;
 	}
+	
+	@RequestMapping(value = { "/admin/deleteMachine" }, method = RequestMethod.GET)
+	public ModelAndView deleteMachine(HttpSession session, @RequestParam("machineId") String machineId) {
+		
+		if(!isAdmin(session)) {
+			mav = new ModelAndView("redirect:/app-view");
+			logger.error("Khong co quyen");
+			session.setAttribute(AppConstants.SESSION_MESSAGE, AppConstants.MESSAGE_ERROR);
+			return mav;
+		}
+		if(machineId == null) {
+			mav = new ModelAndView("redirect:/app-view");
+			logger.error("Loi id null");
+			session.setAttribute(AppConstants.SESSION_MESSAGE, AppConstants.MESSAGE_ERROR);
+			return mav;
+		}
+		service = new machineService();
+		mav = new ModelAndView("/admin/machine/manageMachine");
+		dataSelected = service.getDetail(machineId);
+		if(!service.delete(user.getUserId(), machineId)) {
+			session.setAttribute(AppConstants.SESSION_MESSAGE, AppConstants.MESSAGE_ERROR);
+			return mav;
+		}
+		session.setAttribute(AppConstants.SESSION_MESSAGE,"Xóa thành công");
+		map.addAttribute("isInsert", 0);
+		addData();
+		logger.info(mav);
+		return manageMachine(session);
+	}
+	
 	@ModelAttribute("dataInsert")
 	public machineEntity dataInsert() {
 		return new machineEntity();

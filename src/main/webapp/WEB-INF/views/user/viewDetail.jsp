@@ -552,8 +552,14 @@
 	                                           <!--  <a href="blog-single-sidebar-left.html" class="read-more-btn icon-space-left">Read More <span><i class="ion-ios-arrow-thin-right"></i></span></a>
 	                                            -->
 	                                            <div class="post-meta">
-	                                                <!-- <a href="#" class="date">24 Apr</a> -->
-	                                                <c:out value="${item.stringUnitPrice }"></c:out>
+	                                                <c:if test="${item.discount!=null&&item.discount>0 }">
+						                        <div class="oldPrice price unitPrice " style="color: #929292;">
+					                            	<s><i><c:out value="${dataSelected.stringUnitPrice }"></c:out></i></s>
+					                            </div>
+					                            <div class="price discountPrice newPrice" style="color: red;">
+					                            	<c:out value="${dataSelected.stringDiscountPrice } (-${dataSelected.discount }%)"></c:out>
+					                            </div>
+                       					     </c:if>
 	                                            </div>
 	                                        </div>
 	                                    </div>

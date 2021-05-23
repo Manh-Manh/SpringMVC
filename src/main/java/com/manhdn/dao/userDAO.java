@@ -14,6 +14,7 @@ import com.manhdn.database.CommonDatabase;
 import com.manhdn.entity.userEntity;
 import com.mysql.cj.Query;
 import com.manhdn.entity.productEntity;
+import com.manhdn.entity.roleEntity;
 import com.manhdn.entity.userEntity;
 
 @Repository
@@ -46,7 +47,7 @@ public class userDAO {
 		List<Object> params = new ArrayList<Object>();
 		StringBuilder sql = new StringBuilder();
 
-		sql.append("SELECT * FROM users u " + " WHERE 1 ");
+		sql.append("SELECT * FROM users u " + " WHERE (u.del_flag is null or u.del_flag != 1) ");
 		result = (List<userEntity>) cmd.getListObjByParams(sql, params, userEntity.class);
 		logger.info("Params: " + params + "Result: " + result);
 		return result;
@@ -75,6 +76,8 @@ public class userDAO {
 		List<userEntity> lst = (List<userEntity>) cmd.getListObjByParams(sql, params, userEntity.class);
 		if (lst != null && lst.size() > 0) {
 			result = lst.get(0);
+			roleDAO rD = new roleDAO();
+			result.setLstRoles(rD.getListRoleByUser(result));
 			logger.info("Params: " + params + "Result: " + lst);
 			return result;
 		}else {
@@ -97,14 +100,24 @@ public class userDAO {
 			Long id = cmd.getMaxId("users", "id") +1;
 			user.setUserId(id);
 		}
-		sql.append("INSERT INTO `users` ( userId, userName, " 
-				+ " fullName, password, email, address, phoneNumber, status, "
-				+ " avatar, birthDate, del_flag, created_date, updated_date, "
-				+ " created_by, updated_by )"
+		sql.append("INSERT INTO `users` ( userId, userName, "
+				+ " fullName, password, email, address, phoneNumber, status, avatar ");
+		if (!FunctionCommon.isEmpty(user.getBirthDate())) {
+			sql.append(" , birthDate  ");
+		}
+		sql.append(" , del_flag, created_date, updated_date, " + " created_by, updated_by )"
 //				+ " birthDate ) "
 				+ " VALUES ");
+
+		sql.append("(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ");
 		
-		sql.append("(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ) ");
+		if(!FunctionCommon.isEmpty(user.getBirthDate()))
+		{
+			sql.append( " ?, ");
+		}
+		
+		sql.append("  ?, ?, ? ) ");
+		
 //		sql.append(""+ user.getBirthDate() != null ? (" '"+user.getBirthDate()+"' ") : null);
 //		sql.append(" ) ");
 		sql.append("ON DUPLICATE KEY UPDATE "
@@ -114,9 +127,12 @@ public class userDAO {
 				+ " address = VALUES(address), "
 				+ " phoneNumber = VALUES(phoneNumber), "
 				+ " status = VALUES(status), "
-				+ " avatar = VALUES(avatar), "
-				+ " birthDate = VALUES(birthDate), "
-				+ " updated_date = VALUES(updated_date), "
+				+ " avatar = VALUES(avatar), ");
+				if(!FunctionCommon.isEmpty(user.getBirthDate()))
+				{
+					sql.append( " birthDate = VALUES(birthDate), ");
+				}
+				sql.append( " updated_date = VALUES(updated_date), "
 				+ " updated_by = VALUES(updated_by) "
 				+ "");
 		params.add(user.getUserId() != null ? user.getUserId() : "");
@@ -129,7 +145,11 @@ public class userDAO {
 		params.add(user.getPhoneNumber() != null ? user.getPhoneNumber() : "");
 		params.add(user.getStatus() != null ? user.getStatus() : AppConstants.STATUS_ACTIVE);
 		params.add(user.getAvatar() != null ? user.getAvatar() : "default-avatar.png");
-		params.add(user.getBirthDate() != null ? user.getBirthDate() : dateNow);
+		
+		if(!FunctionCommon.isEmpty(user.getBirthDate()))
+		{
+			params.add(user.getBirthDate());
+		}
 		params.add(user.getDel_flag() != null ? user.getDel_flag() : 0);
 		params.add(user.getCreated_date() != null ? user.getCreated_date() : "");
 		params.add(user.getUpdated_date() != null ? user.getUpdated_date() : "");
@@ -139,4 +159,86 @@ public class userDAO {
 		logger.info("Params: " + params + "Result: " + result);
 		return result;
 	}
+
+	public userEntity findUserByUserEmail(String email) {
+		userEntity result = new userEntity();
+		List<Object> params = new ArrayList<Object>();
+		StringBuilder sql = new StringBuilder();
+		
+		if (FunctionCommon.isEmpty(email)) {
+			logger.error("data null: " );
+			return null;
+		}
+		sql.append("SELECT * FROM users u "
+				+ " WHERE (u.status = 1 or status is null) and (u.del_flag is null or u.del_flag != 1)  ");
+
+		sql.append(" AND   u.email = ? ");
+		params.add(email);
+		
+		List<userEntity> lst = (List<userEntity>) cmd.getListObjByParams(sql, params, userEntity.class);
+		if (lst != null && lst.size() > 0) {
+			result = lst.get(0);
+			 roleDAO rD = new roleDAO();
+			 result.setLstRoles(rD.getListRoleByUser(result));
+			logger.info("Params: " + params + "Result: " + lst);
+			return result;
+		}else {
+			logger.info("Params: " + params + "Result: " + lst);
+			return null;
+		}
+
+		
+	}
+
+	public userEntity getDetail(Long userId) {
+		userEntity result = new userEntity();
+		List<Object> params = new ArrayList<Object>();
+		StringBuilder sql = new StringBuilder();
+		
+		if (null == userId ) {
+			logger.error("data null: " );
+			return null;
+		}
+		sql.append("SELECT * FROM users u "
+				+ " WHERE (u.del_flag is null or u.del_flag != 1)  ");
+
+		sql.append(" AND   u.userId = ? ");
+		params.add(userId);
+
+		List<userEntity> lst = (List<userEntity>) cmd.getListObjByParams(sql, params, userEntity.class);
+		if (lst != null && lst.size() > 0) {
+			result = lst.get(0);
+			roleDAO rD = new roleDAO();
+			result.setLstRoles(rD.getListRoleByUser(result));
+			logger.info("Params: " + params + "Result: " + lst);
+			return result;
+		} else {
+			logger.info("Params: " + params + "Result: " + lst);
+			return null;
+		}
+	}
+
+	public boolean delete(Long userId, Long userDeleteId) {
+		if(null == userId || null == userDeleteId) {
+			logger.error("Id null ");
+			return false;
+		}
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		String dateNow = dtf.format(LocalDateTime.now());
+		boolean  result = false;
+		List<Object> params = new ArrayList<Object>();
+		StringBuilder sql = new StringBuilder();
+		sql.append(" UPDATE `users` u SET u.del_flag = 1, "
+				+ " u.updated_by = ? , u.updated_date = ? "
+				+ " WHERE u.userId = ? " );
+		
+		params.add(userId);
+		params.add(dateNow);
+		params.add(userDeleteId);
+		result = cmd.insertOrUpdateDataBase(sql, params);
+		logger.info("Params: " + params + "Result: " + result);
+		return result;
+	}
+	
+	
 }

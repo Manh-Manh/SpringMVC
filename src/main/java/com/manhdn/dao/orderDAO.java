@@ -1,8 +1,12 @@
 package com.manhdn.dao;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -22,7 +26,7 @@ public class orderDAO {
 	public orderDAO(){
 		cmd = new CommonDatabase();
 	}
-	public List<orderEntity> findDataList(Long orderId, productEntity dataSearch) {
+	public List<orderEntity> findDataList(Long orderId, orderEntity dataSearch) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -150,19 +154,23 @@ public class orderDAO {
 		List<orderEntity> lst = (List<orderEntity>) cmd.getListObjByParams(sql, params, orderEntity.class);
 		if (lst.size() > 0) {
 			for(orderEntity o : lst) {
+				
+				// Tim chi tiet hoa don
+				o.setListProduct(getOrderDetail(o));
+				// them user
 				userDAO uD = new userDAO();
 				o.setUser(uD.findUserById(o.getUserId()));
-				// Tim chi tiet hoa don
-				StringBuilder sql2 = new StringBuilder();
-				List<Object> params2 = new ArrayList<Object>();
-				sql2.append(" SELECT * FROM `products` p WHERE p.status = 1 AND p.productId IN ( "
-						+ "	SELECT od.productId FROM order_detail od WHERE od.orderId = ? " + ")");
-				params2.add(o.getOrderId());
-				List<productEntity> lstProduct = (List<productEntity>) cmd.getListObjByParams(sql2, params2,
-						productEntity.class);
-				if (lstProduct.size() > 0) {
-					o.setListProduct(lstProduct);
-				}
+//				
+//				StringBuilder sql2 = new StringBuilder();
+//				List<Object> params2 = new ArrayList<Object>();
+//				sql2.append(" SELECT * FROM `products` p WHERE p.status = 1 AND p.productId IN ( "
+//						+ "	SELECT od.productId FROM order_detail od WHERE od.orderId = ? " + ")");
+//				params2.add(o.getOrderId());
+//				List<productEntity> lstProduct = (List<productEntity>) cmd.getListObjByParams(sql2, params2,
+//						productEntity.class);
+//				if (lstProduct.size() > 0) {
+//					o.setListProduct(lstProduct);
+//				}
 			}
 //			return cart;
 		} else {
@@ -210,8 +218,19 @@ public class orderDAO {
 		}
 		StringBuilder sql2 = new StringBuilder();
 		List<Object> params2 = new ArrayList<Object>();
-		sql2.append(" SELECT * FROM `products` p WHERE p.status = 1 AND p.productId IN ( "
-				+ "	SELECT od.productId FROM order_detail od WHERE od.orderId = ? " + ")");
+		sql2.append(" SELECT  p.id, p.productId, p.productName, p.quantity, p.supplierId, p.unitPrice, "
+				+ " p.gender, p.status, p.strapId, "
+				+ " p.faceId, p.machineId, p.material, p.otherFunc, p.image, p.description, p.del_flag, "
+				+ " p.created_date, p.updated_date, p.deleted_date, " + " p.created_by, p.updated_by, p.deleted_by, "
+				+ " od.orderId, od.quantity as cartQuantity, od.discount as discount "
+
+				+ " FROM `products` p, ( "
+				+ " SELECT od2.orderId, od2.productId, od2.quantity, od2.discount "
+				+ " FROM order_detail od2  WHERE od2.orderId = ? ) od "
+				+ " WHERE p.status = 1 and p.productId = od.productId  ");
+//		
+//				+ "	SELECT od.productId FROM order_detail od WHERE od.orderId = ? " + ")");
+
 		params2.add(order.getOrderId());
 		List<productEntity> lstProduct = (List<productEntity>) cmd.getListObjByParams(sql2, params2,
 				productEntity.class);
@@ -221,6 +240,66 @@ public class orderDAO {
 //			}
 //		}
 		return lstProduct;
+	}
+	public List<orderEntity> doSearchOrder(orderEntity dataSearch) {
+		List<orderEntity> result = new ArrayList<orderEntity>();
+		List<Object> params = new ArrayList<Object>();
+		StringBuilder sql = new StringBuilder();
+		sql.append("SELECT * FROM `order` o WHERE status > 1 ");
+		// Theo trang thai
+		if(dataSearch.getStatus() != null) {
+			sql.append(" AND o.status = ? ");
+			params.add(dataSearch.getStatus());
+		}
+		// THeo ngay
+		if(!FunctionCommon.isEmpty(dataSearch.getFromDate())&&!FunctionCommon.isEmpty(dataSearch.getToDate())) {
+			SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd");  
+			try {
+				Date date1 = format.parse(dataSearch.getFromDate());
+				Date date2 = format.parse(dataSearch.getToDate());
+				String fDate = format.format(date1);
+				String tDate =format.format(date2);
+				sql.append(" AND ? < o.orderDate AND o.orderDate < ? ");
+				params.add(fDate);
+				params.add(tDate);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			
+		}
+		sql.append(" ORDER BY o.status, updated_date ASC ");
+		result = (List<orderEntity>) cmd.getListObjByParams(sql, params, orderEntity.class);
+		if(!FunctionCommon.isEmpty(result)) {
+			for(orderEntity o : result) {
+				o.setListProduct(getOrderDetail(o));
+				userDAO uD = new userDAO();
+				o.setUser(uD.findUserById(o.getUserId()));
+			}
+		}
+		logger.info("Params: " + params + "Result: " + result);
+		return result;
+	}
+	public List<orderEntity> getListNewOrder() {
+		orderEntity o =new orderEntity();
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		String dateNow = dtf.format(LocalDateTime.now());
+		o.setStatus(2L);
+		o.setToDate(dateNow);
+		Calendar c = Calendar.getInstance();
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd");  
+		try {
+			Date date1 = format.parse(dateNow);
+			c.setTime(date1);
+			c.roll(Calendar.MONTH, -1);
+			String dateLast = format.format(c.getTime());
+			o.setFromDate(dateLast);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return this.doSearchOrder(o);
 	}
 
 }

@@ -60,6 +60,24 @@ public class orderController extends CommonController<orderEntity> {
 		return mav;
 	}
 
+	@RequestMapping(value = { "/admin/doSearchOrder" }, method = RequestMethod.POST)
+	public ModelAndView doSearchOrder(HttpSession session, @ModelAttribute("orderSearch") orderEntity dataSearch) {
+		if(!isAdmin(session)) {
+			mav = new ModelAndView("redirect:/app-view");
+			logger.error("Khong co quyen");
+			session.setAttribute(AppConstants.SESSION_MESSAGE, "Liên hệ quản trị hệ thống để được hỗ trợ");
+			return mav;
+		}
+		if(null==dataSearch) {
+			return manageOrder(session);
+		}
+		service = new orderService();
+		mav = new ModelAndView("/admin/order/manageOrder");
+		dataList = service.doSearchOrder(dataSearch);
+		addData();
+		logger.info(mav);
+		return mav;
+	}
 	/**
 	 * xem gio hang
 	 * 
@@ -361,7 +379,7 @@ public class orderController extends CommonController<orderEntity> {
 		return mav;
 
 	}
-
+	
 	// update
 	private orderEntity updateCart(String id, Long cartQuantity, orderEntity data) {
 		orderEntity result = data;
@@ -400,7 +418,10 @@ public class orderController extends CommonController<orderEntity> {
 	public userEntity userCheckout() {
 		return new userEntity();
 	}
-
+	@ModelAttribute("orderSearch")
+	public orderEntity dataSearch() {
+		return new orderEntity();
+	}
 	private void addAttribute() {
 		super.addData();
 	}

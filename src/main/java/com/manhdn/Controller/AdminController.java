@@ -13,15 +13,15 @@ import com.mysql.cj.log.Log;
 @Controller
 public class AdminController{
 	
-	@Autowired
-	productService service;
-	Logger logger = Logger.getLogger(AdminController.class);
-	@RequestMapping(value = {"/admin"}, method = RequestMethod.GET)
-	public ModelAndView home() {
-		ModelAndView mav = new ModelAndView("/admin/home");
-		logger.info(mav);
-		return mav;
-	}
+//	@Autowired
+//	productService service;
+//	Logger logger = Logger.getLogger(AdminController.class);
+//	@RequestMapping(value = {"/admin"}, method = RequestMethod.GET)
+//	public ModelAndView home() {
+//		ModelAndView mav = new ModelAndView("/admin/home");
+//		logger.info(mav);
+//		return mav;
+//	}
 	/**
 	 * 
 	 * @return

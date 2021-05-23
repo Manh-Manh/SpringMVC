@@ -56,8 +56,20 @@ public class productDAO {
 				+ " FROM products p join suppliers sup on p.supplierId = sup.supplierId "
 				+ " join strap s on p.strapId = s.strapId "
 				+ " join face f on f.faceId = p.faceId join machine m on m.machineId = p.machineId "
-				+ " WHERE (p.del_flag != 1 or p.del_flag is null) and p.status = 1 ");
+				+ " WHERE (p.del_flag != 1 or p.del_flag is null) ");
 		List<Object> params = new ArrayList<>();
+		if(!FunctionCommon.isEmpty(dataSearch.getSupplierId())) {
+			sql.append(" and sup.supplierId = ? ");
+			params.add(dataSearch.getSupplierId());
+		}
+		if(!FunctionCommon.isEmpty(dataSearch.getGender())) {
+			sql.append(" and p.gender = ? ");
+			params.add(dataSearch.getGender());
+		}
+		if(null!=dataSearch.getStatus()) {
+			sql.append(" and p.status = ? ");
+			params.add(dataSearch.getStatus());
+		}
 		List<productEntity> result = new ArrayList<productEntity>();
 		result = (List<productEntity>) cmd.getListObjByParams(sql, params, productEntity.class);
 		fillDataInDataList(result);

@@ -30,7 +30,15 @@
                                     <input type="checkbox" id="offer">
                                     <span>Remember me</span>
                                 </label>-->
-                                <a href="#">Lost your password?</a>
+                                <!-- <a href="">Lost your password?</a>-->
+                            </div>
+                            <p style="text-align: center;">-Hoặc-</p>
+                            <div class="">
+                                <a href="https://accounts.google.com/o/oauth2/auth?scope=profile%20email&redirect_uri=http://localhost:8088/SpringMVC/app-view/login-google&response_type=code&client_id=733898855305-qq55bo8bqmokdrq0bkl41prqlkiiumri.apps.googleusercontent.com" class="">
+						          <button class="btn btn-block btn-danger btnGG" type="button" >
+						          <i class="fab fa-google-plus mr-2"></i> Đăng nhập bằng Google+
+						          </button>
+						        </a>
                             </div>
                         </form:form>
                     </div>

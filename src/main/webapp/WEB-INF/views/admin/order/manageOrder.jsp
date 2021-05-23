@@ -25,6 +25,50 @@
         <div class="row">
           <div class="col-12">
             <div class="card">
+            <c:url var="urlSearch" value='/admin/doSearchOrder'>
+              </c:url>
+              <form:form action="${urlSearch }" method="POST" modelAttribute="orderSearch">
+                <div class="row">
+                    <div class="col-md-10 offset-md-1">
+                        <div class="row">
+                           
+                            <div class="col-4">
+                                <div class="form-group">
+					                <label for="inputDescription">Trạng thái</label>
+					                <form:select id="status" path="status" class="form-control custom-select" >
+					                  <form:option selected="selected" value="" label="__Chọn__" ></form:option>
+					                    <form:option value="2" label="Chưa xử lý" ></form:option>
+										<form:option value="3" label="Đã xử lý" ></form:option>
+										<form:option value="4" label="Đã hủy" ></form:option>
+					                </form:select>            
+					              </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="form-group">
+					                <label for="supplier">Từ ngày</label><br>
+					                <form:input path="fromDate" type="date" id="fromDate" class="form-control " />
+					              </div>
+                            </div>
+                            
+                            <div class="col-4">
+                                <div class="form-group">
+					                <label for="supplier">Đến ngày</label><br>
+					                <form:input path="toDate" type="date" id="toDate" class="form-control" />
+					              </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="" style="text-align:center;">
+                                <div class="">
+                                    <button type="submit" class="btn btn-primary" >
+                                        <i class="fa fa-search">Tìm kiếm</i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form:form>
               <div class="card-header">
               </div>
               <!-- /.card-header -->
@@ -48,7 +92,7 @@
 					<td><c:out value ="${ stt=stt+1 }" /></td>
                     <td><c:out value ="${ item.orderId }" /></td>
                     <td><c:out value ="${ item.user.userName }" /></td>
-                    <td><c:out value ="${ item.updated_date }" /></td>
+                    <td><c:out value ="${ item.orderDate }" /></td>
                     <td><c:out value = "${ item.total }" /></td>
                     <td><c:out value = "${ item.statusString }" /></td>
                     

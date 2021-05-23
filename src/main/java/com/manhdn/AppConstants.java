@@ -59,4 +59,10 @@ public class AppConstants {
 	
 	//
 	public static String MESSAGE_ERROR = "Liên hệ quản trị hệ thống để được hỗ trợ.";
+	
+	public static String urlGG = "https://accounts.google.com/o/oauth2/auth?scope=profile%20email&redirect_uri=http://localhost:8088/SpringMVC/app-view/login-google&response_type=code&client_id=733898855305-qq55bo8bqmokdrq0bkl41prqlkiiumri.apps.googleusercontent.com";
+	//Role
+	public static Long ROLE_ADMIN = 3L;
+	public static Long ROLE_USER = 1L;
+	public static Long ROLE_EMP = 2L;
 }

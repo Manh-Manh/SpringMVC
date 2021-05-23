@@ -57,6 +57,7 @@ import com.manhdn.entity.userEntity;
 import com.manhdn.service.commentService;
 import com.manhdn.service.faceService;
 import com.manhdn.service.productService;
+import com.manhdn.service.statisticProductService;
 
 @Controller
 @Component
@@ -111,7 +112,10 @@ public class productController extends CommonController<productEntity> {
 		if (page != null) {
 			this.page = page;
 		}
-
+		
+		statisticProductService sss = new statisticProductService();
+		sss.findDaList(0L, null);
+		
 		addAttribute();
 		logger.info(mav);
 		return mav;
@@ -234,9 +238,15 @@ public class productController extends CommonController<productEntity> {
 	 * @return
 	 */
 	@RequestMapping(value = { "/admin/manageProduct" }, method = RequestMethod.GET)
-	public ModelAndView manageProduct() {
+	public ModelAndView manageProduct(HttpSession session) {
 		service = new productService();
 		mav = new ModelAndView("/admin/product/manageProduct");
+		if(!isAdmin(session)) {
+			mav = new ModelAndView("redirect:/app-view");
+			logger.error("Khong co quyen");
+			session.setAttribute(AppConstants.SESSION_MESSAGE, AppConstants.MESSAGE_ERROR);
+			return mav;
+		}
 		dataList = service.findAll();
 //		mav.addObject("dataList",dataList);;
 //		service.insertOrUpdate(0L, dataSearch);
@@ -252,10 +262,10 @@ public class productController extends CommonController<productEntity> {
 	@RequestMapping(value = { "/admin/addProduct" }, method = RequestMethod.GET)
 	public ModelAndView addProductView(HttpSession session) {
 		userEntity user = (userEntity) session.getAttribute(AppConstants.SESSION_USER);
-		if(user == null || user.getUserId() ==null) {
+		if(!isAdmin(session)) {
 			mav = new ModelAndView("redirect:/app-view");
 			logger.error("Khong co quyen");
-			session.setAttribute(AppConstants.SESSION_MESSAGE, "Liên hệ quản trị hệ thống để được hỗ trợ");
+			session.setAttribute(AppConstants.SESSION_MESSAGE, AppConstants.MESSAGE_ERROR);
 			return mav;
 		}
 		service = new productService();
@@ -270,24 +280,30 @@ public class productController extends CommonController<productEntity> {
 		return mav;
 	}
 
-	@RequestMapping(value = { "/admin/addProduct" }, method = RequestMethod.POST)
-	public ModelAndView addProduct(@ModelAttribute("dataInsert") productEntity dataInsert, HttpSession session) {
-		service = new productService();
-		mav = new ModelAndView("/admin/product/addProduct");
-		service.insertOrUpdate(0L, dataSearch);
-		addAttribute();
-		logger.info(mav);
-		return mav;
-	}
+//	@RequestMapping(value = { "/admin/addProduct" }, method = RequestMethod.POST)
+//	public ModelAndView addProduct(@ModelAttribute("dataInsert") productEntity dataInsert, HttpSession session) {
+//		service = new productService();
+//		mav = new ModelAndView("/admin/product/addProduct");
+//		if(!isAdmin(session)) {
+//			mav = new ModelAndView("redirect:/app-view");
+//			logger.error("Khong co quyen");
+//			session.setAttribute(AppConstants.SESSION_MESSAGE, AppConstants.MESSAGE_ERROR);
+//			return mav;
+//		}
+//		service.insertOrUpdate(0L, dataSearch);
+//		addAttribute();
+//		logger.info(mav);
+//		return mav;
+//	}
 
 	@RequestMapping(value = { "/admin/addNewProduct" }, method = RequestMethod.POST)
 	public ModelAndView addNewProduct(@ModelAttribute("dataInsert") productEntity dataInsert, HttpSession session,
 			HttpServletRequest request) {
 		userEntity user = (userEntity) session.getAttribute(AppConstants.SESSION_USER);
-		if(user == null || user.getUserId() ==null) {
+		if(!isAdmin(session)) {
 			mav = new ModelAndView("redirect:/app-view");
 			logger.error("Khong co quyen");
-			session.setAttribute(AppConstants.SESSION_MESSAGE, "Liên hệ quản trị hệ thống để được hỗ trợ");
+			session.setAttribute(AppConstants.SESSION_MESSAGE, AppConstants.MESSAGE_ERROR);
 			return mav;
 		}
 		service = new productService();
@@ -325,10 +341,10 @@ public class productController extends CommonController<productEntity> {
 	public ModelAndView editProductView(HttpSession session, @RequestParam("productId") String productId) {
 		userEntity user = (userEntity) session.getAttribute(AppConstants.SESSION_USER);
 		
-		if(user == null || user.getUserId() ==null) {
+		if(!isAdmin(session)) {
 			mav = new ModelAndView("redirect:/app-view");
 			logger.error("Khong co quyen");
-			session.setAttribute(AppConstants.SESSION_MESSAGE, "Liên hệ quản trị hệ thống để được hỗ trợ");
+			session.setAttribute(AppConstants.SESSION_MESSAGE, AppConstants.MESSAGE_ERROR);
 			return mav;
 		}
 		if(productId == null) {
@@ -382,6 +398,28 @@ public class productController extends CommonController<productEntity> {
 		
 	}
 	
+	@RequestMapping(value = { "/admin/doSearchProduct" }, method = RequestMethod.POST)
+	public ModelAndView doSearchProduct(@ModelAttribute("productSearch") productEntity productSearch, HttpSession session,
+			HttpServletRequest request) {
+		userEntity user = (userEntity) session.getAttribute(AppConstants.SESSION_USER);
+		if(!isAdmin(session)) {
+			mav = new ModelAndView("redirect:/app-view");
+			logger.error("Khong co quyen");
+			session.setAttribute(AppConstants.SESSION_MESSAGE, AppConstants.MESSAGE_ERROR);
+			return mav;
+		}
+		service = new productService();
+		mav = new ModelAndView("/admin/product/manageProduct");
+		discountDAO disD = new discountDAO();
+		List<discountEntity> lstDiscount = disD.findDataList(0L, null);
+		
+		map.addAttribute("lstDiscount", lstDiscount);
+		dataList = service.findDaList(0L, productSearch);
+		addAttribute();
+		logger.info(mav);
+//		return this.editProductView(session, dataInsert.getProductId());
+		return mav;
+	}
 	private static void getDataFromLink()
 	{
 	    final String uri = "https://thongtindoanhnghiep.co/api/city";

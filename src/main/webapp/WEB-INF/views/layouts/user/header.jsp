@@ -24,7 +24,7 @@
         <link rel="stylesheet" href="<c:url value='/assets/css/vendor/ionicons.css'/> ">
         <link rel="stylesheet" href="<c:url value='/assets/css/vendor/simple-line-icons.css'/> ">
         <link rel="stylesheet" href="<c:url value='/assets/css/vendor/jquery-ui.min.css'/> "> 
-
+ <link rel="stylesheet" href="<c:url value='/assets/backend/plugins/fontawesome-free/css/all.min.css'/> ">
 <!-- Plugin CSS -->
 		<link rel="stylesheet" href="<c:url value='/assets/css/plugins/swiper-bundle.min.css'/> ">
         <link rel="stylesheet" href="<c:url value='/assets/css/plugins/animate.min.css'/> ">
@@ -414,7 +414,7 @@
                 <div class="logo">
                 <!-- Avatar -->
                   <a href="<c:url value='/app-view/myAccount' />" >
-                   	<img class="logo-avatar"  src="<c:url value='/assets/images/user/${u.avatar}' /> " alt="">
+                   	<img class="logo-avatar"  src="<c:url value='/assets/images/user/${u.userId}/${u.avatar}' /> " alt="">
                   </a>  
                 </div>
 

@@ -15,6 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.manhdn.AppConstants;
 import com.manhdn.entity.ajaxEntity;
 import com.manhdn.entity.productEntity;
+import com.manhdn.entity.roleEntity;
 import com.manhdn.entity.userEntity;
 
 public class CommonController<T> {
@@ -173,21 +174,32 @@ public class CommonController<T> {
 	public void setCount(Integer count) {
 		this.count = count;
 	}
-	
+
 	boolean isAdmin(HttpSession session) {
 		user = (userEntity) session.getAttribute(AppConstants.SESSION_USER);
-		if(user == null || user.getUserId() ==null) {
-			
+		if (user == null || user.getUserId() == null) {
+
 			return false;
 		}
-		if(user.getRole()!=null) {
-			
+		if (user.getLstRoles() != null) {
+			for (roleEntity r : user.getLstRoles()) {
+				if (r.getRoleLevel() == AppConstants.ROLE_ADMIN || r.getRoleLevel() == AppConstants.ROLE_EMP) {
+					return true;
+				}
+			}
+			return false;
 		}
-		return true;
+
+		return false;
 	}
 	@ModelAttribute("productSearch")
 	productEntity productSearch() {
 		return new productEntity();
+	}	
+	@ModelAttribute("dataSearch")
+	T dataSearch() {
+//		dataSearch;
+		return dataSearch;
 	}	
 	@ModelAttribute("prodSelected")
 	public productEntity prodSelected() {

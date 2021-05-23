@@ -2,16 +2,13 @@ package com.manhdn.entity;
 
 import java.text.DecimalFormat;
 import java.util.List;
-
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
-
 import com.manhdn.FunctionCommon;
-
 public class productEntity extends CommonEntity {
 
 	private String productName;
 	private Long quantity;
-	private Long cartQuantity = 1L;
+	private Long cartQuantity;
 	private String productId;
 	private String supplierId;
 	private Long unitPrice;
@@ -172,6 +169,9 @@ public class productEntity extends CommonEntity {
 
 
 	public Double getDiscount() {
+		if(this.discount!=null&& this.discount > 0D) {
+			return discount;
+		}
 		if (FunctionCommon.isEmpty(lstDiscount)) {
 			return 0D;
 		}
@@ -255,6 +255,9 @@ public class productEntity extends CommonEntity {
 	}
 
 	public Long getCartQuantity() {
+		if(cartQuantity == null) {
+			return 1L;
+		}
 		return cartQuantity;
 	}
 
@@ -262,10 +265,10 @@ public class productEntity extends CommonEntity {
 		this.cartQuantity = cart_quantity;
 	}
 	public Long getSubCartTotal() {
-		return cartQuantity *  getUnitPrice();
+		return getCartQuantity() *  getUnitPrice();
 	}
 	public Long getCartTotal() {
-		return cartQuantity * (getDisCountPrice() > 0 ? getDisCountPrice() : getUnitPrice());
+		return getCartQuantity() * (getDisCountPrice() > 0 ? getDisCountPrice() : getUnitPrice());
 	}
 
 	public void setCartTotal(Long cartTotal) {
@@ -275,7 +278,7 @@ public class productEntity extends CommonEntity {
 	public String getCartTotalString() {
 		DecimalFormat myFormatter = new DecimalFormat("###,###,###,###");
 		Long total = 0L;
-		total = cartQuantity * (getDisCountPrice() > 0 ? getDisCountPrice() : getUnitPrice());
+		total = getCartQuantity() * (getDisCountPrice() > 0 ? getDisCountPrice() : getUnitPrice());
 		return myFormatter.format(total);
 	}
 

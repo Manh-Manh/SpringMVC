@@ -13,7 +13,9 @@
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Thêm mới</a></li>
+              <li class="breadcrumb-item"><a href="<c:url value='/admin/addUser' />" >
+					<button type="button" class="btn btn-primary float-right"><i class="fas fa-plus"></i> Thêm mới</button>
+			</a></li>
             </ol>
           </div>
         </div>
@@ -25,9 +27,6 @@
         <div class="row">
           <div class="col-12">
             <div class="card">
-              <div class="card-header">
-                <h3 class="card-title">Quản lý người dùng</h3>
-              </div>
               <!-- /.card-header -->
               <div class="card-body">
                 <table id="example1" class="table table-bordered table-striped">
@@ -38,8 +37,6 @@
                     <th>Tên đăng nhập</th>
                     <th>Ảnh</th>
                     <th>Email</th>
-                    <th>Địa chỉ</th>
-                    <th>Số điện thoại</th>
                     <th>Trạng thái</th>
                     <th>Hành động</th>
                   </tr>
@@ -51,17 +48,22 @@
                   <td><c:out value ="${ stt=stt+1 }" /></td>
                     <td><c:out value ="${ item.userId }" /></td>
                     <td><c:out value ="${ item.userName }" /></td>
-                    <td><img src="<c:url value='/assets/images/users/${item.avatar}' />" style="width: 100px" alt="" ></td>
-                    <td><c:out value ="${ item.email }" /></td>
-                    <td><c:out value = "${ item.address }" /></td>
-                    <td><c:out value = "${item.phoneNumber }" /></td>
+                    <td><img src="<c:url value='/assets/images/users/${item.userId}/${item.avatar}' />" style="width: 100px" alt="" ></td>
+                   <td><c:out value ="${ item.userName }" /></td>
                     <td>
                     	<c:out value ="${ item.statusString }" />                    
                     </td>
-                    <td>
-                    	<a href="<c:url value = '#' /> ">Sửa</a>
-                    	<a href="<c:url value = '#' /> ">Xóa</a>
-                    	<%--<a href="<c:url value = '#' /> ">Sửa</a>--%>
+                    <td class="text-center py-0 align-middle">
+                    <c:url var="urlEdit" value='/admin/editUser'>
+                    	<c:param name="userId" value="${item.userId}"></c:param>
+                    </c:url>
+                    <c:url var="urlDel" value='/admin/deleteUser'>
+                    	<c:param name="userId" value="${item.userId}"></c:param>
+                    </c:url>
+                    <div class="btn-group btn-group-sm">
+                        <a href="${urlEdit }" class="btn btn-info" data-toggle="tooltip" data-placement="bottom" title="Sửa"><i class="fas fa-edit"></i></a>
+                        <a href="${urlDel }" class="btn btn-danger urlConfirm" data-toggle="tooltip" data-placement="bottom" title="Xóa"><i class="fas fa-trash"></i></a>
+                      </div>
                     </td>
                   </tr>  
               </c:forEach>                

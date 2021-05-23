@@ -1,8 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@include file = '/common/taglib.jsp' %>
-
-
 <div class="breadcrumb-section breadcrumb-bg-color--golden">
         <div class="breadcrumb-wrapper">
             <div class="container">
@@ -68,7 +66,7 @@
                                         <tr>
                                         <c:set var="stt" value="${stt+1 }"></c:set>
                                             <td><c:out value="${stt }" ></c:out></td>
-                                            <td><c:out value="${item.updated_date!=null?item.updated_date:item.created_date }"></c:out></td>
+                                            <td><c:out value="${item.orderDate }"></c:out></td>
                                             <td>
                                             	<c:if test="${item.status == 3 }">
                                             		<span class="success">
@@ -108,6 +106,7 @@
                                         <c:set var ="u" value="${sessionScope.user }"></c:set>
                                             
                                             <br>
+                                            	<form:hidden value="${u.userId }" path="userId"  />
                                                 <form:hidden value="${u.fullName }" path="fullName"  />
                                                 <form:hidden  value="${u.userName }" path="userName"  />
                                                 <form:hidden  value="${u.email }" path="email"  />
@@ -158,7 +157,7 @@
                                                     <div class="team-img">
                                                     	<div class="img-fluid">
                                                     		<c:set var="default" value="default-avatar.png"></c:set>
-                                                        	<img id="img-avatar" class="img-avatar" src="<c:url value='/assets/images/user/${u.avatar}' /> " alt="">
+                                                        	<img id="img-avatar" class="img-avatar" src="<c:url value='/assets/images/user/${u.userId }/${u.avatar}' /> " alt="">
                                                     	</div>
                                                     </div>
                                                     

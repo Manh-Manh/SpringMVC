@@ -11,12 +11,39 @@ public class orderEntity extends CommonEntity {
 	private Long userId;
 	private Long status;
 	private List<productEntity> listProduct;
+	private String orderDate;
+	private String toDate;	
+	private String fromDate;
 	// nguoi mua
 	private String start_date_discount;
 	private String end_date_discount; 
 	private userEntity user;
 	public userEntity getUser() {
 		return user;
+	}
+
+	public String getOrderDate() {
+		return orderDate;
+	}
+
+	public void setOrderDate(String orderDate) {
+		this.orderDate = orderDate;
+	}
+
+	public String getToDate() {
+		return toDate;
+	}
+
+	public void setToDate(String toDate) {
+		this.toDate = toDate;
+	}
+
+	public String getFromDate() {
+		return fromDate;
+	}
+
+	public void setFromDate(String fromDate) {
+		this.fromDate = fromDate;
 	}
 
 	public String getStart_date_discount() {

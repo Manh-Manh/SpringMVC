@@ -80,7 +80,6 @@
                                 </div>
                                 <script>
                                 	function doSearch(e){
-                                		
                                 		return false;
                                 		e.preventdefault();
                                 	}

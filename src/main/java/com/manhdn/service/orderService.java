@@ -21,7 +21,7 @@ public class orderService {
 	 * @param dataSearch
 	 * @return
 	 */
-	public List<orderEntity> findDaList(Long orderId, productEntity dataSearch) {
+	public List<orderEntity> findDaList(Long orderId, orderEntity dataSearch) {
 		dao =new orderDAO();
 		return dao.findDataList(orderId, dataSearch);
 	}
@@ -52,5 +52,15 @@ public class orderService {
 	public orderEntity findOrderByOrderId(String orderId) {
 		dao = new orderDAO();
 		return dao.findOrderByOrderId(orderId);
+	}
+
+	public List<orderEntity> doSearchOrder(orderEntity dataSearch) {
+		dao = new orderDAO();
+		return dao.doSearchOrder(dataSearch);
+	}
+
+	public List<orderEntity> getListNewOrder() {
+		dao = new orderDAO();
+		return dao.getListNewOrder();
 	}
 }

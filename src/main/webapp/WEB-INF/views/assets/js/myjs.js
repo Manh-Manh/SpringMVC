@@ -11,12 +11,15 @@ $(document).ready(function() {
 		$("input:text[name='amount']").each(function() {
 			am = $(this).val();
 		});
-		am=am.replaceAll("Tr","").trim();
-		am=am.split("-");
-		data = new Array();		
-		data.push(1000000*(am[0].trim()));
-		data.push(1000000*(am[1].trim()));
-		map.set('amount', data);
+		if(typeof am!="undefined" && am){
+			am=am.replaceAll("Tr","").trim();
+			am=am.split("-");
+			data = new Array();		
+			data.push(1000000*(am[0].trim()));
+			data.push(1000000*(am[1].trim()));
+			map.set('amount', data);
+		}
+		
 		
 		// Machine
 		data= new Array();
@@ -462,8 +465,22 @@ $(document).ready(function() {
 //		alert($(this).attr('data-url'));
 		
 	});
+	
+	
+	
 	//alert($("#slider").slider('values'));
 });
+function changePass(){
+		var oldPass = $("#oldPass").val();
+		var newPass = $("#newPass").val();
+		var reNewPass = $("#reNewPass").val();
+		var label = $("#labelPass");
+		if(newPass != reNewPass){
+			label.html("Mật khẩu không khớp");
+			return false;
+		}
+		return true;
+	}
 /*// ajax Search
 function advSearch(map) {
         //var data = {}

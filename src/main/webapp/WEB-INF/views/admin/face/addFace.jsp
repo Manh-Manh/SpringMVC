@@ -2,7 +2,6 @@
     pageEncoding="UTF-8"%>
 
 <%@include file="/common/taglib.jsp"%>
-    
 <div class="content-wrapper">
 <form:form method="POST" action="addNewFace" modelAttribute="dataInsert" enctype="multipart/form-data" > 
 <form:hidden path="faceId" value="${dataSelected.faceId }"/>

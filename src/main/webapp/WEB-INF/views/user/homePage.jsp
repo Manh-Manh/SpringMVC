@@ -192,8 +192,13 @@
                                                     <a href="<c:out value='${urlAdd}'/>" data-bs-toggle="modal" data-bs-target="">Thêm vào giỏ</a>
                                                 </div>
                                                 <div class="action-link-right">
-                                                    
-                                                </div>
+		                                           <c:url var="urlCompare" value="/app-view/compare" >
+	                                       			<c:param name="id" value="${item.productId }"/>  
+	                                       			</c:url>
+	                                            <a href="${urlCompare}" data-toggle="tooltip" data-placement="bottom" title="So sánh giá" >
+	                                            	<i class="icon-shuffle"></i>
+	                                            </a>
+		                                        </div>
                                             </div>
                                         </div>
                                         <div class="content">
@@ -212,9 +217,19 @@
                                                 </ul>
                                             </div>
                                             <div class="content-right">
-                                                <span class="price">
-                                               	<c:out value="${item.stringUnitPrice }"></c:out>
+                                            <c:if test="${item.discount!=null&&item.discount>0 }">
+						                        <div class="oldPrice price unitPrice " style="color: #929292;">
+					                            	<s><i><c:out value="${item.stringUnitPrice }"></c:out></i></s>
+					                            </div>
+					                            <div class="price discountPrice newPrice" style="color: red;">
+					                            	<c:out value="${item.stringDiscountPrice } (-${item.discount }%)"></c:out>
+					                            </div>
+                       					     </c:if>
+                       					     <c:if test="${(item.discount==null||item.discount<=0) }">
+	                                                <span class="price">
+	                                               	<c:out value="${item.stringUnitPrice }"></c:out>
                                                </span>
+                                              </c:if>		
                                             </div>
                                         </div>
                                     </div>
@@ -282,8 +297,12 @@
                                                     <a href="<c:out value='${urlAdd}'/>" data-bs-toggle="modal" data-bs-target="">Thêm vào giỏ</a>
                                                 </div>
                                                 <div class="action-link-right">
-                                                    
-                                                </div>
+		                                          <c:url var="urlCompare" value="/app-view/compare" >
+		                                     			<c:param name="id" value="${item.productId }"/>  
+		                                     		</c:url>
+		                                          <a href="${urlCompare}" data-toggle="tooltip" data-placement="bottom" title="So sánh giá">
+		                                          <i class="icon-shuffle"></i></a>
+		                                        </div>
                                             </div>
                                         </div>
                                         <div class="content">
@@ -302,9 +321,19 @@
                                                 </ul>
                                             </div>
                                             <div class="content-right">
-                                                <span class="price">
-                                               	<c:out value="${item.stringUnitPrice }"></c:out>
+	                                            <c:if test="${item.discount!=null&&item.discount>0 }">
+							                        <div class="oldPrice price unitPrice " style="color: #929292;">
+							                           	<s><i><c:out value="${item.stringUnitPrice }"></c:out></i></s>
+							                           </div>
+							                           <div class="price discountPrice newPrice" style="color: red;">
+							                           	<c:out value="${item.stringDiscountPrice } (-${item.discount }%)"></c:out>
+							                           </div>
+							                 	</c:if>
+							                 	<c:if test="${(item.discount==null || item.discount<=0) }">
+	                                                <span class="price">
+	                                               	<c:out value="${item.stringUnitPrice }"></c:out>
                                                </span>
+                                               </c:if>
                                             </div>
                                         </div>
                                     </div>

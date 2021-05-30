@@ -24,13 +24,21 @@
                                 <form:input path="password"  required="required" type="password" />
                             </div>
                             
-                            <div class="login_submit">
-                                <button class="btn btn-md btn-black-default-hover mb-4" type="submit">Đăng nhập</button>
+                            <div class="">
+                                <button class="btn btn-block btn-md btn-black-default-hover mb-4" type="submit">Đăng nhập</button>
                                 <!-- <label class="checkbox-default mb-4" for="offer">
                                     <input type="checkbox" id="offer">
                                     <span>Remember me</span>
                                 </label>-->
-                                <a href="#">Lost your password?</a>
+                                <!-- <a href="">Lost your password?</a>-->
+                            </div>
+                            <p style="text-align: center;">-Hoặc-</p>
+                            <div class="">
+                                <a href="https://accounts.google.com/o/oauth2/auth?scope=profile%20email&redirect_uri=http://localhost:8088/SpringMVC/app-view/login-google&response_type=code&client_id=733898855305-qq55bo8bqmokdrq0bkl41prqlkiiumri.apps.googleusercontent.com" class="">
+						          <button class="btn btn-block btn-danger btnGG" type="button" >
+						          <i class="fab fa-google-plus mr-2"></i> Đăng nhập bằng Google+
+						          </button>
+						        </a>
                             </div>
                         </form:form>
                     </div>
@@ -40,8 +48,9 @@
                 <!--register area start-->
          
                 <div class="col-lg-6 col-md-6">
-                 <form:form method="POST" action="register" modelAttribute="userRegister">
-                    <div class="account_form register" data-aos="fade-up"  data-aos-delay="200">
+                
+                    <div class="account_form " data-aos="fade-up"  data-aos-delay="200">
+                     <form:form method="POST" action="register" modelAttribute="userRegister">
                         <h3>Đăng ký</h3>
                             <div class="default-form-box">
                                 <label>Tên đăng nhập <span>*</span></label>
@@ -61,10 +70,11 @@
                                 <form:input type="date" name="birthday" required="required"  path="birthDate"/>
                             </div>
                             <div class="login_submit">
-                                <button class="btn btn-md btn-black-default-hover" type="submit">Đăng kí</button>
+                                <button class="btn btn-block btn-md btn-black-default-hover" type="submit">Đăng kí</button>
                             </div>
+                             </form:form>
                     </div>
-                      </form:form>
+                     
                 </div>
       
                 <!--register area end-->

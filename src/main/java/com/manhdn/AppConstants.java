@@ -36,6 +36,7 @@ public class AppConstants {
 	public static String MAP_SEARCH_PRODUCT_ID = "productId";
 	public static String MAP_SEARCH_CART_QUANTITY = "cartQuantity";
 	public static final String MAP_SEARCH_PAGE = "page";
+	
 	public static String MAP_SEARCH_STRING = "searchString"; // string quickSearch
 	
 	// Session
@@ -48,6 +49,7 @@ public class AppConstants {
 	public static String ID_PRODUCT = "PRO";
 	public static String ID_MACHINE = "M";
 	public static String ID_FACE = "F";
+	public static final String ID_STRAP = "S";
 	public static String ID_SUPPLIER = "SUP";
 	public static String ID_ODER = "ORDER";
 	public static String ID_COMMENT = "CMT";
@@ -57,4 +59,10 @@ public class AppConstants {
 	
 	//
 	public static String MESSAGE_ERROR = "Liên hệ quản trị hệ thống để được hỗ trợ.";
+	
+	public static String urlGG = "https://accounts.google.com/o/oauth2/auth?scope=profile%20email&redirect_uri=http://localhost:8088/SpringMVC/app-view/login-google&response_type=code&client_id=733898855305-qq55bo8bqmokdrq0bkl41prqlkiiumri.apps.googleusercontent.com";
+	//Role
+	public static Long ROLE_ADMIN = 3L;
+	public static Long ROLE_USER = 1L;
+	public static Long ROLE_EMP = 2L;
 }

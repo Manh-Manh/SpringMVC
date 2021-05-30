@@ -5,7 +5,7 @@
 
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
-    <section class="content-header">
+    <div class="content-header">
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
@@ -13,12 +13,14 @@
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Thêm mới</a></li>
+              <li class="breadcrumb-item"><a href="<c:url value = '/admin/addFace' />">
+                	<button type="button" class="btn btn-primary float-right"><i class="fas fa-plus"></i> Thêm mới</button>
+              </a></li>
             </ol>
           </div>
         </div>
       </div><!-- /.container-fluid -->
-    </section>
+    </div>
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
@@ -26,13 +28,13 @@
           <div class="col-12">
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title">Quản lý mặt đồng hồ</h3>
               </div>
               <!-- /.card-header -->
               <div class="card-body">
                 <table id="example1" class="table table-bordered table-striped">
                   <thead>
                   <tr>
+                  	<th>Số thứ tự</th>
                     <th>Mã mặt</th>
                     <th>Tên mặt</th>
                     <th>Độ dày</th>
@@ -43,18 +45,27 @@
                   </tr>
                   </thead>
                   <tbody>
+                  <c:set var="stt" value="0"></c:set>
              <c:forEach var = "item" items="${dataList}">
                   <tr>
+                  <td><c:out value ="${ stt=stt+1 }" /></td>
                     <td><c:out value ="${ item.faceId }" /></td>
                     <td><c:out value ="${ item.faceName }" /></td>
                     <td><c:out value = "${ item.thickness }" /></td>
                     <td><c:out value = "${item.faceSize }" /></td>
                     <td><c:out value = "${item.waterProof }" /></td>
                     <td><c:out value = "${item.glass }" /></td>
-                    <td>
-                    	<a href="<c:url value = '#' /> ">Sửa</a>
-                    	<a href="<c:url value = '#' /> ">Xóa</a>
-                    	<%--<a href="<c:url value = '#' /> ">Sửa</a>--%>
+                    <td class="text-center py-0 align-middle">
+                    <c:url var="urlEdit" value='/admin/editFace'>
+                    	<c:param name="faceId" value="${item.faceId}"></c:param>
+                    </c:url>
+                    <c:url var="urlDel" value='/admin/deleteFace'>
+                    	<c:param name="faceId" value="${item.faceId}"></c:param>
+                    </c:url>
+                    <div class="btn-group btn-group-sm">
+                        <a href="${urlEdit }" class="btn btn-info" data-toggle="tooltip" data-placement="bottom" title="Sửa"><i class="fas fa-edit"></i></a>
+                        <a href="${urlDel }" class="btn btn-danger urlConfirm" data-toggle="tooltip" data-placement="bottom" title="Xóa"><i class="fas fa-trash"></i></a>
+                      </div>
                     </td>
                   </tr>  
               </c:forEach>                

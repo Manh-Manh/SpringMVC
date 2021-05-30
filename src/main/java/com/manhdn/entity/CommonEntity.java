@@ -22,6 +22,15 @@ public class CommonEntity {
 	protected Long created_by;
 	protected Long updated_by;
 	protected Long deleted_by;
+	protected Long del_flag;
+
+	public Long getDel_flag() {
+		return del_flag;
+	}
+
+	public void setDel_flag(Long del_flag) {
+		this.del_flag = del_flag;
+	}
 
 	public String getCreated_date() {
 		return created_date;

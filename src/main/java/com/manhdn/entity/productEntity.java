@@ -2,16 +2,13 @@ package com.manhdn.entity;
 
 import java.text.DecimalFormat;
 import java.util.List;
-
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
-
 import com.manhdn.FunctionCommon;
-
 public class productEntity extends CommonEntity {
 
 	private String productName;
 	private Long quantity;
-	private Long cartQuantity = 1L;
+	private Long cartQuantity;
 	private String productId;
 	private String supplierId;
 	private Long unitPrice;
@@ -25,7 +22,6 @@ public class productEntity extends CommonEntity {
 	private String material;
 	private String otherFunc;
 	private String image;
-	private Long del_flag;
 	private String description;
 	private String strLstDiscount;// danh sach discountId - string
 	private Long cartTotal;
@@ -173,6 +169,9 @@ public class productEntity extends CommonEntity {
 
 
 	public Double getDiscount() {
+		if(this.discount!=null&& this.discount > 0D) {
+			return discount;
+		}
 		if (FunctionCommon.isEmpty(lstDiscount)) {
 			return 0D;
 		}
@@ -255,24 +254,21 @@ public class productEntity extends CommonEntity {
 		this.image = image;
 	}
 
-	public Long getDel_flag() {
-		return del_flag;
-	}
-
-	public void setDel_flag(Long del_flag) {
-		this.del_flag = del_flag;
-	}
-
 	public Long getCartQuantity() {
+		if(cartQuantity == null) {
+			return 1L;
+		}
 		return cartQuantity;
 	}
 
 	public void setCartQuantity(Long cart_quantity) {
 		this.cartQuantity = cart_quantity;
 	}
-
+	public Long getSubCartTotal() {
+		return getCartQuantity() *  getUnitPrice();
+	}
 	public Long getCartTotal() {
-		return cartQuantity * (getDisCountPrice() > 0 ? getDisCountPrice() : getUnitPrice());
+		return getCartQuantity() * (getDisCountPrice() > 0 ? getDisCountPrice() : getUnitPrice());
 	}
 
 	public void setCartTotal(Long cartTotal) {
@@ -282,7 +278,7 @@ public class productEntity extends CommonEntity {
 	public String getCartTotalString() {
 		DecimalFormat myFormatter = new DecimalFormat("###,###,###,###");
 		Long total = 0L;
-		total = cartQuantity * (getDisCountPrice() > 0 ? getDisCountPrice() : getUnitPrice());
+		total = getCartQuantity() * (getDisCountPrice() > 0 ? getDisCountPrice() : getUnitPrice());
 		return myFormatter.format(total);
 	}
 

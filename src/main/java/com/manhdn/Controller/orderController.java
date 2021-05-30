@@ -40,15 +40,41 @@ public class orderController extends CommonController<orderEntity> {
 	@Autowired
 	orderService service;
 	Logger logger = Logger.getLogger(orderController.class);
+
 	/**
 	 * 
 	 * @return
 	 */
 	@RequestMapping(value = { "/admin/manageOrder" }, method = RequestMethod.GET)
-	public ModelAndView manageOrder() {
+	public ModelAndView manageOrder(HttpSession session) {
+		if (!isAdmin(session)) {
+			mav = new ModelAndView("redirect:/app-view");
+			logger.error("Khong co quyen");
+			session.setAttribute(AppConstants.SESSION_MESSAGE, AppConstants.MESSAGE_ERROR);
+			return mav;
+		}
 		service = new orderService();
 		mav = new ModelAndView("/admin/order/manageOrder");
-		dataList = service.findDaList(0L, null);
+		dataList = service.getAllOrder();
+		addData();
+		logger.info(mav);
+		return mav;
+	}
+
+	@RequestMapping(value = { "/admin/doSearchOrder" }, method = RequestMethod.POST)
+	public ModelAndView doSearchOrder(HttpSession session, @ModelAttribute("orderSearch") orderEntity dataSearch) {
+		if (!isAdmin(session)) {
+			mav = new ModelAndView("redirect:/app-view");
+			logger.error("Khong co quyen");
+			session.setAttribute(AppConstants.SESSION_MESSAGE, AppConstants.MESSAGE_ERROR);
+			return mav;
+		}
+		if (null == dataSearch) {
+			return manageOrder(session);
+		}
+		service = new orderService();
+		mav = new ModelAndView("/admin/order/manageOrder");
+		dataList = service.doSearchOrder(dataSearch);
 		addData();
 		logger.info(mav);
 		return mav;
@@ -84,13 +110,91 @@ public class orderController extends CommonController<orderEntity> {
 	@RequestMapping(value = { "/app-view/viewOrder" }, method = RequestMethod.GET)
 	public ModelAndView viewOrder(@RequestParam("orderId") String orderId) {
 		mav = new ModelAndView("/user/viewOrder");
-		dataSelected = service.findOrderById(orderId);
+		dataSelected = service.findOrderByOrderId(orderId);
 		if (dataSelected == null || dataSelected.getListProduct().size() == 0) {
 			mav = new ModelAndView("/user/emptyCart");
 		}
 		addData();
 		logger.info(mav);
 		return mav;
+	}
+
+	@RequestMapping(value = { "/admin/viewOrder" }, method = RequestMethod.GET)
+	public ModelAndView viewOrderAdmin(@RequestParam("orderId") String orderId, HttpSession session) {
+		mav = new ModelAndView("/admin/order/viewOrder");
+		if (!isAdmin(session)) {
+			mav = new ModelAndView("redirect:/app-view");
+			logger.error("Khong co quyen");
+			session.setAttribute(AppConstants.SESSION_MESSAGE, "Liên hệ quản trị hệ thống để được hỗ trợ");
+			return mav;
+		}
+		dataSelected = service.findOrderByOrderId(orderId);
+		if (dataSelected == null || dataSelected.getListProduct().size() == 0) {
+			session.setAttribute(AppConstants.SESSION_MESSAGE, AppConstants.MESSAGE_ERROR);
+			return mav;
+		}
+		addData();
+		logger.info(mav);
+		return mav;
+	}
+
+	@RequestMapping(value = { "/admin/acceptOrder" }, method = RequestMethod.GET)
+	public ModelAndView acceptOrder(@RequestParam("orderId") String orderId, HttpSession session) {
+		mav = new ModelAndView("/admin/order/manageOrder");
+		if (!isAdmin(session)) {
+			mav = new ModelAndView("redirect:/app-view");
+			logger.error("Khong co quyen");
+			session.setAttribute(AppConstants.SESSION_MESSAGE, "Liên hệ quản trị hệ thống để được hỗ trợ");
+			return mav;
+		}
+		service = new orderService();
+		// update cart
+		orderEntity order = service.findOrderByOrderId(orderId);
+		orderService orderS = new orderService();
+		boolean result = orderS.insertOrUpdate(user.getUserId(), order, AppConstants.OS_ORDER_COMPLETE);
+		if (!result) {
+			message = AppConstants.MESSAGE_ERROR;
+			addMessage(message, session);
+			addData();
+			logger.info(mav);
+			return mav;
+		}
+		message = "Xác nhận thành công đơn hàng!";
+		addMessage(message, session);
+		addData();
+		logger.info(mav);
+		return mav;
+
+	}
+
+	@RequestMapping(value = { "/admin/rejectOrder" }, method = RequestMethod.GET)
+	public ModelAndView rejectOrder(@RequestParam("orderId") String orderId, HttpSession session) {
+		mav = new ModelAndView("/admin/order/manageOrder");
+		if (!isAdmin(session)) {
+			mav = new ModelAndView("redirect:/app-view");
+			logger.error("Khong co quyen");
+			session.setAttribute(AppConstants.SESSION_MESSAGE, AppConstants.MESSAGE_ERROR);
+			return mav;
+		}
+
+		// update cart
+		orderEntity order = service.findOrderByOrderId(orderId);
+		orderService orderS = new orderService();
+		boolean result = orderS.insertOrUpdate(user.getUserId(), order, AppConstants.OS_ORDER_CANCEL);
+		if (!result) {
+			message = AppConstants.MESSAGE_ERROR;
+			addMessage(message, session);
+			addData();
+			logger.info(mav);
+			return mav;
+		}
+		mav = new ModelAndView("redirect:/app-view/homePage");
+		message = "Đã hủy đơn hàng!";
+		addMessage(message, session);
+		addData();
+		logger.info(mav);
+		return mav;
+
 	}
 
 	/**
@@ -316,6 +420,11 @@ public class orderController extends CommonController<orderEntity> {
 	@ModelAttribute("userCheckOut")
 	public userEntity userCheckout() {
 		return new userEntity();
+	}
+
+	@ModelAttribute("orderSearch")
+	public orderEntity dataSearch() {
+		return new orderEntity();
 	}
 
 	private void addAttribute() {

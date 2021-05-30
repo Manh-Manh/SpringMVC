@@ -26,9 +26,8 @@ public class faceDAO {
 		List<faceEntity>  result = new ArrayList<faceEntity>();
 		List<Object> params = new ArrayList<Object>();
 		StringBuilder sql = new StringBuilder();
-		
 		sql.append("SELECT * FROM face f "
-				+ " WHERE 1 ORDER BY f.faceId " );
+				+ " WHERE (f.del_flag is null or f.del_flag != 1) ORDER BY f.id " );
 //				+ "(f.status != 0 or f.status is null) ");
 		result = (List<faceEntity>) cmd.getListObjByParams(sql, params, faceEntity.class);
 		return result;
@@ -39,7 +38,7 @@ public class faceDAO {
 		StringBuilder sql = new StringBuilder();
 
 		sql.append("SELECT * FROM face f "
-				+ " WHERE f.faceId = ? and (f.status != 0 or f.status is null) ");
+				+ " WHERE f.faceId = ? and (f.status != 0 or f.status is null) and (f.del_flag is null or f.del_flag != 1) ");
 		params.add(id);
 		List<faceEntity> lst = (List<faceEntity>) cmd.getListObjByParams(sql, params, faceEntity.class);
 		if (null == lst || lst.size() == 0) {
@@ -57,7 +56,7 @@ public class faceDAO {
 		StringBuilder sql = new StringBuilder();
 		
 		sql.append("SELECT * FROM face f "
-				+ " WHERE (f.status != 0 or f.status is null) ");
+				+ " WHERE (f.status != 0 or f.status is null) and (f.del_flag is null or f.del_flag != 1) ");
 		result = (List<faceEntity>) cmd.getListObjByParams(sql, params, faceEntity.class);
 		return result;
 	}
@@ -68,7 +67,7 @@ public class faceDAO {
 		StringBuilder sql = new StringBuilder();
 		
 		sql.append("SELECT DISTINCT f.faceName FROM face f "
-				+ " WHERE (f.status != 0 or f.status is null) ");
+				+ " WHERE (f.del_flag is null or f.del_flag != 1) and (f.status != 0 or f.status is null) ");
 		result = (List<faceEntity>) cmd.getListObjByParams(sql, params, faceEntity.class);
 		logger.info("Params: " + params + "Result: " + result);
 		return result;
@@ -77,7 +76,7 @@ public class faceDAO {
 		StringBuilder sql = new StringBuilder();
 		faceEntity result = new faceEntity();
 		List<Object> params = new ArrayList<Object>();
-		sql.append("SELECT * FROM face f " + "WHERE f.faceId = ");
+		sql.append("SELECT * FROM face f " + " WHERE (f.del_flag is null or f.del_flag != 1) and f.faceId = ");
 		sql.append("?");
 		params.add(faceId);
 		List<faceEntity> lst = (List<faceEntity>) cmd.getListObjByParams(sql, params, faceEntity.class);
@@ -130,6 +129,27 @@ public class faceDAO {
 		params.add(dataInsert.getCreated_by() != null ? dataInsert.getCreated_by() : 0);
 		params.add(dataInsert.getUpdated_by() != null ? dataInsert.getUpdated_by() : 0); 
 		boolean result = cmd.insertOrUpdateDataBase(sql, params);
+		logger.info("Params: " + params + "Result: " + result);
+		return result;
+	}
+	public boolean delete(Long userId, String faceId) {
+		if(null == userId) {
+			logger.error("Id null ");
+			return false;
+		}
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		String dateNow = dtf.format(LocalDateTime.now());
+		boolean  result = false;
+		List<Object> params = new ArrayList<Object>();
+		StringBuilder sql = new StringBuilder();
+		sql.append(" UPDATE `face` f SET f.del_flag = 1, "
+				+ " updated_by = ? , f.updated_date = ? "
+				+ " WHERE f.faceId = ? " );
+		
+		params.add(userId);
+		params.add(dateNow);
+		params.add(faceId);
+		result = cmd.insertOrUpdateDataBase(sql, params);
 		logger.info("Params: " + params + "Result: " + result);
 		return result;
 	}

@@ -1,8 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@include file = '/common/taglib.jsp' %>
-
-
 <div class="breadcrumb-section breadcrumb-bg-color--golden">
         <div class="breadcrumb-wrapper">
             <div class="container">
@@ -68,7 +66,7 @@
                                         <tr>
                                         <c:set var="stt" value="${stt+1 }"></c:set>
                                             <td><c:out value="${stt }" ></c:out></td>
-                                            <td><c:out value="${item.updated_date!=null?item.updated_date:item.created_date }"></c:out></td>
+                                            <td><c:out value="${item.orderDate }"></c:out></td>
                                             <td>
                                             	<c:if test="${item.status == 3 }">
                                             		<span class="success">
@@ -102,12 +100,13 @@
                             </div>
                         </div>
                         <div class="tab-pane fade" id="downloads">
-                            <h4>Downloads</h4>
+                            <h4>Đổi mật khẩu</h4>
                             <div class="table_page table-responsive">
-                                <form:form action="changePassword" modelAttribute="userUpdate" >
+                                <form:form action="changePassword" modelAttribute="userUpdate" onsubmit="return changePass();" >
                                         <c:set var ="u" value="${sessionScope.user }"></c:set>
                                             
                                             <br>
+                                            	<form:hidden value="${u.userId }" path="userId"  />
                                                 <form:hidden value="${u.fullName }" path="fullName"  />
                                                 <form:hidden  value="${u.userName }" path="userName"  />
                                                 <form:hidden  value="${u.email }" path="email"  />
@@ -115,15 +114,16 @@
                                                 <form:hidden  name="address" value="${u.address }" path="address"/>
                                             <div class="default-form-box mb-20">
                                                 <label>Mật khẩu cũ</label>
-                                                <form:input type="password" name="phoneNumber" path="password" />
+                                                <form:input type="password" required="required"  id="oldPass" path="password" />
                                             </div>
                                             <div class="default-form-box mb-20">
                                                 <label>Mật khẩu mới</label>
-                                                <form:input type="password" name="phoneNumber" path="newPassword" />
+                                                <form:input type="password" required="required" id="newPass" path="newPassword" />
                                             </div>
                                             <div class="default-form-box mb-20">
                                                 <label>Nhập lại mật khẩu</label>
-                                                <input type="password" name="phoneNumber"  />
+                                                <input type="password" name="" required="required" id="reNewPass"  />
+                                                <label id="labelPass" style="color:red;"></label>
                                             </div>
                                             <div class="save_button mt-3">
                                                 <button class="btn btn-md btn-black-default-hover" type="submit">Thay đổi</button>
@@ -158,7 +158,7 @@
                                                     <div class="team-img">
                                                     	<div class="img-fluid">
                                                     		<c:set var="default" value="default-avatar.png"></c:set>
-                                                        	<img id="img-avatar" class="img-avatar" src="<c:url value='/assets/images/user/${u.avatar}' /> " alt="">
+                                                        	<img id="img-avatar" class="img-avatar" src="<c:url value='/assets/images/user/${u.userId }/${u.avatar}' /> " alt="">
                                                     	</div>
                                                     </div>
                                                     
@@ -184,7 +184,7 @@
                                             <br>
                                             <div class="default-form-box mb-20">
                                                 <label>Tên người dùng</label>
-                                                <form:input type="text" value="${u.fullName }" path="fullName" name="first-name" />
+                                                <form:input type="text" value="${u.fullName }" required="required" path="fullName" name="first-name" />
                                             </div>
                                             <div class="default-form-box mb-20">
                                                 <label>Tên đăng nhập</label>
@@ -192,7 +192,7 @@
                                             </div>
                                             <div class="default-form-box mb-20">
                                                 <label>Email</label>
-                                                <form:input type="text" value="${u.email }" path="email" name="email-name" />
+                                                <form:input type="text" readonly="true" value="${u.email }" path="email" name="email-name" />
                                             </div>
                                             
                                             <div class="default-form-box mb-20">

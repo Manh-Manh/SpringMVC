@@ -149,12 +149,24 @@
                 <label for="inputDescription">Số lượng</label>
                 <form:input type="number" id="inputName" required="required" path="quantity" value="${dataSelected.quantity}" class="form-control" ></form:input>
               </div>
+              <div class="form-group">
+                <label for="inputDescription">Chất liệu</label>
+                <form:input path="material" value="${dataSelected.material}" class="form-control" ></form:input>
+              </div>
+              <div class="form-group">
+                <label for="inputDescription">Chức năng khác</label>
+                <form:textarea id="otherFunc" path="otherFunc" value="${dataSelected.otherFunc}" class="form-control" ></form:textarea>
+              </div>
               <!-- Mô tả -->
                <div class="form-group">
-                <label for="inputDescription">Loại kính</label>
-                <form:textarea path="description" value="${dataSelected.description}" class="form-control" ></form:textarea>>
+                <label for="inputDescription">Mô tả</label>
+                <form:textarea id="description" path="description" value="${dataSelected.description}" class="form-control" ></form:textarea>
               </div>
             </div>
+            <script>
+              	document.getElementById("description").defaultValue = "<c:out value="${dataSelected.description}" />";
+              	document.getElementById("otherFunc").defaultValue = "<c:out value="${dataSelected.otherFunc}" />";
+            </script>
             <!-- /.card-body -->
           </div>
           <!-- /.card -->
@@ -173,11 +185,25 @@
             <div class="card-body">
               <div class="form-group">
               <c:forEach var="item" items = "${dataSelected.lstDiscount }">
-                <form:checkbox path="strLstDiscount" value="${item.discountId }"  checked="checked" /> <c:out value="${item.description } (-${item.discount }%)"></c:out><br> 
+              <div class="icheck-success d-inline">
+                <form:checkbox id="${ item.discountId}" path="strLstDiscount" value="${item.discountId }"  checked="checked" />
+              	<label for="${item.discountId }">
+              		<c:out value="${item.description } (-${item.discount }%)"></c:out>
+              	</label>
+              	<br>
+              </div>
               </c:forEach>
+              
               <c:forEach var="item" items = "${lstDiscount }">
-                <form:checkbox path="strLstDiscount" value="${item.discountId }"  /> <c:out value="${item.description } (-${item.discount }%)"></c:out><br> 
+              <div class="icheck-success d-inline">
+                <form:checkbox id="${ item.discountId}" path="strLstDiscount" value="${item.discountId }"  /> 
+              	<label for="${item.discountId }">
+              		<c:out value="${item.description } (-${item.discount }%)"></c:out>
+              	</label>
+              	<br>
+              </div>
               </c:forEach>
+              
               </div>
             </div>
             <!-- /.card-body -->

@@ -86,6 +86,11 @@ public class CommonDatabase {
 						// thuc hien add du lieu vao json
 						Field field = fieldlist[i];
 						String fileName = field.getName();
+//						ResultSetMetaData metaData = rs.getMetaData();
+//						assertEquals("VAL", metaData.getColumnName(1));
+//					      assertEquals(1, rs.getInt("VAL"));
+//						
+//						
 						if (hasColumn(rs, fileName)) {
 							datasetItem.addProperty(fileName, rs.getString(fileName));
 						}
@@ -123,7 +128,8 @@ public class CommonDatabase {
 
 		int columns = rsmd.getColumnCount();
 		for (int x = 1; x <= columns; x++) {
-			String cl = rsmd.getColumnName(x);
+//			String cl = rsmd.getColumnName(x);
+			String cl = rsmd.getColumnLabel(x);
 			if (columnName.toLowerCase().equals(cl.toLowerCase())) {
 				return true;
 			}

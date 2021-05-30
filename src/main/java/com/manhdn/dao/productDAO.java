@@ -56,8 +56,20 @@ public class productDAO {
 				+ " FROM products p join suppliers sup on p.supplierId = sup.supplierId "
 				+ " join strap s on p.strapId = s.strapId "
 				+ " join face f on f.faceId = p.faceId join machine m on m.machineId = p.machineId "
-				+ " WHERE (p.del_flag != 1 or p.del_flag is null) and p.status = 1 ");
+				+ " WHERE (p.del_flag != 1 or p.del_flag is null) ");
 		List<Object> params = new ArrayList<>();
+		if(!FunctionCommon.isEmpty(dataSearch.getSupplierId())) {
+			sql.append(" and sup.supplierId = ? ");
+			params.add(dataSearch.getSupplierId());
+		}
+		if(!FunctionCommon.isEmpty(dataSearch.getGender())) {
+			sql.append(" and p.gender = ? ");
+			params.add(dataSearch.getGender());
+		}
+		if(null!=dataSearch.getStatus()) {
+			sql.append(" and p.status = ? ");
+			params.add(dataSearch.getStatus());
+		}
 		List<productEntity> result = new ArrayList<productEntity>();
 		result = (List<productEntity>) cmd.getListObjByParams(sql, params, productEntity.class);
 		fillDataInDataList(result);
@@ -119,9 +131,10 @@ public class productDAO {
 					sql.append(" AND ( p.unitPrice BETWEEN ? AND ? )");
 					params.addAll(mapSearch.get(key));
 				}
+				// TIm theo tu khoa
 				if (key.equals(AppConstants.MAP_SEARCH_STRING)) {
 					if (!FunctionCommon.isEmpty(mapSearch.get(key))) {
-						String sqlLike = FunctionCommon.generateSqlLike("productName", mapSearch.get(key).get(0));
+						String sqlLike = FunctionCommon.generateSqlLike("p.productName", mapSearch.get(key).get(0));
 						if (!FunctionCommon.isEmpty(sqlLike)) {
 							sql.append(" AND ( ");
 							sql.append(sqlLike);
@@ -326,9 +339,12 @@ public class productDAO {
 		StringBuilder sql = new StringBuilder();
 		List<Object> params = new ArrayList<Object>();
 
-		sql.append("SELECT * FROM products p " + "WHERE p.productName like ? ");
-
-		sql.append(" and (p.status != 0 or p.status is null) ");
+		sql.append("SELECT * FROM products p "
+				+" WHERE ");
+//		+ " p.productName like ? ");
+		sql.append(FunctionCommon.generateSqlLike("p.productName", strSearch));
+		sql.append(" AND (p.status != 0 or p.status is null) AND (p.del_flag is null OR p.del_flag !=1) ");
+		
 		params.add("%" + strSearch + "%");
 		List<productEntity> lst = (List<productEntity>) cmd.getListObjByParams(sql, params, productEntity.class);
 		if (null == lst || lst.size() == 0) {
@@ -360,7 +376,7 @@ public class productDAO {
 				+ ") "
 				+ ") ");
 		sql.append(" AND (p.status != 0 or p.status is null) ");
-		
+		sql.append(" AND (p.del_flag != 1 or p.del_flag is null) ");
 		sql.append(" ORDER BY p.unitPrice ");
 		sql.append(" LIMIT 0, 24 ");
 		List<productEntity> lst = (List<productEntity>) cmd.getListObjByParams(sql, params, productEntity.class);

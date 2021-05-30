@@ -44,6 +44,14 @@
     margin: 10px;
 }
 
+.btnGG{
+	width:100%;
+	margin: 0px auto;
+	color: #fff;
+    background-color: #dc3545;
+    border-color: #dc3545;
+    box-shadow: none;
+}
 
 
 

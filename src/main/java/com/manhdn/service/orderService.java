@@ -21,11 +21,16 @@ public class orderService {
 	 * @param dataSearch
 	 * @return
 	 */
-	public List<orderEntity> findDaList(Long orderId, productEntity dataSearch) {
+	public List<orderEntity> findDaList(Long orderId, orderEntity dataSearch) {
 		dao =new orderDAO();
 		return dao.findDataList(orderId, dataSearch);
 	}
 
+	public List<orderEntity> getAllOrder() {
+		dao =new orderDAO();
+		return dao.getAllOrder();
+	}
+	
 	public boolean insertOrUpdate(Long userId, orderEntity cart, Long status) {
 		// TODO Auto-generated method stub
 		dao = new orderDAO();
@@ -41,6 +46,21 @@ public class orderService {
 
 	public orderEntity findOrderById(String orderId) {
 		dao = new orderDAO();
-		return dao.findOrderByUserId(orderId);
+		return dao.findOrderByOrderId(orderId);
+	}
+
+	public orderEntity findOrderByOrderId(String orderId) {
+		dao = new orderDAO();
+		return dao.findOrderByOrderId(orderId);
+	}
+
+	public List<orderEntity> doSearchOrder(orderEntity dataSearch) {
+		dao = new orderDAO();
+		return dao.doSearchOrder(dataSearch);
+	}
+
+	public List<orderEntity> getListNewOrder() {
+		dao = new orderDAO();
+		return dao.getListNewOrder();
 	}
 }

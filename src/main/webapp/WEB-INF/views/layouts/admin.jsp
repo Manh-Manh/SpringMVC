@@ -2,10 +2,6 @@
 	pageEncoding="UTF-8"%>
 
 <%@ include file="/WEB-INF/views/layouts/admin/header.jsp"%>
-
-
-
-
 <section id="main-content">
 
 	<dec:body />

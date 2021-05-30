@@ -2,8 +2,8 @@ package com.manhdn.entity;
 
 public class roleEntity extends CommonEntity {
 	private String roleId;
-	private String roleLevel;
-	private String description;
+	private Long roleLevel;
+	private String roleName;
 
 	public String getRoleId() {
 		return roleId;
@@ -13,20 +13,20 @@ public class roleEntity extends CommonEntity {
 		this.roleId = roleId;
 	}
 
-	public String getRoleLevel() {
+	public Long getRoleLevel() {
 		return roleLevel;
 	}
 
-	public void setRoleLevel(String roleLevel) {
+	public void setRoleLevel(Long roleLevel) {
 		this.roleLevel = roleLevel;
 	}
 
-	public String getDescription() {
-		return description;
+	public String getRoleName() {
+		return roleName;
 	}
 
-	public void setDescription(String description) {
-		this.description = description;
+	public void setRoleName(String description) {
+		this.roleName = description;
 	}
 
 }

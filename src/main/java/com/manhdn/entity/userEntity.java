@@ -1,8 +1,12 @@
 package com.manhdn.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import com.manhdn.AppConstants;
+import com.manhdn.FunctionCommon;
 
 public class userEntity extends CommonEntity {
 	private Long userId;
@@ -15,10 +19,36 @@ public class userEntity extends CommonEntity {
 	private String phoneNumber;
 	private Long status;
 	private String avatar;
+	private String path;
 	private String birthDate;
-	private Integer del_flag;
-	private roleEntity role;
+	private List<roleEntity> lstRoles;
 	private CommonsMultipartFile[] fileAvatar;
+	
+	public boolean getIsAdmin() {
+		if (this.getLstRoles() != null) {
+			for (roleEntity r : this.getLstRoles()) {
+				if (r.getRoleLevel() == AppConstants.ROLE_ADMIN || r.getRoleLevel() == AppConstants.ROLE_EMP) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	public String getPath() {
+		return path;
+	}
+
+	public void setPath(String path) {
+		this.path = path;
+	}
+
+	public List<roleEntity> getLstRoles() {
+		return lstRoles;
+	}
+
+	public void setLstRoles(List<roleEntity> lstRoles) {
+		this.lstRoles = lstRoles;
+	}
 
 	public String getNewPassword() {
 		return newPassword;
@@ -36,13 +66,7 @@ public class userEntity extends CommonEntity {
 		this.fileAvatar = fileAvatar;
 	}
 
-	public roleEntity getRole() {
-		return role;
-	}
-
-	public void setRole(roleEntity role) {
-		this.role = role;
-	}
+	
 
 	public Long getUserId() {
 		return userId;
@@ -116,13 +140,6 @@ public class userEntity extends CommonEntity {
 		this.birthDate = birthDate;
 	}
 
-	public Integer getDel_flag() {
-		return del_flag;
-	}
-
-	public void setDel_flag(Integer del_flag) {
-		this.del_flag = del_flag;
-	}
 	public String getStatusString() {
 		if(status == 1 || status == null) {
 			return AppConstants.ACTIVE;
@@ -138,5 +155,16 @@ public class userEntity extends CommonEntity {
 
 	public void setFullName(String fullName) {
 		this.fullName = fullName;
+	}
+	
+	public List<String> getListRoleName() {
+		if(FunctionCommon.isEmpty(getLstRoles())) {
+			return null;
+		}
+		List<String> lst = new ArrayList<String>();
+		for(roleEntity r: getLstRoles()) {
+			lst.add(r.getRoleName());
+		}
+		return lst;
 	}
 }

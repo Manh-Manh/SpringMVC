@@ -117,13 +117,11 @@
 	                             <h4 class="title" style="font-size:18px;"><b>Giảm giá</b></h4>
 	                             <br>
 	                            	 <c:forEach var="dis" items="${dataSelected.lstDiscount }">
-	                            	 
 		                                <div class="product-stock"> <span class="product-stock-in"><i class="ion-checkmark-circled"></i> </span>
 			                            	 <c:out value="${dis.description }: " />
 			                            	 <span  style="color: red;"><c:out value ="-${dis.discount }% "></c:out> <span>
 		                            	 </div>
 	                            	 </c:forEach>
-	                            
                             </c:if>
                             <c:if test="${dataSelected.discount == null || dataSelected.discount <= 0}">
 		                        <div class="price unitPrice newPrice" style="color: red;">₫ 
@@ -172,13 +170,19 @@
                                 <div class="product-add-to-cart-btn">
                                     <div class="btn btn-block btn-lg btn-black-default-hover" data-bs-toggle="modal" data-bs-target="">+ Thêm vào giỏ</div>
                                 </div>
+                                
                                 </form:button>
                             </div>
+                            
                             </form:form>
-                            <!-- Start  Product Details Meta Area
+                            
+                            <!-- Start  Product Details Meta Area-->
                             <div class="product-details-meta mb-20">
-                                <a href="wishlist.html" class="icon-space-right"><i class="icon-heart"></i>Add to wishlist</a>
-                                <a href="compare.html" class="icon-space-right"><i class="icon-refresh"></i>Compare</a>
+                                <c:url var="urlCompare" value="/app-view/compare" >
+                         			<c:param name="id" value="${dataSelected.productId }"/>  
+                         		</c:url>
+                                <a href="${urlCompare}" class="icon-space-right" data-toggle="tooltip" data-placement="bottom" title="So sánh giá" >
+                                <i class="icon-shuffle"></i> So sánh giá</a>
                             </div> <!-- End  Product Details Meta Area-->
                         </div> <!-- End Product Variable Area -->
                         
@@ -358,7 +362,7 @@
                                             <li class="comment-list">
                                                 <div class="comment-wrapper">
                                                     <div class="comment-img">
-                                                        <img class="cmt-avatar" src="<c:url value='/assets/images/user/${item.user.avatar }'/> " alt="">
+                                                        <img class="cmt-avatar" src="<c:url value='/assets/images/user/${item.user.userId }/${item.user.avatar }'/> " alt="">
                                                     </div>
                                                     <div class="comment-content">
                                                         <div class="comment-content-top">
@@ -485,7 +489,10 @@
             </div>
         </div>
     </div> <!-- End Product Content Tab Section -->
-<div class="product-default-slider-section section-top-gap-100 section-fluid">
+    
+    
+    
+	<div class="product-default-slider-section section-top-gap-100 section-fluid">
         <!-- Start Section Content Text Area -->
         <div class="section-title-wrapper" data-aos="fade-up"  data-aos-delay="0">
             <div class="container">
@@ -494,17 +501,11 @@
 	                    <div class="col-3">
 	                    <!-- SAN PHAM LIEN QUAN -->  
 	                            <div class="secton-content">
-	                                <h3 class="section-title">Sản phẩm liên quan</h3>
-	                                
+	                                <h3 class="section-title">Có thể bạn quan tâm</h3>
 	                            </div>
-		                    
-		                                
 	                    </div>
                     <div class= "col-9">
 				    <!-- Start Product Default Slider Section -->
-				          
-				        <!-- Start Section Content Text Area -->
-				      <!-- Start Section Content Text Area -->
 	                    <div class="blog-default-slider default-slider-nav-arrow">
 	                        <!-- Slider main container -->
 	                        <div class="swiper-container blog-slider">
@@ -521,7 +522,6 @@
 	                                        <a href="<c:out value="${url}" /> " class="image-link" >                              
 	                                            <img src="<c:url value='/assets/images/products/${item.image.trim()}' /> " alt="">
 	                                        
-	                                        
 	                                  <c:if test="${item.discount!=null&&item.discount>0 }">
 	                                        <div class="tag">
 				                                <span>sale</span>
@@ -536,9 +536,12 @@
 	                                            <a href="<c:out value='${urlAdd}'/>" data-bs-toggle="modal" data-bs-target="">Thêm vào giỏ</a>
 	                                        </div>
 	                                        <div class="action-link-right">
-	                                           <!--  <a href="#" data-bs-toggle="modal" data-bs-target="#modalQuickview"><i class="icon-magnifier"></i></a>
-	                                            <a href="wishlist.html"><i class="icon-heart"></i></a>
-	                                            <a href="compare.html"><i class="icon-shuffle"></i></a>-->
+	                                           <c:url var="urlCompare" value="/app-view/compare" >
+                                       			<c:param name="id" value="${item.productId }"/>  
+                                       		</c:url>
+                                            <a href="${urlCompare}" data-toggle="tooltip" data-placement="bottom" title="So sánh giá">
+                                            	<i class="icon-shuffle"></i>
+                                            </a>
 	                                        </div>
 	                                    </div>
 	                                    </div>
@@ -552,7 +555,7 @@
 	                                           <!--  <a href="blog-single-sidebar-left.html" class="read-more-btn icon-space-left">Read More <span><i class="ion-ios-arrow-thin-right"></i></span></a>
 	                                            -->
 	                                            <div class="post-meta">
-	                                                <c:if test="${item.discount!=null&&item.discount>0 }">
+	                                        <c:if test="${item.discount!=null&&item.discount>0 }">
 						                        <div class="oldPrice price unitPrice " style="color: #929292;">
 					                            	<s><i><c:out value="${dataSelected.stringUnitPrice }"></c:out></i></s>
 					                            </div>
@@ -560,14 +563,17 @@
 					                            	<c:out value="${dataSelected.stringDiscountPrice } (-${dataSelected.discount }%)"></c:out>
 					                            </div>
                        					     </c:if>
+                       					     <c:if test="${(item.discount==null||item.discount<=0) }">
+	                                                <span class="price">
+	                                               	<c:out value="${item.stringUnitPrice }"></c:out>
+                                               </span>
+                                               </c:if>
 	                                            </div>
 	                                        </div>
 	                                    </div>
 	                                </div>
 	                                <!-- End Product Default Single Item -->
 	                                </c:forEach>
-	                               
-	                                
 	                            </div>
 	                        </div>
 	                        <!-- If we need navigation buttons -->

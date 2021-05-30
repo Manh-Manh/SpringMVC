@@ -26,20 +26,21 @@ import com.manhdn.service.faceService;
 import com.manhdn.service.productService;
 
 @Controller
-public class faceController extends CommonController<faceEntity>{
+public class faceController extends CommonController<faceEntity> {
 	@Autowired
 	faceService service;
 	Logger logger = Logger.getLogger(faceController.class);
+
 	/**
 	 * 
 	 * @return
 	 */
-	@RequestMapping( value = { "/admin/manageFace"}, method = RequestMethod.GET)
+	@RequestMapping(value = { "/admin/manageFace" }, method = RequestMethod.GET)
 	public ModelAndView manageFace(HttpSession session) {
 		service = new faceService();
 		mav = new ModelAndView("/admin/face/manageFace");
 		userEntity user = (userEntity) session.getAttribute(AppConstants.SESSION_USER);
-		if(!isAdmin(session)) {
+		if (!isAdmin(session)) {
 			mav = new ModelAndView("redirect:/app-view");
 			logger.error("Khong co quyen");
 			session.setAttribute(AppConstants.SESSION_MESSAGE, AppConstants.MESSAGE_ERROR);
@@ -52,19 +53,17 @@ public class faceController extends CommonController<faceEntity>{
 		logger.info(mav);
 		return mav;
 	}
-	
+
 	@RequestMapping(value = { "/admin/addFace" }, method = RequestMethod.GET)
 	public ModelAndView addFaceView(HttpSession session) {
 		userEntity user = (userEntity) session.getAttribute(AppConstants.SESSION_USER);
-		if(!isAdmin(session)) {
+		if (!isAdmin(session)) {
 			mav = new ModelAndView("redirect:/app-view");
 			logger.error("Khong co quyen");
 			session.setAttribute(AppConstants.SESSION_MESSAGE, AppConstants.MESSAGE_ERROR);
 			return mav;
 		}
-		if(isInsert) {
-			dataSelected = new faceEntity();
-		}
+		dataSelected = new faceEntity();
 		service = new faceService();
 		mav = new ModelAndView("/admin/face/addFace");
 		map.addAttribute("isInsert", 1);
@@ -75,23 +74,23 @@ public class faceController extends CommonController<faceEntity>{
 		logger.info(mav);
 		return mav;
 	}
+
 	@RequestMapping(value = { "/admin/editFace" }, method = RequestMethod.GET)
 	public ModelAndView editFaceView(HttpSession session, @RequestParam("faceId") String faceId) {
 		userEntity user = (userEntity) session.getAttribute(AppConstants.SESSION_USER);
-		
-		if(!isAdmin(session)) {
+
+		if (!isAdmin(session)) {
 			mav = new ModelAndView("redirect:/app-view");
 			logger.error("Khong co quyen");
 			session.setAttribute(AppConstants.SESSION_MESSAGE, AppConstants.MESSAGE_ERROR);
 			return mav;
 		}
-		if(faceId == null) {
+		if (faceId == null) {
 			mav = new ModelAndView("redirect:/app-view");
 			logger.error("Loi id null");
 			session.setAttribute(AppConstants.SESSION_MESSAGE, AppConstants.MESSAGE_ERROR);
 			return mav;
 		}
-		service = new faceService();
 		service = new faceService();
 		mav = new ModelAndView("/admin/face/addFace");
 		dataSelected = service.getDetail(faceId);
@@ -100,23 +99,24 @@ public class faceController extends CommonController<faceEntity>{
 		logger.info(mav);
 		return mav;
 	}
-	
+
 	/**
 	 * delete
+	 * 
 	 * @param session
 	 * @param faceId
 	 * @return
 	 */
 	@RequestMapping(value = { "/admin/deleteFace" }, method = RequestMethod.GET)
 	public ModelAndView deleteFace(HttpSession session, @RequestParam("faceId") String faceId) {
-		
-		if(!isAdmin(session)) {
+
+		if (!isAdmin(session)) {
 			mav = new ModelAndView("redirect:/app-view");
 			logger.error("Khong co quyen");
 			session.setAttribute(AppConstants.SESSION_MESSAGE, AppConstants.MESSAGE_ERROR);
 			return mav;
 		}
-		if(faceId == null) {
+		if (faceId == null) {
 			mav = new ModelAndView("redirect:/app-view");
 			logger.error("Loi id null");
 			session.setAttribute(AppConstants.SESSION_MESSAGE, AppConstants.MESSAGE_ERROR);
@@ -125,11 +125,11 @@ public class faceController extends CommonController<faceEntity>{
 		service = new faceService();
 		mav = new ModelAndView("/admin/face/manageFace");
 		dataSelected = service.getDetail(faceId);
-		if(!service.delete(user.getUserId(), faceId)) {
+		if (!service.delete(user.getUserId(), faceId)) {
 			session.setAttribute(AppConstants.SESSION_MESSAGE, AppConstants.MESSAGE_ERROR);
 			return mav;
 		}
-		session.setAttribute(AppConstants.SESSION_MESSAGE,"Xóa thành công");
+		session.setAttribute(AppConstants.SESSION_MESSAGE, "Xóa thành công");
 		map.addAttribute("isInsert", 0);
 		addData();
 		logger.info(mav);
@@ -140,7 +140,7 @@ public class faceController extends CommonController<faceEntity>{
 	public ModelAndView addNewFace(@ModelAttribute("dataInsert") faceEntity dataInsert, HttpSession session,
 			HttpServletRequest request) {
 		userEntity user = (userEntity) session.getAttribute(AppConstants.SESSION_USER);
-		if(!isAdmin(session)) {
+		if (!isAdmin(session)) {
 			mav = new ModelAndView("redirect:/app-view");
 			logger.error("Khong co quyen");
 			session.setAttribute(AppConstants.SESSION_MESSAGE, AppConstants.MESSAGE_ERROR);
@@ -148,11 +148,11 @@ public class faceController extends CommonController<faceEntity>{
 		}
 		service = new faceService();
 		mav = new ModelAndView("/admin/face/addFace");
-		
-		if(service.insertOrUpdate(0L, dataInsert)) {
+
+		if (service.insertOrUpdate(0L, dataInsert)) {
 			message = "Cập nhật thành công!";
-		}else {
-			message= AppConstants.MESSAGE_ERROR;
+		} else {
+			message = AppConstants.MESSAGE_ERROR;
 		}
 		mav = new ModelAndView("/admin/product/addProduct");
 		session.setAttribute(AppConstants.SESSION_MESSAGE, message);
@@ -163,6 +163,7 @@ public class faceController extends CommonController<faceEntity>{
 		return this.editFaceView(session, dataInsert.getFaceId());
 //		return mav;
 	}
+
 	@ModelAttribute("dataInsert")
 	public faceEntity dataInsert() {
 		return new faceEntity();

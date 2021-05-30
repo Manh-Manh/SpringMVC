@@ -33,16 +33,21 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.text.DecimalFormat;
 
 import com.manhdn.AppConstants;
 import com.manhdn.FunctionCommon;
 import com.manhdn.entity.commentEntity;
+import com.manhdn.entity.discountEntity;
 import com.manhdn.entity.orderEntity;
 import com.manhdn.entity.productEntity;
+import com.manhdn.entity.statisticProductEntity;
 import com.manhdn.entity.supplierEntity;
 import com.manhdn.entity.userEntity;
 import com.manhdn.service.commentService;
+import com.manhdn.service.discountService;
 import com.manhdn.service.orderService;
+import com.manhdn.service.statisticProductService;
 import com.manhdn.service.supplierService;
 import com.manhdn.service.userService;
 import com.manhdn.social.GooglePojo;
@@ -85,19 +90,34 @@ public class userController extends CommonController<userEntity> {
 	public ModelAndView home(HttpSession session) {
 		service = new userService();
 		ModelAndView mav = new ModelAndView("/admin/home");
-		if(!isAdmin(session)) {
-			user = (userEntity) session.getAttribute(AppConstants.SESSION_USER);
-			if(!user.getListRoleName().contains(AppConstants.ROLE_ADMIN)) {
-				mav = new ModelAndView("redirect:/app-view");
-				logger.error("Khong co quyen");
-				session.setAttribute(AppConstants.SESSION_MESSAGE, AppConstants.MESSAGE_ERROR);
-				return mav;
-			}
+		if (!isAdmin(session)) {
+			mav = new ModelAndView("redirect:/app-view");
+			logger.error("Khong co quyen");
+			session.setAttribute(AppConstants.SESSION_MESSAGE, AppConstants.MESSAGE_ERROR);
+			return mav;
 		}
+		
 		orderService orderS = new orderService();
+		// Danh sach cac hoa don moi trong thang
 		List<orderEntity> listNewOrder = orderS.getListNewOrder();
 		map.addAttribute("listNewOrder", listNewOrder);
+		// Doanh so
+		statisticProductService statisS = new statisticProductService();
+		List<statisticProductEntity> listStatisticProduct = statisS.findDaListByThisMonth(user.getUserId());
+		Long saleTotal=0L;
+		for(statisticProductEntity sta: listStatisticProduct) {
+			saleTotal += sta.getTotal();
+		}
+		DecimalFormat myFormatter = new DecimalFormat("###,###,###,###");
+		String saleCost =  myFormatter.format(saleTotal);
+		map.addAttribute("saleCost", saleCost);
+		// danh sach giam gia
+		discountService disS = new discountService();
+		List<discountEntity> lstDiscount = disS.findDaList(user.getUserId(), null);
 		
+		map.addAttribute("listDiscount", lstDiscount);
+		addData();
+		mav.addAllObjects(map);
 		return mav;
 	}
 	@RequestMapping(value = { "/app-view/login" }, method = RequestMethod.GET)
@@ -107,7 +127,21 @@ public class userController extends CommonController<userEntity> {
 		logger.info(mav);
 		return mav;
 	}
-
+	@RequestMapping(value = { "/app-view/contact" }, method = RequestMethod.GET)
+	public ModelAndView contact(HttpSession session) {
+		mav = new ModelAndView("/user/contact");
+		mav.addObject(AppConstants.SESSION_USER, new userEntity());
+		logger.info(mav);
+		return mav;
+	}
+	
+	@RequestMapping(value = { "/app-view/about" }, method = RequestMethod.GET)
+	public ModelAndView about(HttpSession session) {
+		mav = new ModelAndView("/user/about");
+		mav.addObject(AppConstants.SESSION_USER, new userEntity());
+		logger.info(mav);
+		return mav;
+	}
 	@RequestMapping(value = { "/app-view/login" }, method = RequestMethod.POST)
 	public ModelAndView login(@ModelAttribute("userSearch") userEntity dataSearch, HttpSession session) {
 		this.dataSearch = dataSearch;
@@ -121,6 +155,10 @@ public class userController extends CommonController<userEntity> {
 			}
 		}
 		message = "Đăng nhập thành công!";
+		if(isAdmin(session)) {
+			mav = new ModelAndView("redirect:/admin");
+			return mav;
+		}
 		mav = new ModelAndView("redirect:/app-view/home-page");
 //		return "redirect:/showUser/" ;
 		addData();
@@ -162,8 +200,8 @@ public class userController extends CommonController<userEntity> {
 
 	@RequestMapping(value = { "/app-view/logout" }, method = RequestMethod.GET)
 	public ModelAndView logout(HttpSession session) {
-
-		session.removeAttribute("user");
+		session.removeAttribute(AppConstants.SESSION_CART);
+		session.removeAttribute(AppConstants.SESSION_USER);
 		mav = new ModelAndView("redirect:/app-view/");
 		addData();
 		logger.info(mav);
@@ -204,9 +242,10 @@ public class userController extends CommonController<userEntity> {
 			return mav;
 		}
 		userUpdate.setUserId(user.getUserId());
+		userUpdate.setUserName(user.getUserName());
 		userUpdate.setPassword(user.getPassword());
 		// upload anh
-		if (userUpdate.getFileAvatar() != null) {
+		if (userUpdate.getFileAvatar() != null && userUpdate.getFileAvatar()[0].getSize() >0 ) {
 			String upload = doUpload(request, userUpdate);
 			userUpdate.setAvatar(userUpdate.getFileAvatar()[0].getOriginalFilename());
 		} else {
@@ -216,6 +255,7 @@ public class userController extends CommonController<userEntity> {
 		boolean result = service.insertOrUpdate(user.getUserId(), userUpdate);
 		if (result) {
 			message = "Cập nhật thành công!";
+			session.setAttribute(AppConstants.SESSION_MESSAGE, message);
 			session.setAttribute(AppConstants.SESSION_USER, userUpdate);
 		}
 		mav = new ModelAndView("redirect:/app-view/myAccount");
@@ -238,7 +278,7 @@ public class userController extends CommonController<userEntity> {
 		if (!userUpdate.getPassword().equals(user.getPassword())) {
 //			userUpdate.setPassword(userUpdate.getNewPassword());
 			message = "Mật khẩu không đúng!";
-			addMessage(message, session);
+			session.setAttribute(AppConstants.SESSION_MESSAGE, message);
 			session.setAttribute(AppConstants.SESSION_USER, user);
 			logger.info(mav);
 			return mav;
@@ -248,7 +288,7 @@ public class userController extends CommonController<userEntity> {
 		boolean result = service.insertOrUpdate(user.getUserId(), user);
 		if (result) {
 			message = "Cập nhật thành công!";
-			addMessage(message, session);
+			session.setAttribute(AppConstants.SESSION_MESSAGE, message);
 			session.setAttribute(AppConstants.SESSION_USER, user);
 		}
 		mav = new ModelAndView("redirect:/app-view/myAccount");

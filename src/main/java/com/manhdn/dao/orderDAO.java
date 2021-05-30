@@ -66,18 +66,20 @@ public class orderDAO {
 		if (cart.getStatus() == null ) {
 			cart.setStatus(1L);
 		}
-		sql.append("INSERT INTO `order` ( orderId, userId, status, created_date,"
-				+ " updated_date, created_by, updated_by, del_flag) VALUES ");
+		sql.append("INSERT INTO `order` ( orderId, userId, status, created_date, "
+				+ " orderDate, updated_date, created_by, updated_by, del_flag) VALUES ");
 		
-		sql.append("(?, ?, ?, ?, ?, ?, ?, ?)");		
+		sql.append("(?, ?, ?, ?, ?, ?, ?, ?, ?)");		
 		sql.append("ON DUPLICATE KEY UPDATE "
 				+ " status = VALUES(status), "
+				+ " orderDate = VALUES(orderDate), "
 				+ " updated_date = VALUES(updated_date), "
 				+ " updated_by = VALUES(updated_by) "
 				+ "");
 		params.add(cart.getOrderId());
 		params.add(userId);
 		params.add(cart.getStatus() != null ? cart.getStatus() : "");
+		params.add(dateNow);
 		params.add(dateNow);
 		params.add(dateNow);
 		params.add(userId);
@@ -259,7 +261,7 @@ public class orderDAO {
 				Date date2 = format.parse(dataSearch.getToDate());
 				String fDate = format.format(date1);
 				String tDate =format.format(date2);
-				sql.append(" AND ? < o.orderDate AND o.orderDate < ? ");
+				sql.append(" AND ? <= o.orderDate AND o.orderDate <= ? ");
 				params.add(fDate);
 				params.add(tDate);
 			} catch (ParseException e) {
@@ -286,18 +288,18 @@ public class orderDAO {
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		String dateNow = dtf.format(LocalDateTime.now());
 		o.setStatus(2L);
-		o.setToDate(dateNow);
+//		o.setToDate(dateNow);
 		Calendar c = Calendar.getInstance();
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd");  
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");  
 		try {
 			Date date1 = format.parse(dateNow);
 			c.setTime(date1);
-			c.roll(Calendar.MONTH, -1);
+			c.add(Calendar.DAY_OF_MONTH, -30);
 			String dateLast = format.format(c.getTime());
-			o.setFromDate(dateLast);
-		} catch (ParseException e) {
+//			o.setFromDate(dateLast);
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+//			e.printStackTrace();
 		}
 		return this.doSearchOrder(o);
 	}

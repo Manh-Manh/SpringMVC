@@ -32,42 +32,24 @@
           <div class="col-12">
             <div class="card">
               <div class="card-header">
-              <c:url var="urlSearch" value='/admin/doSearchProduct'>
+              <c:url var="urlSearch" value='/admin/statisticProductSearch'>
               </c:url>
-              <form:form action="${urlSearch }" method="POST" modelAttribute="productSearch" onsubmit="return doSearch();">
+              <form:form action="${urlSearch }" method="POST" modelAttribute="itemSearch" onsubmit="return doSearch();">
                 <div class="row">
                     <div class="col-md-10 offset-md-1">
                         <div class="row">
-                            <div class="col-4">
+                            
+                            <div class="col-6">
                                 <div class="form-group">
-					                <label for="inputDescription">Giới tính</label>
-					                <form:select id="gender" path="gender" class="form-control custom-select" >
-					                  <option value=""> <c:out value ="__Chọn__" /></option>
-					                  <c:forEach var="g" items = "${gender }">
-					                   <option value="${g }"> <c:out value ="${g }" /></option>
-					                  </c:forEach>
-					                  
-					                </form:select>            
+					                <label for="supplier">Từ ngày</label><br>
+					                <form:input path="fromDate" type="date" value="${dataSelected.fromDate }" id="fromDate" class="form-control " />
 					              </div>
                             </div>
-                            <div class="col-4">
+                            
+                            <div class="col-6">
                                 <div class="form-group">
-					                <label for="inputDescription">Trạng thái</label>
-					                <form:select id="status" path="status" class="form-control custom-select" >
-					                  <form:option selected="selected" value="" label="__Chọn__" ></form:option>
-					                    <form:option value="1" label="Hoạt động" ></form:option>
-										<form:option value="0" label="Không hoạt động" ></form:option>
-					                </form:select>            
-					              </div>
-                            </div>
-                            <div class="col-4">
-                                <div class="form-group">
-					                <label for="supplier">Thuơng hiệu</label>
-					                <form:select id="supplier" path="supplierId" class="form-control custom-select">
-					                  <form:option selected="selected" value="" label="__Chọn__"  ></form:option>
-					                  	<form:options  items="${supplier}" itemValue="supplierId" itemLabel="supplierName" ></form:options>
-					                  
-					                </form:select>
+					                <label for="supplier">Đến ngày</label><br>
+					                <form:input path="toDate" value="${dataSelected.toDate }" type="date" id="toDate" class="form-control" />
 					              </div>
                             </div>
                         </div>
@@ -98,11 +80,9 @@
                   	<th>Số thứ tự</th>
                     <th>Mã sản phẩm</th>
                     <th>Tên sản phẩm</th>
-                    <th>Trạng thái</th>
                     <th>Hình ảnh</th>
-                    <th>Thương hiệu</th>
-                    <th>Số lượng</th>
-                     <th>Giá</th>
+                    <th>Tổng số lượng bán</th>
+                    <th>Tổng tiền</th>
                     <th>Hành động</th>
                   </tr>
                   </thead>
@@ -111,20 +91,18 @@
              <c:forEach var = "item" items="${dataList}">
                   <tr>
                   <td><c:out value ="${ stt=stt+1 }" /></td>
-                    <td><c:out value ="${ item.productId }" /></td>
-                    <td><c:out value ="${ item.productName }" /></td>
-                    <td><c:out value ="${ item.statusString }" /></td>
-                    <td><img src="<c:url value='/assets/images/products/${item.image}' />" style="width: 100px" alt="" ></td>
-                    <td><c:out value = "${item.supplier.supplierName }" /></td>
+                    <td><c:out value ="${ item.product.productId }" /></td>
+                    <td><c:out value ="${ item.product.productName }" /></td>
+                    <td><img src="<c:url value='/assets/images/products/${item.product.image}' />" style="width: 100px" alt="" ></td>
                     <td><c:out value ="${ item.quantity }" /></td>
-                    <td><c:out value ="${ item.stringUnitPrice }" /> đ</td>
+                    <td><c:out value ="${ item.totalString }" /> đ</td>
                     <td class="text-center py-0 align-middle">
                     
                     <c:url var="urlEdit" value='/admin/editProduct'>
-                    	<c:param name="productId" value="${item.productId}"></c:param>
+                    	<c:param name="productId" value="${item.product.productId}"></c:param>
                     </c:url>
                     <c:url var="urlDel" value='/admin/deleteProduct'>
-                    	<c:param name="productId" value="${item.productId}"></c:param>
+                    	<c:param name="productId" value="${item.product.productId}"></c:param>
                     </c:url>
                     <div class="btn-group btn-group-sm">
                         <a href="${urlEdit }" class="btn btn-info" data-toggle="tooltip" data-placement="bottom" title="Sửa"><i class="fas fa-edit"></i></a>

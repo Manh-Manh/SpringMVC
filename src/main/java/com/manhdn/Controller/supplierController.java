@@ -39,7 +39,7 @@ public class supplierController extends CommonController<supplierEntity> {
 	 */
 	@RequestMapping(value = { "/admin/manageSupplier" }, method = RequestMethod.GET)
 	public ModelAndView manageSupplier(HttpSession session) {
-		if(!isAdmin(session)) {
+		if (!isAdmin(session)) {
 			mav = new ModelAndView("redirect:/app-view");
 			logger.error("Khong co quyen");
 			session.setAttribute(AppConstants.SESSION_MESSAGE, AppConstants.MESSAGE_ERROR);
@@ -54,20 +54,17 @@ public class supplierController extends CommonController<supplierEntity> {
 		logger.info(mav);
 		return mav;
 	}
-	
 
 	@RequestMapping(value = { "/admin/addSupplier" }, method = RequestMethod.GET)
 	public ModelAndView addSupplierView(HttpSession session) {
 		userEntity user = (userEntity) session.getAttribute(AppConstants.SESSION_USER);
-		if(!isAdmin(session)) {
+		if (!isAdmin(session)) {
 			mav = new ModelAndView("redirect:/app-view");
 			logger.error("Khong co quyen");
 			session.setAttribute(AppConstants.SESSION_MESSAGE, AppConstants.MESSAGE_ERROR);
 			return mav;
 		}
-		if(isInsert) {
-			dataSelected = new supplierEntity();
-		}
+		dataSelected = new supplierEntity();
 		service = new supplierService();
 		mav = new ModelAndView("/admin/supplier/addSupplier");
 		map.addAttribute("isInsert", 1);
@@ -78,17 +75,18 @@ public class supplierController extends CommonController<supplierEntity> {
 		logger.info(mav);
 		return mav;
 	}
+
 	@RequestMapping(value = { "/admin/editSupplier" }, method = RequestMethod.GET)
 	public ModelAndView editSupplierView(HttpSession session, @RequestParam("supplierId") String supplierId) {
 		userEntity user = (userEntity) session.getAttribute(AppConstants.SESSION_USER);
-		
-		if(!isAdmin(session)) {
+
+		if (!isAdmin(session)) {
 			mav = new ModelAndView("redirect:/app-view");
 			logger.error("Khong co quyen");
 			session.setAttribute(AppConstants.SESSION_MESSAGE, AppConstants.MESSAGE_ERROR);
 			return mav;
 		}
-		if(supplierId == null) {
+		if (supplierId == null) {
 			mav = new ModelAndView("redirect:/app-view");
 			logger.error("Loi id null");
 			session.setAttribute(AppConstants.SESSION_MESSAGE, AppConstants.MESSAGE_ERROR);
@@ -97,31 +95,29 @@ public class supplierController extends CommonController<supplierEntity> {
 		service = new supplierService();
 		mav = new ModelAndView("/admin/supplier/addSupplier");
 		dataSelected = service.getDetail(supplierId);
-		if(isInsert) {
-			dataSelected = new supplierEntity();
-		}
 		map.addAttribute("isInsert", 0);
 		addData();
 		logger.info(mav);
 		return mav;
 	}
-	
+
 	/**
 	 * delete
+	 * 
 	 * @param session
 	 * @param supplierId
 	 * @return
 	 */
 	@RequestMapping(value = { "/admin/deleteSupplier" }, method = RequestMethod.GET)
 	public ModelAndView deleteSupplier(HttpSession session, @RequestParam("supplierId") String supplierId) {
-		
-		if(!isAdmin(session)) {
+
+		if (!isAdmin(session)) {
 			mav = new ModelAndView("redirect:/app-view");
 			logger.error("Khong co quyen");
 			session.setAttribute(AppConstants.SESSION_MESSAGE, AppConstants.MESSAGE_ERROR);
 			return mav;
 		}
-		if(supplierId == null) {
+		if (supplierId == null) {
 			mav = new ModelAndView("redirect:/app-view");
 			logger.error("Loi id null");
 			session.setAttribute(AppConstants.SESSION_MESSAGE, AppConstants.MESSAGE_ERROR);
@@ -130,11 +126,11 @@ public class supplierController extends CommonController<supplierEntity> {
 		service = new supplierService();
 		mav = new ModelAndView("/admin/supplier/manageSupplier");
 		dataSelected = service.getDetail(supplierId);
-		if(!service.delete(user.getUserId(), supplierId)) {
+		if (!service.delete(user.getUserId(), supplierId)) {
 			session.setAttribute(AppConstants.SESSION_MESSAGE, AppConstants.MESSAGE_ERROR);
 			return mav;
 		}
-		session.setAttribute(AppConstants.SESSION_MESSAGE,"Xóa thành công");
+		session.setAttribute(AppConstants.SESSION_MESSAGE, "Xóa thành công");
 		map.addAttribute("isInsert", 0);
 		addData();
 		logger.info(mav);
@@ -145,7 +141,7 @@ public class supplierController extends CommonController<supplierEntity> {
 	public ModelAndView addNewSupplier(@ModelAttribute("dataInsert") supplierEntity dataInsert, HttpSession session,
 			HttpServletRequest request) {
 		userEntity user = (userEntity) session.getAttribute(AppConstants.SESSION_USER);
-		if(!isAdmin(session)) {
+		if (!isAdmin(session)) {
 			mav = new ModelAndView("redirect:/app-view");
 			logger.error("Khong co quyen");
 			session.setAttribute(AppConstants.SESSION_MESSAGE, AppConstants.MESSAGE_ERROR);
@@ -153,18 +149,18 @@ public class supplierController extends CommonController<supplierEntity> {
 		}
 		service = new supplierService();
 		mav = new ModelAndView("/admin/supplier/addSupplier");
-		
+
 		// upload Anh
-		if(dataInsert.getFileLogo() != null && dataInsert.getFileLogo().length >0 ) {
-			if(!FunctionCommon.isEmpty(dataInsert.getFileLogo()[0].getOriginalFilename())) {
+		if (dataInsert.getFileLogo() != null && dataInsert.getFileLogo().length > 0) {
+			if (!FunctionCommon.isEmpty(dataInsert.getFileLogo()[0].getOriginalFilename())) {
 				boolean upload = this.doUpload(request, dataInsert);
 				dataInsert.setLogo(dataInsert.getFileLogo()[0].getOriginalFilename());
 			}
 		}
-		if(service.insertOrUpdate(0L, dataInsert)) {
+		if (service.insertOrUpdate(0L, dataInsert)) {
 			message = "Cập nhật thành công!";
-		}else {
-			message= AppConstants.MESSAGE_ERROR;
+		} else {
+			message = AppConstants.MESSAGE_ERROR;
 		}
 		mav = new ModelAndView("/admin/product/addProduct");
 		session.setAttribute(AppConstants.SESSION_MESSAGE, message);
@@ -175,8 +171,7 @@ public class supplierController extends CommonController<supplierEntity> {
 		return this.editSupplierView(session, dataInsert.getSupplierId());
 //		return mav;
 	}
-	
-	
+
 	private boolean doUpload(HttpServletRequest request, supplierEntity supUpload) {
 
 		// Thư mục gốc upload file.
@@ -228,6 +223,7 @@ public class supplierController extends CommonController<supplierEntity> {
 
 		return true;
 	}
+
 	@ModelAttribute("dataInsert")
 	public supplierEntity dataInsert() {
 		return new supplierEntity();

@@ -46,7 +46,7 @@
                   <td><c:out value ="${ stt=stt+1 }" /></td>
                     <td><c:out value ="${ item.discountId }" /></td>
                     <td><c:out value = "${item.discount }" /></td>
-                    <td><c:out value ="${ item.statusString }" /></td>
+                    <td><c:out value ="${ item.stringActive }" /></td>
                     <td class="text-center py-0 align-middle">
                     <c:url var="urlEdit" value='/admin/editDiscount'>
                     	<c:param name="discountId" value="${item.discountId}"></c:param>

@@ -16,7 +16,7 @@ public class statisticProductEntity implements Comparable {
 	
 	public String getTotalString() {
 		DecimalFormat myFormatter = new DecimalFormat("###,###,###,###");
-		return myFormatter.format(total);
+		return myFormatter.format(getTotal());
 	}
 	
 	public productEntity getProductSearch() {
@@ -67,7 +67,14 @@ public class statisticProductEntity implements Comparable {
 		}
 		Long t = 0L;
 		for (orderEntity o : getListOrder()) {
-			t += o.getTotal();
+			if(o.getListProduct()!=null) {
+				for(productEntity p : o.getListProduct()) {
+					if(this.getProduct().getProductId().equals(p.getProductId())) {
+						t += p.getCartTotal();
+					}
+				}
+			}
+			
 		}
 		return t;
 	}

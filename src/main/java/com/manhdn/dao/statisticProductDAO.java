@@ -42,30 +42,31 @@ public class statisticProductDAO {
 			order.setFromDate(dataSearch.getFromDate());
 			order.setToDate(dataSearch.getToDate());
 		}
+		order.setStatus(3L);
 		orderService orderS = new orderService();
 		/* Test */
-		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-		String dateNow = dtf.format(LocalDateTime.now());
-		order.setStatus(3L);
-		order.setToDate(dateNow);
-		order.setFromDate("2021-04-23");
+//		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+//		String dateNow = dtf.format(LocalDateTime.now());
+		
+//		order.setToDate(dateNow);
+//		order.setFromDate("2021-04-23");
 //		Calendar c = Calendar.getInstance();
-//		SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd");  
+//		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");  
 //		try {
 //			Date date1 = format.parse(dateNow);
 //			c.setTime(date1);
-//			c.roll(Calendar.MONTH, -1);
+//			c.add(Calendar.MONTH, -1);
 //			String dateLast = format.format(c.getTime());
 //			order.setFromDate(dateLast);
 //		} catch (ParseException e) {
 //			// TODO Auto-generated catch block
 //			e.printStackTrace();
 //		}
-		List<orderEntity> listOrder = orderS.doSearchOrder(order);
+//		
 		/* End Test */
 		
 		/* Main */
-		
+		List<orderEntity> listOrder = orderS.doSearchOrder(order);
 		// Loc danh sach hoa don theo ngay
 //		List<orderEntity> listOrder = orderS.doSearchOrder(order);
 		List<String> listProductId =new ArrayList<String>();

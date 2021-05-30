@@ -40,16 +40,17 @@ public class orderController extends CommonController<orderEntity> {
 	@Autowired
 	orderService service;
 	Logger logger = Logger.getLogger(orderController.class);
+
 	/**
 	 * 
 	 * @return
 	 */
 	@RequestMapping(value = { "/admin/manageOrder" }, method = RequestMethod.GET)
 	public ModelAndView manageOrder(HttpSession session) {
-		if(!isAdmin(session)) {
+		if (!isAdmin(session)) {
 			mav = new ModelAndView("redirect:/app-view");
 			logger.error("Khong co quyen");
-			session.setAttribute(AppConstants.SESSION_MESSAGE, "Liên hệ quản trị hệ thống để được hỗ trợ");
+			session.setAttribute(AppConstants.SESSION_MESSAGE, AppConstants.MESSAGE_ERROR);
 			return mav;
 		}
 		service = new orderService();
@@ -62,13 +63,13 @@ public class orderController extends CommonController<orderEntity> {
 
 	@RequestMapping(value = { "/admin/doSearchOrder" }, method = RequestMethod.POST)
 	public ModelAndView doSearchOrder(HttpSession session, @ModelAttribute("orderSearch") orderEntity dataSearch) {
-		if(!isAdmin(session)) {
+		if (!isAdmin(session)) {
 			mav = new ModelAndView("redirect:/app-view");
 			logger.error("Khong co quyen");
-			session.setAttribute(AppConstants.SESSION_MESSAGE, "Liên hệ quản trị hệ thống để được hỗ trợ");
+			session.setAttribute(AppConstants.SESSION_MESSAGE, AppConstants.MESSAGE_ERROR);
 			return mav;
 		}
-		if(null==dataSearch) {
+		if (null == dataSearch) {
 			return manageOrder(session);
 		}
 		service = new orderService();
@@ -78,6 +79,7 @@ public class orderController extends CommonController<orderEntity> {
 		logger.info(mav);
 		return mav;
 	}
+
 	/**
 	 * xem gio hang
 	 * 
@@ -116,11 +118,11 @@ public class orderController extends CommonController<orderEntity> {
 		logger.info(mav);
 		return mav;
 	}
-	
+
 	@RequestMapping(value = { "/admin/viewOrder" }, method = RequestMethod.GET)
 	public ModelAndView viewOrderAdmin(@RequestParam("orderId") String orderId, HttpSession session) {
 		mav = new ModelAndView("/admin/order/viewOrder");
-		if(!isAdmin(session)) {
+		if (!isAdmin(session)) {
 			mav = new ModelAndView("redirect:/app-view");
 			logger.error("Khong co quyen");
 			session.setAttribute(AppConstants.SESSION_MESSAGE, "Liên hệ quản trị hệ thống để được hỗ trợ");
@@ -128,19 +130,18 @@ public class orderController extends CommonController<orderEntity> {
 		}
 		dataSelected = service.findOrderByOrderId(orderId);
 		if (dataSelected == null || dataSelected.getListProduct().size() == 0) {
-			session.setAttribute(AppConstants.SESSION_MESSAGE, "Liên hệ quản trị hệ thống để được hỗ trợ");
+			session.setAttribute(AppConstants.SESSION_MESSAGE, AppConstants.MESSAGE_ERROR);
 			return mav;
 		}
 		addData();
 		logger.info(mav);
 		return mav;
 	}
-	
-	
+
 	@RequestMapping(value = { "/admin/acceptOrder" }, method = RequestMethod.GET)
 	public ModelAndView acceptOrder(@RequestParam("orderId") String orderId, HttpSession session) {
 		mav = new ModelAndView("/admin/order/manageOrder");
-		if(!isAdmin(session)) {
+		if (!isAdmin(session)) {
 			mav = new ModelAndView("redirect:/app-view");
 			logger.error("Khong co quyen");
 			session.setAttribute(AppConstants.SESSION_MESSAGE, "Liên hệ quản trị hệ thống để được hỗ trợ");
@@ -165,13 +166,14 @@ public class orderController extends CommonController<orderEntity> {
 		return mav;
 
 	}
+
 	@RequestMapping(value = { "/admin/rejectOrder" }, method = RequestMethod.GET)
 	public ModelAndView rejectOrder(@RequestParam("orderId") String orderId, HttpSession session) {
 		mav = new ModelAndView("/admin/order/manageOrder");
-		if(!isAdmin(session)) {
+		if (!isAdmin(session)) {
 			mav = new ModelAndView("redirect:/app-view");
 			logger.error("Khong co quyen");
-			session.setAttribute(AppConstants.SESSION_MESSAGE, "Liên hệ quản trị hệ thống để được hỗ trợ");
+			session.setAttribute(AppConstants.SESSION_MESSAGE, AppConstants.MESSAGE_ERROR);
 			return mav;
 		}
 
@@ -194,6 +196,7 @@ public class orderController extends CommonController<orderEntity> {
 		return mav;
 
 	}
+
 	/**
 	 * Huy don hang
 	 * 
@@ -379,7 +382,7 @@ public class orderController extends CommonController<orderEntity> {
 		return mav;
 
 	}
-	
+
 	// update
 	private orderEntity updateCart(String id, Long cartQuantity, orderEntity data) {
 		orderEntity result = data;
@@ -418,10 +421,12 @@ public class orderController extends CommonController<orderEntity> {
 	public userEntity userCheckout() {
 		return new userEntity();
 	}
+
 	@ModelAttribute("orderSearch")
 	public orderEntity dataSearch() {
 		return new orderEntity();
 	}
+
 	private void addAttribute() {
 		super.addData();
 	}

@@ -23,7 +23,17 @@ public class userEntity extends CommonEntity {
 	private String birthDate;
 	private List<roleEntity> lstRoles;
 	private CommonsMultipartFile[] fileAvatar;
-
+	
+	public boolean getIsAdmin() {
+		if (this.getLstRoles() != null) {
+			for (roleEntity r : this.getLstRoles()) {
+				if (r.getRoleLevel() == AppConstants.ROLE_ADMIN || r.getRoleLevel() == AppConstants.ROLE_EMP) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
 	public String getPath() {
 		return path;
 	}

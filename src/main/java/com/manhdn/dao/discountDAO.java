@@ -56,9 +56,9 @@ public class discountDAO {
 		List<Object> params = new ArrayList<Object>();
 		StringBuilder sql = new StringBuilder();
 
-		sql.append("SELECT * FROM discount d " + " WHERE (d.status != 0 or d.status is null) AND d.endDate > SYSDATE() "
+		sql.append("SELECT * FROM discount d " + " WHERE (d.status != 0 or d.status is null) AND d.endDate >= SYSDATE() "
 				+ " and (d.del_flag is null or d.del_flag != 1) ");
-		sql.append(" ORDER BY d.endDate ");
+		sql.append(" ORDER BY d.endDate DESC ");
 //		params.add(id);
 		result = (List<discountEntity>) cmd.getListObjByParams(sql, params, discountEntity.class);
 		logger.info("Params: " + params + " Result size: " + result.size());

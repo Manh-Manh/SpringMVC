@@ -59,7 +59,8 @@
                              <!-- Start Header Logo -->
                             <div class="header-logo">
                                 <div class="logo">
-                                    <a href="index.html"><img src="assets/images/logo/logo_black.png" alt=""></a>
+                                    <a href="<c:url value='/app-view/homePage' /> " >
+                                    <img style="width: 70px;margin: 10px;margin-left: 75%;"  src="<c:url value='/assets/images/logo/Xwatch_Logo.png' /> " alt=""></a>
                                 </div>
                             </div>
                             <!-- End Header Logo -->
@@ -158,11 +159,16 @@
                                             </ul>
                                         </li> --%>
                                         <li>
-                                            <a href="about-us.html">Giới thiệu</a>
+                                            <a  href="<c:url value='/app-view/about' /> ">Giới thiệu</a>
                                         </li>
                                         <li>
-                                            <a href="contact-us.html">Liên hệ</a>
+                                            <a  href="<c:url value='/app-view/contact' /> ">Liên hệ</a>
                                         </li>
+                                        <c:if test="${sessionScope.user.isAdmin }">
+                                        <li>
+                                            <a href="<c:url value='/admin' /> ">Trang quản trị</a>
+                                        </li>
+                                        </c:if>
                                     </ul>
                                 </nav>
                             </div> 
@@ -424,12 +430,13 @@
                     <!-- <span>Email: <c:out value="${ u.email }" /></span>    -->
                 </address>
 			</c:if>
+			<!-- 
                 <ul class="social-link">
                     <li><a href="#"><i class="fa fa-facebook"></i></a></li>
                     <li><a href="#"><i class="fa fa-twitter"></i></a></li>
                     <li><a href="#"><i class="fa fa-instagram"></i></a></li>
                     <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
-                </ul>
+                </ul>-->
 
                 <ul class="user-link">
                     <!-- <li><a href="wishlist.html">Wishlist</a></li> -->

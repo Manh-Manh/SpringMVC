@@ -19,19 +19,20 @@ import com.manhdn.service.faceService;
 import com.manhdn.service.machineService;
 
 @Controller
-public class machineController extends CommonController<machineEntity>{
+public class machineController extends CommonController<machineEntity> {
 	@Autowired
 	machineService service;
 	Logger logger = Logger.getLogger(machineController.class);
+
 	/**
 	 * 
 	 * @return
 	 */
-	@RequestMapping( value = { "/admin/manageMachine"}, method = RequestMethod.GET)
+	@RequestMapping(value = { "/admin/manageMachine" }, method = RequestMethod.GET)
 	public ModelAndView manageMachine(HttpSession session) {
 		service = new machineService();
 		mav = new ModelAndView("/admin/machine/manageMachine");
-		if(!isAdmin(session)) {
+		if (!isAdmin(session)) {
 			mav = new ModelAndView("redirect:/app-view");
 			logger.error("Khong co quyen");
 			session.setAttribute(AppConstants.SESSION_MESSAGE, "Liên hệ quản trị hệ thống để được hỗ trợ");
@@ -48,15 +49,13 @@ public class machineController extends CommonController<machineEntity>{
 	@RequestMapping(value = { "/admin/addMachine" }, method = RequestMethod.GET)
 	public ModelAndView addMachineView(HttpSession session) {
 		userEntity user = (userEntity) session.getAttribute(AppConstants.SESSION_USER);
-		if(!isAdmin(session)) {
+		if (!isAdmin(session)) {
 			mav = new ModelAndView("redirect:/app-view");
 			logger.error("Khong co quyen");
 			session.setAttribute(AppConstants.SESSION_MESSAGE, "Liên hệ quản trị hệ thống để được hỗ trợ");
 			return mav;
 		}
-		if(isInsert) {
-			dataSelected = new machineEntity();
-		}
+		dataSelected = new machineEntity();
 		service = new machineService();
 		mav = new ModelAndView("/admin/machine/addMachine");
 		map.addAttribute("isInsert", 1);
@@ -67,20 +66,21 @@ public class machineController extends CommonController<machineEntity>{
 		logger.info(mav);
 		return mav;
 	}
+
 	@RequestMapping(value = { "/admin/editMachine" }, method = RequestMethod.GET)
 	public ModelAndView editMachineView(HttpSession session, @RequestParam("machineId") String machineId) {
 		userEntity user = (userEntity) session.getAttribute(AppConstants.SESSION_USER);
-		
-		if(!isAdmin(session)) {
+
+		if (!isAdmin(session)) {
 			mav = new ModelAndView("redirect:/app-view");
 			logger.error("Khong co quyen");
-			session.setAttribute(AppConstants.SESSION_MESSAGE, "Liên hệ quản trị hệ thống để được hỗ trợ");
+			session.setAttribute(AppConstants.SESSION_MESSAGE, AppConstants.MESSAGE_ERROR);
 			return mav;
 		}
-		if(machineId == null) {
+		if (machineId == null) {
 			mav = new ModelAndView("redirect:/app-view");
 			logger.error("Loi id null");
-			session.setAttribute(AppConstants.SESSION_MESSAGE, "Liên hệ quản trị hệ thống để được hỗ trợ");
+			session.setAttribute(AppConstants.SESSION_MESSAGE, AppConstants.MESSAGE_ERROR);
 			return mav;
 		}
 		service = new machineService();
@@ -91,26 +91,24 @@ public class machineController extends CommonController<machineEntity>{
 		logger.info(mav);
 		return mav;
 	}
-	
-	
 
 	@RequestMapping(value = { "/admin/addNewMachine" }, method = RequestMethod.POST)
 	public ModelAndView addNewMachine(@ModelAttribute("dataInsert") machineEntity dataInsert, HttpSession session,
 			HttpServletRequest request) {
 		userEntity user = (userEntity) session.getAttribute(AppConstants.SESSION_USER);
-		if(!isAdmin(session)) {
+		if (!isAdmin(session)) {
 			mav = new ModelAndView("redirect:/app-view");
 			logger.error("Khong co quyen");
-			session.setAttribute(AppConstants.SESSION_MESSAGE, "Liên hệ quản trị hệ thống để được hỗ trợ");
+			session.setAttribute(AppConstants.SESSION_MESSAGE, AppConstants.MESSAGE_ERROR);
 			return mav;
 		}
 		service = new machineService();
 		mav = new ModelAndView("/admin/machine/addMachine");
-		
-		if(service.insertOrUpdate(user.getUserId(), dataInsert)) {
+
+		if (service.insertOrUpdate(user.getUserId(), dataInsert)) {
 			message = "Cập nhật thành công!";
-		}else {
-			message= AppConstants.MESSAGE_ERROR;
+		} else {
+			message = AppConstants.MESSAGE_ERROR;
 		}
 		mav = new ModelAndView("/admin/product/addProduct");
 		session.setAttribute(AppConstants.SESSION_MESSAGE, message);
@@ -121,17 +119,17 @@ public class machineController extends CommonController<machineEntity>{
 		return this.editMachineView(session, dataInsert.getMachineId());
 //		return mav;
 	}
-	
+
 	@RequestMapping(value = { "/admin/deleteMachine" }, method = RequestMethod.GET)
 	public ModelAndView deleteMachine(HttpSession session, @RequestParam("machineId") String machineId) {
-		
-		if(!isAdmin(session)) {
+
+		if (!isAdmin(session)) {
 			mav = new ModelAndView("redirect:/app-view");
 			logger.error("Khong co quyen");
 			session.setAttribute(AppConstants.SESSION_MESSAGE, AppConstants.MESSAGE_ERROR);
 			return mav;
 		}
-		if(machineId == null) {
+		if (machineId == null) {
 			mav = new ModelAndView("redirect:/app-view");
 			logger.error("Loi id null");
 			session.setAttribute(AppConstants.SESSION_MESSAGE, AppConstants.MESSAGE_ERROR);
@@ -140,17 +138,17 @@ public class machineController extends CommonController<machineEntity>{
 		service = new machineService();
 		mav = new ModelAndView("/admin/machine/manageMachine");
 		dataSelected = service.getDetail(machineId);
-		if(!service.delete(user.getUserId(), machineId)) {
+		if (!service.delete(user.getUserId(), machineId)) {
 			session.setAttribute(AppConstants.SESSION_MESSAGE, AppConstants.MESSAGE_ERROR);
 			return mav;
 		}
-		session.setAttribute(AppConstants.SESSION_MESSAGE,"Xóa thành công");
+		session.setAttribute(AppConstants.SESSION_MESSAGE, "Xóa thành công");
 		map.addAttribute("isInsert", 0);
 		addData();
 		logger.info(mav);
 		return manageMachine(session);
 	}
-	
+
 	@ModelAttribute("dataInsert")
 	public machineEntity dataInsert() {
 		return new machineEntity();

@@ -17,8 +17,6 @@
               <a href="<c:url value='/admin/addProduct' /> " >
                 	<button type="button" class="btn btn-primary float-right"><i class="fas fa-plus"></i> Thêm mới </button>
               </a>
-              
-              
               </li>
             </ol>
           </div>

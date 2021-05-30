@@ -321,7 +321,7 @@
                                         <div class="tab-pane active show sort-layout-single" id="layout-3-grid">
                                             <div class="row">
                                      <c:if test="${dataList==null || dataList.size()==0 }">
-                                     	<h2>Không có sản phẩm phù hợp</h2>
+                                     	<h2 style="text-align: center;">Không có sản phẩm phù hợp</h2>
                                      </c:if>
                                      <c:forEach var="item" items="${dataList}">
                                                 <div class="col-xl-4 col-sm-6 col-12">                                                
@@ -350,8 +350,12 @@
                                                                 </div>
                                                                 <div class="action-link-right">
                                                                    <!--  <a href="#" data-bs-toggle="modal" data-bs-target="#modalQuickview"><i class="icon-magnifier"></i></a>
-                                                                    <a href="wishlist.html"><i class="icon-heart"></i></a>
-                                                                    <a href="compare.html"><i class="icon-shuffle"></i></a>-->
+                                                                    <a href="wishlist.html"><i class="icon-heart"></i></a> -->
+                                                                    <c:url var="urlCompare" value="/app-view/compare" >
+	                                                        			<c:param name="id" value="${item.productId }"/>  
+	                                                        		</c:url>
+                                                                    <a href="${urlCompare}" data-toggle="tooltip" data-placement="bottom" title="So sánh giá">
+                                                                    <i class="icon-shuffle"></i></a>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -373,12 +377,17 @@
                                                             <div class="content-right">
                                                                 <c:if test="${item.discount!=null&&item.discount>0 }">
 											                        <div class="oldPrice price unitPrice " style="color: #929292;">
-										                            	<s><i><c:out value="${dataSelected.stringUnitPrice }"></c:out></i></s>
+										                            	<s><i><c:out value="${item.stringUnitPrice }"></c:out></i></s>
 										                            </div>
 										                            <div class="price discountPrice newPrice" style="color: red;">
-										                            	<c:out value="${dataSelected.stringDiscountPrice } (-${dataSelected.discount }%)"></c:out>
+										                            	<c:out value="${item.stringDiscountPrice } (-${item.discount }%)"></c:out>
 										                            </div>
 					                       					     </c:if>
+					                       					     <c:if test="${(item.discount==null||item.discount<=0) }">
+					                                                <span class="price">
+					                                               	<c:out value="${item.stringUnitPrice }"></c:out>
+				                                               		</span>
+				                                               	 </c:if>
                                                             </div>
                 
                                                         </div>
@@ -450,9 +459,11 @@
                                             <a href="<c:out value='${urlAdd}'/>" data-bs-toggle="modal" data-bs-target="">Thêm vào giỏ</a>
                                         </div>
                                         <div class="action-link-right">
-                                           <!--  <a href="#" data-bs-toggle="modal" data-bs-target="#modalQuickview"><i class="icon-magnifier"></i></a>
-                                            <a href="wishlist.html"><i class="icon-heart"></i></a>
-                                            <a href="compare.html"><i class="icon-shuffle"></i></a>-->
+                                          <c:url var="urlCompare" value="/app-view/compare" >
+                                  			<c:param name="id" value="${item.productId }"/>  
+                                  		</c:url>
+                                        <a href="${urlCompare}" data-toggle="tooltip" data-placement="bottom" title="So sánh giá">
+                                        <i class="icon-shuffle"></i></a>
                                         </div>
                                     </div>
                                     </div>
@@ -469,10 +480,10 @@
                                                 <!-- <a href="#" class="date">24 Apr</a> -->
                                                 <c:if test="${item.discount!=null&&item.discount>0 }">
 						                        <div class="oldPrice price unitPrice " style="color: #929292;">
-					                            	<s><i><c:out value="${dataSelected.stringUnitPrice }"></c:out></i></s>
+					                            	<s><i><c:out value="${item.stringUnitPrice }"></c:out></i></s>
 					                            </div>
 					                            <div class="price discountPrice newPrice" style="color: red;">
-					                            	<c:out value="${dataSelected.stringDiscountPrice } (-${dataSelected.discount }%)"></c:out>
+					                            	<c:out value="${item.stringDiscountPrice } (-${item.discount }%)"></c:out>
 					                            </div>
                        					     </c:if>
                                             </div>

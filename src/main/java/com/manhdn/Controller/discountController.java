@@ -39,7 +39,7 @@ public class discountController extends CommonController<discountEntity> {
 	 */
 	@RequestMapping(value = { "/admin/manageDiscount" }, method = RequestMethod.GET)
 	public ModelAndView manageDiscount(HttpSession session) {
-		if(!isAdmin(session)) {
+		if (!isAdmin(session)) {
 			mav = new ModelAndView("redirect:/app-view");
 			logger.error("Khong co quyen");
 			session.setAttribute(AppConstants.SESSION_MESSAGE, AppConstants.MESSAGE_ERROR);
@@ -54,20 +54,19 @@ public class discountController extends CommonController<discountEntity> {
 		logger.info(mav);
 		return mav;
 	}
-	
 
 	@RequestMapping(value = { "/admin/addDiscount" }, method = RequestMethod.GET)
 	public ModelAndView addDiscountView(HttpSession session) {
 		userEntity user = (userEntity) session.getAttribute(AppConstants.SESSION_USER);
-		if(!isAdmin(session)) {
+		if (!isAdmin(session)) {
 			mav = new ModelAndView("redirect:/app-view");
 			logger.error("Khong co quyen");
 			session.setAttribute(AppConstants.SESSION_MESSAGE, AppConstants.MESSAGE_ERROR);
 			return mav;
 		}
-		if(isInsert) {
-			dataSelected = new discountEntity();
-		}
+
+		dataSelected = new discountEntity();
+
 		service = new discountService();
 		mav = new ModelAndView("/admin/discount/addDiscount");
 		map.addAttribute("isInsert", 1);
@@ -78,17 +77,18 @@ public class discountController extends CommonController<discountEntity> {
 		logger.info(mav);
 		return mav;
 	}
+
 	@RequestMapping(value = { "/admin/editDiscount" }, method = RequestMethod.GET)
 	public ModelAndView editDiscountView(HttpSession session, @RequestParam("discountId") String discountId) {
 		userEntity user = (userEntity) session.getAttribute(AppConstants.SESSION_USER);
-		
-		if(!isAdmin(session)) {
+
+		if (!isAdmin(session)) {
 			mav = new ModelAndView("redirect:/app-view");
 			logger.error("Khong co quyen");
 			session.setAttribute(AppConstants.SESSION_MESSAGE, AppConstants.MESSAGE_ERROR);
 			return mav;
 		}
-		if(discountId == null) {
+		if (discountId == null) {
 			mav = new ModelAndView("redirect:/app-view");
 			logger.error("Loi id null");
 			session.setAttribute(AppConstants.SESSION_MESSAGE, AppConstants.MESSAGE_ERROR);
@@ -97,30 +97,31 @@ public class discountController extends CommonController<discountEntity> {
 		service = new discountService();
 		mav = new ModelAndView("/admin/discount/addDiscount");
 		dataSelected = service.getDetail(discountId);
-		
-		isInsert= false;
+
+		isInsert = false;
 		map.addAttribute("isInsert", 0);
 		addData();
 		logger.info(mav);
 		return mav;
 	}
-	
+
 	/**
 	 * delete
+	 * 
 	 * @param session
 	 * @param discountId
 	 * @return
 	 */
 	@RequestMapping(value = { "/admin/deleteDiscount" }, method = RequestMethod.GET)
 	public ModelAndView deleteDiscount(HttpSession session, @RequestParam("discountId") String discountId) {
-		
-		if(!isAdmin(session)) {
+
+		if (!isAdmin(session)) {
 			mav = new ModelAndView("redirect:/app-view");
 			logger.error("Khong co quyen");
 			session.setAttribute(AppConstants.SESSION_MESSAGE, AppConstants.MESSAGE_ERROR);
 			return mav;
 		}
-		if(discountId == null) {
+		if (discountId == null) {
 			mav = new ModelAndView("redirect:/app-view");
 			logger.error("Loi id null");
 			session.setAttribute(AppConstants.SESSION_MESSAGE, AppConstants.MESSAGE_ERROR);
@@ -129,11 +130,11 @@ public class discountController extends CommonController<discountEntity> {
 		service = new discountService();
 		mav = new ModelAndView("/admin/discount/manageDiscount");
 		dataSelected = service.getDetail(discountId);
-		if(!service.delete(user.getUserId(), discountId)) {
+		if (!service.delete(user.getUserId(), discountId)) {
 			session.setAttribute(AppConstants.SESSION_MESSAGE, AppConstants.MESSAGE_ERROR);
 			return mav;
 		}
-		session.setAttribute(AppConstants.SESSION_MESSAGE,"Xóa thành công");
+		session.setAttribute(AppConstants.SESSION_MESSAGE, "Xóa thành công");
 		map.addAttribute("isInsert", 0);
 		addData();
 		logger.info(mav);
@@ -144,7 +145,7 @@ public class discountController extends CommonController<discountEntity> {
 	public ModelAndView addNewDiscount(@ModelAttribute("dataInsert") discountEntity dataInsert, HttpSession session,
 			HttpServletRequest request) {
 		userEntity user = (userEntity) session.getAttribute(AppConstants.SESSION_USER);
-		if(!isAdmin(session)) {
+		if (!isAdmin(session)) {
 			mav = new ModelAndView("redirect:/app-view");
 			logger.error("Khong co quyen");
 			session.setAttribute(AppConstants.SESSION_MESSAGE, AppConstants.MESSAGE_ERROR);
@@ -152,17 +153,17 @@ public class discountController extends CommonController<discountEntity> {
 		}
 		service = new discountService();
 		mav = new ModelAndView("/admin/discount/addDiscount");
-		
-		if(service.insertOrUpdate(user.getUserId(), dataInsert)) {
+
+		if (service.insertOrUpdate(user.getUserId(), dataInsert)) {
 			message = "Cập nhật thành công!";
-		}else {
-			message= AppConstants.MESSAGE_ERROR;
+		} else {
+			message = AppConstants.MESSAGE_ERROR;
 		}
 		mav = new ModelAndView("/admin/product/addProduct");
 		session.setAttribute(AppConstants.SESSION_MESSAGE, message);
-		if(!FunctionCommon.isEmpty(dataInsert.getDiscountId()) ) {
+		if (!FunctionCommon.isEmpty(dataInsert.getDiscountId())) {
 			dataSelected = service.getDetail(dataInsert.getDiscountId());
-		}else {
+		} else {
 			dataSelected = dataInsert;
 		}
 
@@ -172,9 +173,7 @@ public class discountController extends CommonController<discountEntity> {
 		return this.editDiscountView(session, dataInsert.getDiscountId());
 //		return mav;
 	}
-	
-	
-	
+
 	@ModelAttribute("dataInsert")
 	public discountEntity dataInsert() {
 		return new discountEntity();

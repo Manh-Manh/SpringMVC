@@ -8,7 +8,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>AdminLTE 3 | DataTables</title>
+  <title>Admin Xwatch</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -182,24 +182,26 @@
   <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <a href="../../index3.html" class="brand-link">
-      <img src="../../dist/img/AdminLTELogo.png" alt="ADMIN" class="brand-image img-circle elevation-3" style="opacity: .8">
-      <span class="brand-text font-weight-light">AdminLTE 3</span>
+    <a href='<c:url value="/admin" />' class="brand-link">
+      <!-- <img src="../../dist/img/AdminLTELogo.png" alt="ADMIN" class="brand-image img-circle elevation-3" style="opacity: .8">-->
+      <span class="brand-text font-weight-light">Admin Xwatch</span>
     </a>
-
+	<c:set var ="u" value="${sessionScope.user }"></c:set>
     <!-- Sidebar -->
     <div class="sidebar">
       <!-- Sidebar user (optional) -->
+      <a href="<c:url value='/app-view/myAccount' /> ">
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-          <img src="../../dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+          <img style="" src='<c:url value="/assets/images/user/${u.userId }/${u.avatar}" />' class="img-circle elevation-2" alt="User Image">
         </div>
-        <div class="info">
-          <a href="#" class="d-block">Alexander Pierce</a>
+        <br>
+        <div class="info" style="color:floralwhite">
+         <c:out value="${u.fullName!=null?u.fullName:u.userName }" />
         </div>
       </div>
-
-      <!-- SidebarSearch Form -->
+ </a>
+      <!-- SidebarSearch Form 
       <div class="form-inline">
         <div class="input-group" data-widget="sidebar-search">
           <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
@@ -209,7 +211,7 @@
             </button>
           </div>
         </div>
-      </div>
+      </div>-->
 
       <!-- Sidebar Menu -->
       <nav class="mt-2">
@@ -224,26 +226,7 @@
                 <i class="right fas "></i>
               </p>
             </a>
-            <!-- <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="../../index.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Dashboard v1</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="../../index2.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Dashboard v2</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="../../index3.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Dashboard v3</p>
-                </a>
-              </li>
-            </ul>-->
+            
           </li>
           <li class="nav-item">
             <a href="<c:url value = '/admin/manageProduct' /> " class="nav-link">
@@ -313,6 +296,27 @@
             
           </li>
           
+          <li class="nav-item">
+            <a href="<c:url value = '/admin/statisticProduct' /> " class="nav-link">
+              <i class="nav-icon fas fa-tree"></i>
+              <p>
+                Thống kê doanh số
+                <i class="fas right"></i>
+              </p>
+            </a>
+            
+          </li>
+          
+          <li class="nav-item">
+            <a href="<c:url value = '/app-view/homePage' /> " class="nav-link">
+              <i class="nav-icon fas fa-arrow-circle-right"></i>
+              <p>
+               	Đến cửa hàng
+                <i class="fas right"></i>
+              </p>
+            </a>
+            
+          </li>
         </ul>
       </nav>
       <!-- /.sidebar-menu -->

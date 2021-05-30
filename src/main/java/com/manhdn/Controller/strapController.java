@@ -17,20 +17,22 @@ import com.manhdn.entity.strapEntity;
 import com.manhdn.entity.userEntity;
 import com.manhdn.service.faceService;
 import com.manhdn.service.strapService;
+
 @Controller
-public class strapController extends CommonController<strapEntity>{
+public class strapController extends CommonController<strapEntity> {
 	@Autowired
 	strapService service;
 	Logger logger = Logger.getLogger(strapController.class);
+
 	/**
 	 * 
 	 * @return
 	 */
-	@RequestMapping( value = { "/admin/manageStrap"}, method = RequestMethod.GET)
+	@RequestMapping(value = { "/admin/manageStrap" }, method = RequestMethod.GET)
 	public ModelAndView manageStrap(HttpSession session) {
 		service = new strapService();
 		mav = new ModelAndView("/admin/strap/manageStrap");
-		if(!isAdmin(session)) {
+		if (!isAdmin(session)) {
 			mav = new ModelAndView("redirect:/app-view");
 			logger.error("Khong co quyen");
 			session.setAttribute(AppConstants.SESSION_MESSAGE, "Liên hệ quản trị hệ thống để được hỗ trợ");
@@ -47,15 +49,13 @@ public class strapController extends CommonController<strapEntity>{
 	@RequestMapping(value = { "/admin/addStrap" }, method = RequestMethod.GET)
 	public ModelAndView addStrapView(HttpSession session) {
 		userEntity user = (userEntity) session.getAttribute(AppConstants.SESSION_USER);
-		if(!isAdmin(session)) {
+		if (!isAdmin(session)) {
 			mav = new ModelAndView("redirect:/app-view");
 			logger.error("Khong co quyen");
-			session.setAttribute(AppConstants.SESSION_MESSAGE, "Liên hệ quản trị hệ thống để được hỗ trợ");
+			session.setAttribute(AppConstants.SESSION_MESSAGE, AppConstants.MESSAGE_ERROR);
 			return mav;
 		}
-		if(isInsert) {
-			dataSelected = new strapEntity();
-		}
+		dataSelected = new strapEntity();
 		service = new strapService();
 		mav = new ModelAndView("/admin/strap/addStrap");
 		map.addAttribute("isInsert", 1);
@@ -66,20 +66,21 @@ public class strapController extends CommonController<strapEntity>{
 		logger.info(mav);
 		return mav;
 	}
+
 	@RequestMapping(value = { "/admin/editStrap" }, method = RequestMethod.GET)
 	public ModelAndView editStrapView(HttpSession session, @RequestParam("strapId") String strapId) {
 		userEntity user = (userEntity) session.getAttribute(AppConstants.SESSION_USER);
-		
-		if(!isAdmin(session)) {
+
+		if (!isAdmin(session)) {
 			mav = new ModelAndView("redirect:/app-view");
 			logger.error("Khong co quyen");
-			session.setAttribute(AppConstants.SESSION_MESSAGE, "Liên hệ quản trị hệ thống để được hỗ trợ");
+			session.setAttribute(AppConstants.SESSION_MESSAGE, AppConstants.MESSAGE_ERROR);
 			return mav;
 		}
-		if(strapId == null) {
+		if (strapId == null) {
 			mav = new ModelAndView("redirect:/app-view");
 			logger.error("Loi id null");
-			session.setAttribute(AppConstants.SESSION_MESSAGE, "Liên hệ quản trị hệ thống để được hỗ trợ");
+			session.setAttribute(AppConstants.SESSION_MESSAGE, AppConstants.MESSAGE_ERROR);
 			return mav;
 		}
 		service = new strapService();
@@ -90,26 +91,24 @@ public class strapController extends CommonController<strapEntity>{
 		logger.info(mav);
 		return mav;
 	}
-	
-	
 
 	@RequestMapping(value = { "/admin/addNewStrap" }, method = RequestMethod.POST)
 	public ModelAndView addNewStrap(@ModelAttribute("dataInsert") strapEntity dataInsert, HttpSession session,
 			HttpServletRequest request) {
 		userEntity user = (userEntity) session.getAttribute(AppConstants.SESSION_USER);
-		if(!isAdmin(session)) {
+		if (!isAdmin(session)) {
 			mav = new ModelAndView("redirect:/app-view");
 			logger.error("Khong co quyen");
-			session.setAttribute(AppConstants.SESSION_MESSAGE, "Liên hệ quản trị hệ thống để được hỗ trợ");
+			session.setAttribute(AppConstants.SESSION_MESSAGE, AppConstants.MESSAGE_ERROR);
 			return mav;
 		}
 		service = new strapService();
 		mav = new ModelAndView("/admin/strap/addStrap");
-		
-		if(service.insertOrUpdate(user.getUserId(), dataInsert)) {
+
+		if (service.insertOrUpdate(user.getUserId(), dataInsert)) {
 			message = "Cập nhật thành công!";
-		}else {
-			message= AppConstants.MESSAGE_ERROR;
+		} else {
+			message = AppConstants.MESSAGE_ERROR;
 		}
 		mav = new ModelAndView("/admin/product/addProduct");
 		session.setAttribute(AppConstants.SESSION_MESSAGE, message);
@@ -120,17 +119,17 @@ public class strapController extends CommonController<strapEntity>{
 		return this.editStrapView(session, dataInsert.getStrapId());
 //		return mav;
 	}
-	
+
 	@RequestMapping(value = { "/admin/deleteStrap" }, method = RequestMethod.GET)
 	public ModelAndView deleteStrap(HttpSession session, @RequestParam("strapId") String strapId) {
-		
-		if(!isAdmin(session)) {
+
+		if (!isAdmin(session)) {
 			mav = new ModelAndView("redirect:/app-view");
 			logger.error("Khong co quyen");
 			session.setAttribute(AppConstants.SESSION_MESSAGE, AppConstants.MESSAGE_ERROR);
 			return mav;
 		}
-		if(strapId == null) {
+		if (strapId == null) {
 			mav = new ModelAndView("redirect:/app-view");
 			logger.error("Loi id null");
 			session.setAttribute(AppConstants.SESSION_MESSAGE, AppConstants.MESSAGE_ERROR);
@@ -139,16 +138,17 @@ public class strapController extends CommonController<strapEntity>{
 		service = new strapService();
 		mav = new ModelAndView("/admin/strap/manageStrap");
 		dataSelected = service.getDetail(strapId);
-		if(!service.delete(user.getUserId(), strapId)) {
+		if (!service.delete(user.getUserId(), strapId)) {
 			session.setAttribute(AppConstants.SESSION_MESSAGE, AppConstants.MESSAGE_ERROR);
 			return mav;
 		}
-		session.setAttribute(AppConstants.SESSION_MESSAGE,"Xóa thành công");
+		session.setAttribute(AppConstants.SESSION_MESSAGE, "Xóa thành công");
 		map.addAttribute("isInsert", 0);
 		addData();
 		logger.info(mav);
 		return manageStrap(session);
 	}
+
 	@ModelAttribute("dataInsert")
 	public strapEntity dataInsert() {
 		return new strapEntity();

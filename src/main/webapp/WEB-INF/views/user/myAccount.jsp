@@ -100,9 +100,9 @@
                             </div>
                         </div>
                         <div class="tab-pane fade" id="downloads">
-                            <h4>Downloads</h4>
+                            <h4>Đổi mật khẩu</h4>
                             <div class="table_page table-responsive">
-                                <form:form action="changePassword" modelAttribute="userUpdate" >
+                                <form:form action="changePassword" modelAttribute="userUpdate" onsubmit="return changePass();" >
                                         <c:set var ="u" value="${sessionScope.user }"></c:set>
                                             
                                             <br>
@@ -114,15 +114,16 @@
                                                 <form:hidden  name="address" value="${u.address }" path="address"/>
                                             <div class="default-form-box mb-20">
                                                 <label>Mật khẩu cũ</label>
-                                                <form:input type="password" name="phoneNumber" path="password" />
+                                                <form:input type="password" required="required"  id="oldPass" path="password" />
                                             </div>
                                             <div class="default-form-box mb-20">
                                                 <label>Mật khẩu mới</label>
-                                                <form:input type="password" name="phoneNumber" path="newPassword" />
+                                                <form:input type="password" required="required" id="newPass" path="newPassword" />
                                             </div>
                                             <div class="default-form-box mb-20">
                                                 <label>Nhập lại mật khẩu</label>
-                                                <input type="password" name="phoneNumber"  />
+                                                <input type="password" name="" required="required" id="reNewPass"  />
+                                                <label id="labelPass" style="color:red;"></label>
                                             </div>
                                             <div class="save_button mt-3">
                                                 <button class="btn btn-md btn-black-default-hover" type="submit">Thay đổi</button>
@@ -183,7 +184,7 @@
                                             <br>
                                             <div class="default-form-box mb-20">
                                                 <label>Tên người dùng</label>
-                                                <form:input type="text" value="${u.fullName }" path="fullName" name="first-name" />
+                                                <form:input type="text" value="${u.fullName }" required="required" path="fullName" name="first-name" />
                                             </div>
                                             <div class="default-form-box mb-20">
                                                 <label>Tên đăng nhập</label>
@@ -191,7 +192,7 @@
                                             </div>
                                             <div class="default-form-box mb-20">
                                                 <label>Email</label>
-                                                <form:input type="text" value="${u.email }" path="email" name="email-name" />
+                                                <form:input type="text" readonly="true" value="${u.email }" path="email" name="email-name" />
                                             </div>
                                             
                                             <div class="default-form-box mb-20">

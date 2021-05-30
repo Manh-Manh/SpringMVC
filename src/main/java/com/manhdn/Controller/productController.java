@@ -68,42 +68,39 @@ public class productController extends CommonController<productEntity> {
 	List<productEntity> listSale = new ArrayList<productEntity>();
 	List<productEntity> listNew = new ArrayList<productEntity>();
 	List<productEntity> listSuggest = new ArrayList<productEntity>();
+
 	@RequestMapping(value = { "/app-view/home-page", "/app-view/homePage" }, method = RequestMethod.GET)
 	public @ResponseBody ModelAndView homePage() {
 		service = new productService();
-		message ="";
+		message = "";
 		mav = new ModelAndView("/user/homePage");
-		message="";
+		message = "";
 		refreshMap();
 		count = service.countDataList(0L, mapSearch);
 		dataList = service.findDaList(0L, mapSearch, page, pageSize);
-//		getDataFromLink();
-//		List<productEntity> dataList2= new ArrayList<productEntity>();
-//		dataList2.addAll(dataList);
-//		mav.addObject("dataList2",dataList2);
 		addAttribute();
 		logger.info(mav);
 		return mav;
 	}
-	
+
 	@RequestMapping(value = { "/app-view/shop" }, method = RequestMethod.GET)
 	public @ResponseBody ModelAndView shop() {
-		message="";
+		message = "";
 		service = new productService();
 		mav = new ModelAndView("/user/home");
 		refreshMap();
 		count = service.countDataList(0L, mapSearch);
 		dataList = service.findDaList(0L, mapSearch, page, pageSize);
-		this.page =1;
+		this.page = 1;
 		addAttribute();
 		logger.info(mav);
 		return mav;
 	}
-	
+
 	@RequestMapping(value = { "/app-view" }, method = RequestMethod.GET)
 	public @ResponseBody ModelAndView home(@RequestParam(value = "page", required = false) Integer page) {
 		service = new productService();
-		message ="";
+		message = "";
 		mav = new ModelAndView("/user/home");
 		if (isReload) {
 			count = service.countDataList(0L, mapSearch);
@@ -112,10 +109,9 @@ public class productController extends CommonController<productEntity> {
 		if (page != null) {
 			this.page = page;
 		}
-		
 		statisticProductService sss = new statisticProductService();
 		sss.findDaList(0L, null);
-		
+
 		addAttribute();
 		logger.info(mav);
 		return mav;
@@ -129,7 +125,7 @@ public class productController extends CommonController<productEntity> {
 	public ModelAndView viewDetail(@RequestParam("id") String id, HttpServletResponse res) {
 		mav = new ModelAndView("/user/viewDetail");
 		res.setCharacterEncoding("UTF-8");
-		message ="";
+		message = "";
 		service = new productService();
 		dataSelected = service.getProductDetail(id);
 		List<commentEntity> listCmt = new ArrayList<commentEntity>();
@@ -149,6 +145,9 @@ public class productController extends CommonController<productEntity> {
 	 */
 	@RequestMapping(value = { "/app-view/quickSearch" }, method = RequestMethod.POST)
 	public String quickSearch(@RequestBody String data) {
+		if(FunctionCommon.isEmpty(data)) {
+			return "redirect:/app-view/";
+		}
 		service = new productService();
 		this.isReload = false;
 		Gson gson = new GsonBuilder().create();
@@ -175,7 +174,7 @@ public class productController extends CommonController<productEntity> {
 //		this.dataSearch = productSearch;		
 //		mav = new ModelAndView("/user/home");
 		this.page = Integer.valueOf(mapSearch.get(AppConstants.MAP_SEARCH_PAGE).get(0));
-		if (FunctionCommon.isEmpty(mapSearch.get(AppConstants.MAP_SEARCH_STRING))){
+		if (FunctionCommon.isEmpty(mapSearch.get(AppConstants.MAP_SEARCH_STRING))) {
 			this.type = "";
 		}
 		mapSearch.remove("page");
@@ -226,7 +225,7 @@ public class productController extends CommonController<productEntity> {
 		count = service.countDataList(0L, mapSearch);
 		dataList = service.findDaList(0L, mapSearch, page, pageSize);
 		this.isReload = false;
-		
+
 		addAttribute();
 		logger.info(mav);
 		return "advSearch";
@@ -241,7 +240,7 @@ public class productController extends CommonController<productEntity> {
 	public ModelAndView manageProduct(HttpSession session) {
 		service = new productService();
 		mav = new ModelAndView("/admin/product/manageProduct");
-		if(!isAdmin(session)) {
+		if (!isAdmin(session)) {
 			mav = new ModelAndView("redirect:/app-view");
 			logger.error("Khong co quyen");
 			session.setAttribute(AppConstants.SESSION_MESSAGE, AppConstants.MESSAGE_ERROR);
@@ -262,7 +261,7 @@ public class productController extends CommonController<productEntity> {
 	@RequestMapping(value = { "/admin/addProduct" }, method = RequestMethod.GET)
 	public ModelAndView addProductView(HttpSession session) {
 		userEntity user = (userEntity) session.getAttribute(AppConstants.SESSION_USER);
-		if(!isAdmin(session)) {
+		if (!isAdmin(session)) {
 			mav = new ModelAndView("redirect:/app-view");
 			logger.error("Khong co quyen");
 			session.setAttribute(AppConstants.SESSION_MESSAGE, AppConstants.MESSAGE_ERROR);
@@ -274,7 +273,8 @@ public class productController extends CommonController<productEntity> {
 		List<discountEntity> lstDiscount = disD.findDataList(0L, null);
 		map.addAttribute("lstDiscount", lstDiscount);
 		map.addAttribute("isInsert", 1);
-		dataList = service.findDaList(0L, new productEntity());
+		dataSelected = new productEntity();
+//		dataList = service.findDaList(0L, new productEntity());
 		addAttribute();
 		logger.info(mav);
 		return mav;
@@ -300,7 +300,7 @@ public class productController extends CommonController<productEntity> {
 	public ModelAndView addNewProduct(@ModelAttribute("dataInsert") productEntity dataInsert, HttpSession session,
 			HttpServletRequest request) {
 		userEntity user = (userEntity) session.getAttribute(AppConstants.SESSION_USER);
-		if(!isAdmin(session)) {
+		if (!isAdmin(session)) {
 			mav = new ModelAndView("redirect:/app-view");
 			logger.error("Khong co quyen");
 			session.setAttribute(AppConstants.SESSION_MESSAGE, AppConstants.MESSAGE_ERROR);
@@ -310,24 +310,24 @@ public class productController extends CommonController<productEntity> {
 		mav = new ModelAndView("/admin/product/addProduct");
 		discountDAO disD = new discountDAO();
 		List<discountEntity> lstDiscount = disD.findDataList(0L, null);
-		
+
 		// upload Anh
-		if(dataInsert.getFileImage() != null && dataInsert.getFileImage().length >0 ) {
-			if(!FunctionCommon.isEmpty(dataInsert.getFileImage()[0].getOriginalFilename())) {
+		if (dataInsert.getFileImage() != null && dataInsert.getFileImage().length > 0) {
+			if (!FunctionCommon.isEmpty(dataInsert.getFileImage()[0].getOriginalFilename())) {
 				String upload = this.doUpload(request, dataInsert);
 				dataInsert.setImage(dataInsert.getFileImage()[0].getOriginalFilename());
 			}
 		}
-		if(service.insertOrUpdate(0L, dataInsert)) {
+		if (service.insertOrUpdate(0L, dataInsert)) {
 			message = "Cập nhật thành công!";
-		}else {
-			message= AppConstants.MESSAGE_ERROR;
+		} else {
+			message = AppConstants.MESSAGE_ERROR;
 		}
 		dataSelected = service.getProductDetail(dataInsert.getProductId());
 		mav = new ModelAndView("/admin/product/addProduct");
 		session.setAttribute(AppConstants.SESSION_MESSAGE, message);
 		dataSelected = service.getProductDetail(dataInsert.getProductId());
-		
+
 		map.addAttribute("lstDiscount", lstDiscount);
 //		dataList = service.findDaList(0L, new productEntity());
 		addAttribute();
@@ -336,18 +336,17 @@ public class productController extends CommonController<productEntity> {
 //		return mav;
 	}
 
-	
 	@RequestMapping(value = { "/admin/editProduct" }, method = RequestMethod.GET)
 	public ModelAndView editProductView(HttpSession session, @RequestParam("productId") String productId) {
 		userEntity user = (userEntity) session.getAttribute(AppConstants.SESSION_USER);
-		
-		if(!isAdmin(session)) {
+
+		if (!isAdmin(session)) {
 			mav = new ModelAndView("redirect:/app-view");
 			logger.error("Khong co quyen");
 			session.setAttribute(AppConstants.SESSION_MESSAGE, AppConstants.MESSAGE_ERROR);
 			return mav;
 		}
-		if(productId == null) {
+		if (productId == null) {
 			mav = new ModelAndView("redirect:/app-view");
 			logger.error("Loi id null");
 			session.setAttribute(AppConstants.SESSION_MESSAGE, "Liên hệ quản trị hệ thống để được hỗ trợ");
@@ -364,17 +363,17 @@ public class productController extends CommonController<productEntity> {
 		discountDAO disD = new discountDAO();
 		List<discountEntity> lstDiscount = disD.findDataList(0L, null);
 		List<discountEntity> lstDiscount2 = new ArrayList<discountEntity>();
-		
-		// remove discount 
-		for(discountEntity d : lstDiscount) {
+
+		// remove discount
+		for (discountEntity d : lstDiscount) {
 			lstDiscount2.add(d);
 		}
-		
-		if(!FunctionCommon.isEmpty(dataSelected.getLstDiscount())) {
-			for(int  i =  0; i< dataSelected.getLstDiscount().size();i++) {
+
+		if (!FunctionCommon.isEmpty(dataSelected.getLstDiscount())) {
+			for (int i = 0; i < dataSelected.getLstDiscount().size(); i++) {
 				String id = dataSelected.getLstDiscount().get(i).getDiscountId();
-				for(int j =0;j< lstDiscount2.size();j++) {
-					if(id.equals(lstDiscount2.get(j).getDiscountId())) {
+				for (int j = 0; j < lstDiscount2.size(); j++) {
+					if (id.equals(lstDiscount2.get(j).getDiscountId())) {
 						lstDiscount2.remove(j);
 						j--;
 					}
@@ -387,6 +386,7 @@ public class productController extends CommonController<productEntity> {
 		logger.info(mav);
 		return mav;
 	}
+
 	private void addAttribute() {
 		listSale = service.findListSale();
 		listSuggest = service.findListSuggest(this.dataSelected);
@@ -395,14 +395,14 @@ public class productController extends CommonController<productEntity> {
 		map.addAttribute("listNew", listNew);
 		map.addAttribute("listSuggest", listSuggest);
 		super.addData();
-		
+
 	}
-	
+
 	@RequestMapping(value = { "/admin/doSearchProduct" }, method = RequestMethod.POST)
-	public ModelAndView doSearchProduct(@ModelAttribute("productSearch") productEntity productSearch, HttpSession session,
-			HttpServletRequest request) {
+	public ModelAndView doSearchProduct(@ModelAttribute("productSearch") productEntity productSearch,
+			HttpSession session, HttpServletRequest request) {
 		userEntity user = (userEntity) session.getAttribute(AppConstants.SESSION_USER);
-		if(!isAdmin(session)) {
+		if (!isAdmin(session)) {
 			mav = new ModelAndView("redirect:/app-view");
 			logger.error("Khong co quyen");
 			session.setAttribute(AppConstants.SESSION_MESSAGE, AppConstants.MESSAGE_ERROR);
@@ -412,7 +412,7 @@ public class productController extends CommonController<productEntity> {
 		mav = new ModelAndView("/admin/product/manageProduct");
 		discountDAO disD = new discountDAO();
 		List<discountEntity> lstDiscount = disD.findDataList(0L, null);
-		
+
 		map.addAttribute("lstDiscount", lstDiscount);
 		dataList = service.findDaList(0L, productSearch);
 		addAttribute();
@@ -420,32 +420,33 @@ public class productController extends CommonController<productEntity> {
 //		return this.editProductView(session, dataInsert.getProductId());
 		return mav;
 	}
-	private static void getDataFromLink()
-	{
-	    final String uri = "https://thongtindoanhnghiep.co/api/city";
 
-	    RestTemplate restTemplate = new RestTemplate();
-        HttpHeaders headers = new HttpHeaders();
-        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-        headers.add("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.99 Safari/537.36");
-        HttpEntity<String> entity = new HttpEntity<String>("parameters", headers);
+	private static void getDataFromLink() {
+		final String uri = "https://thongtindoanhnghiep.co/api/city";
+
+		RestTemplate restTemplate = new RestTemplate();
+		HttpHeaders headers = new HttpHeaders();
+		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+		headers.add("user-agent",
+				"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.99 Safari/537.36");
+		HttpEntity<String> entity = new HttpEntity<String>("parameters", headers);
 
 //	    String result = restTemplate.getForObject(uri, String.class);
 //
 //	    System.out.println(result);
-        Object response = restTemplate.exchange(uri, HttpMethod.GET,entity,Object.class);
-        System.out.println(response);
-        Gson gson = new GsonBuilder().create();
-        ResponseEntity<Class<? extends Object>> r = (ResponseEntity<Class<? extends Object>>) response;
-        Class<? extends Object> map = r.getBody();
-        String s =response.toString();
-        
-        String json = gson.toJson(r.getBody(), r.getBody().getClass());
-        
-        
-	    	Class<? extends Object> res = response.getClass();
-	    	
+		Object response = restTemplate.exchange(uri, HttpMethod.GET, entity, Object.class);
+		System.out.println(response);
+		Gson gson = new GsonBuilder().create();
+		ResponseEntity<Class<? extends Object>> r = (ResponseEntity<Class<? extends Object>>) response;
+		Class<? extends Object> map = r.getBody();
+		String s = response.toString();
+
+		String json = gson.toJson(r.getBody(), r.getBody().getClass());
+
+		Class<? extends Object> res = response.getClass();
+
 	}
+
 	private String doUpload(HttpServletRequest request, productEntity prUpload) {
 
 		// Thư mục gốc upload file.
@@ -497,7 +498,7 @@ public class productController extends CommonController<productEntity> {
 
 		return "Success";
 	}
-	
+
 	@ModelAttribute("dataInsert")
 	productEntity dataIn() {
 		return new productEntity();
@@ -507,6 +508,7 @@ public class productController extends CommonController<productEntity> {
 	productEntity productSearch() {
 		return new productEntity();
 	}
+
 	@ModelAttribute("comment")
 	public commentEntity comment() {
 		return new commentEntity();

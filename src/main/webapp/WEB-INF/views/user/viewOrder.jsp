@@ -55,7 +55,7 @@
                                         </c:url>
                                         	<input name="productId" class="productId" type="text" hidden  value="${item.productId}" >
                                             <td class="product_remove">
-                                            	<button value="${item.productId}" class="delCart"><i class="fa fa-trash-o"></i></button>
+                                            	<button disabled="disabled" value="${item.productId}" class="delCart"><i class="fa fa-trash-o"></i></button>
                                             </td>
                                             <td class="product_thumb">
                                              
@@ -100,7 +100,7 @@
              	                       <c:url var="urlCancel" value="/app-view/cancelOrder" >
                 							<c:param name="orderId" value="${item.orderId }"/>  
                                      </c:url>
-                                   	<a id="urlCancel" data-url="${ urlCancel}" href="#" class="view">Hủy</a>
+                                   	<a id="urlCancel"  data-url="${ urlCancel}" href="#" class="view">Hủy</a>
                                   	
                                 </button>
                             </div>
@@ -143,7 +143,13 @@
                                     </p>
                                 </div>
                                 <div class="checkout_btn">
-                                    <a href="<c:url value='/app-view/checkOut' />" class="btn btn-md btn-golden">Thanh toán</a>
+                               		<c:if test="${dataSelected.status == 2 }">
+              	                       <c:url var="urlCancel" value="/app-view/cancelOrder" >
+                 							<c:param name="orderId" value="${dataSelected.orderId }"/>  
+                                      </c:url>
+                                    	<a id="urlCancel" class="btn btn-md btn-golden" href="#" data-url="${urlCancel }" class="view"> Hủy</a>
+                                   	</c:if>	
+                                    
                                 </div>
                             </div>
                         </div>

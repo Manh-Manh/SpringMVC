@@ -22,7 +22,7 @@
               <div class="icon">
                 <i class="ion ion-bag"></i>
               </div>
-              <a href="#" class="small-box-footer">Xem ngay <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="<c:url value='/admin/manageOrder'></c:url>" class="small-box-footer">Xem ngay <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
@@ -37,7 +37,7 @@
               <div class="icon">
                 <i class="ion ion-stats-bars"></i>
               </div>
-              <a href=" <c:url value='/admin/manageDiscount'></c:url>" class="small-box-footer">Xem ngay <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="<c:url value='/admin/manageDiscount'></c:url>" class="small-box-footer">Xem ngay <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->

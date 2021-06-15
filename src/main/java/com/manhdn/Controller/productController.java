@@ -58,6 +58,7 @@ import com.manhdn.service.commentService;
 import com.manhdn.service.faceService;
 import com.manhdn.service.productService;
 import com.manhdn.service.statisticProductService;
+import com.manhdn.service.supplierService;
 
 @Controller
 @Component
@@ -385,6 +386,34 @@ public class productController extends CommonController<productEntity> {
 		addAttribute();
 		logger.info(mav);
 		return mav;
+	}
+	@RequestMapping(value = { "/admin/deleteProduct" }, method = RequestMethod.GET)
+	public ModelAndView deleteProduct(HttpSession session, @RequestParam("productId") String productId) {
+
+		if (!isAdmin(session)) {
+			mav = new ModelAndView("redirect:/app-view");
+			logger.error("Khong co quyen");
+			session.setAttribute(AppConstants.SESSION_MESSAGE, AppConstants.MESSAGE_ERROR);
+			return mav;
+		}
+		if (productId == null) {
+			mav = new ModelAndView("redirect:/app-view");
+			logger.error("Loi id null");
+			session.setAttribute(AppConstants.SESSION_MESSAGE, AppConstants.MESSAGE_ERROR);
+			return mav;
+		}
+		service = new productService();
+		mav = new ModelAndView("/admin/product/manageProduct");
+		dataSelected = service.getProductDetail(productId);
+		if (!service.delete(user.getUserId(), productId)) {
+			session.setAttribute(AppConstants.SESSION_MESSAGE, AppConstants.MESSAGE_ERROR);
+			return mav;
+		}
+		session.setAttribute(AppConstants.SESSION_MESSAGE, "Xóa thành công");
+		map.addAttribute("isInsert", 0);
+		addData();
+		logger.info(mav);
+		return manageProduct(session);
 	}
 
 	private void addAttribute() {

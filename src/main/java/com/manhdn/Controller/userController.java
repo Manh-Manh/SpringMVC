@@ -105,8 +105,10 @@ public class userController extends CommonController<userEntity> {
 		statisticProductService statisS = new statisticProductService();
 		List<statisticProductEntity> listStatisticProduct = statisS.findDaListByThisMonth(user.getUserId());
 		Long saleTotal=0L;
-		for(statisticProductEntity sta: listStatisticProduct) {
-			saleTotal += sta.getTotal();
+		if(!FunctionCommon.isEmpty(listStatisticProduct)) {
+			for(statisticProductEntity sta: listStatisticProduct) {
+				saleTotal += sta.getTotal();
+			}
 		}
 		DecimalFormat myFormatter = new DecimalFormat("###,###,###,###");
 		String saleCost =  myFormatter.format(saleTotal);

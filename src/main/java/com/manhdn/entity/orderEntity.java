@@ -146,11 +146,12 @@ public class orderEntity extends CommonEntity {
 	}
 	public Long getTotalDiscount() {
 		Long d=0L;
-		if(FunctionCommon.isEmpty(this.listProduct)) {
-			for(productEntity p :listProduct) {
-				d+=p.getDisCountPrice();
-			}
-		}
+//		if(!FunctionCommon.isEmpty(this.listProduct)) {
+//			for(productEntity p :listProduct) {
+//				d+=(p.getSubCartTotal() - p.getDisCountPrice());
+//			}
+//		}
+		d = this.getSubTotal() - this.getTotal();
 		return d;
 	}
 	public String  getTotalDiscountString() {

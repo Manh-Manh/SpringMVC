@@ -146,6 +146,9 @@
        		<a style="font-size: 28px" class="urlConfirm btn btn-info float-right"  data-toggle="tooltip" data-placement="bottom" title="Xác nhận" href="#" data-url="${urlAccept }"><i class="fas fa-check"></i></a>
         	<a style="font-size: 28px; margin-left:1%;" class="urlConfirm btn btn-danger" data-toggle="tooltip" data-placement="bottom" title="Từ chối"  href="#" data-url="${urlReject }"><i class="fas fa-trash"></i></a>
        	</c:if>
+       	<c:if test="${dataSelected.status != 2 }">
+       	<a href="#" onclick="goBack()" class="btn btn-secondary">Trở về</a>
+       	</c:if>
       </div>
       </div>
     </section>

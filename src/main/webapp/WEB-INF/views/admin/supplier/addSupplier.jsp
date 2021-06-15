@@ -109,7 +109,7 @@
       </div>
       <div class="row">
         <div class="col-12">
-          <a href="#" class="btn btn-secondary">Hủy</a>
+          <a href="#" onclick="goBack()" class="btn btn-secondary">Hủy</a>
           <button type="submit" value="Create new Porject" class="btn btn-success float-right">
           	<c:out value="${ isInsert==0?'Cập nhật':'Thêm mới' }"></c:out>
           </button>

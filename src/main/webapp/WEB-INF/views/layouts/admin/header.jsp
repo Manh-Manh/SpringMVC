@@ -295,7 +295,16 @@
             </a>
             
           </li>
-          
+          <li class="nav-item">
+            <a href="<c:url value = '/admin/manageDiscount' /> " class="nav-link">
+              <i class="nav-icon fas fa-tree"></i>
+              <p>
+                Quản lý giảm giá
+                <i class="fas right"></i>
+              </p>
+            </a>
+            
+          </li>
           <li class="nav-item">
             <a href="<c:url value = '/admin/statisticProduct' /> " class="nav-link">
               <i class="nav-icon fas fa-tree"></i>

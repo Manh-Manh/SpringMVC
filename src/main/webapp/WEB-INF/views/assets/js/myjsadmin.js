@@ -49,6 +49,10 @@ function doSearch(e) {
 	window.location.href="http://localhost:8088/SpringMVC/admin/manageProduct";
 	return false;
 }
+
+function goBack(){
+  window.history.back();
+}
 function doSearchOrder(e) {
 	var gender = $("#gender").val();
 	var sup = $("#supplier").val();

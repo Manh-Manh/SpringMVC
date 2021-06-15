@@ -35,7 +35,7 @@ public class productDAO {
 	 */
 	public List<productEntity> findAll() {
 		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT * FROM products ");
+		sql.append("SELECT * FROM `products` p WHERE (p.del_flag IS NULL OR p.del_flag != 1) ORDER BY p.id ");
 		List<Object> params = new ArrayList<>();
 
 //		sql.append(" WHERE ").append(cmd.sql_SelectLike("productName", "ÔGi"));
@@ -510,6 +510,28 @@ public class productDAO {
 				}
 			}
 		}
+	}
+
+	public boolean delete(Long userId, String productId) {
+		if(null == userId) {
+			logger.error("Id null ");
+			return false;
+		}
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		String dateNow = dtf.format(LocalDateTime.now());
+		boolean  result = false;
+		List<Object> params = new ArrayList<Object>();
+		StringBuilder sql = new StringBuilder();
+		sql.append(" UPDATE `products` p SET p.del_flag = 1, "
+				+ " p.updated_by = ? , p.updated_date = ? "
+				+ " WHERE p.productId = ? " );
+		
+		params.add(userId);
+		params.add(dateNow);
+		params.add(productId);
+		result = cmd.insertOrUpdateDataBase(sql, params);
+		logger.info("Params: " + params + "Result: " + result);
+		return result;
 	}
 }
 

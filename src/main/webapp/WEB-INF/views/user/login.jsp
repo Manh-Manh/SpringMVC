@@ -50,8 +50,9 @@
                 <div class="col-lg-6 col-md-6">
                 
                     <div class="account_form " data-aos="fade-up"  data-aos-delay="200">
+                    <h3>Đăng ký</h3>
                      <form:form method="POST" action="register" modelAttribute="userRegister">
-                        <h3>Đăng ký</h3>
+                        
                             <div class="default-form-box">
                                 <label>Tên đăng nhập <span>*</span></label>
                                 <form:input  path="userName"  required="required" type="text" />

@@ -37,7 +37,7 @@ public class discountDAO {
 		}
 		sql.append(" SELECT * FROM `discount` d WHERE d.status = 1 AND d.discountId IN ( "
 				+ "	SELECT pd.discountId FROM product_discount pd WHERE pd.productId = ? " + ")");
-		sql.append(" AND d.endDate > SYSDATE() "
+		sql.append(" AND d.endDate >= SYSDATE() "
 				+ " and (d.del_flag is null or d.del_flag != 1) ");
 		params.add(productId);
 		

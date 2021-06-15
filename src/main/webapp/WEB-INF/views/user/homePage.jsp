@@ -195,7 +195,7 @@
 		                                           <c:url var="urlCompare" value="/app-view/compare" >
 	                                       			<c:param name="id" value="${item.productId }"/>  
 	                                       			</c:url>
-	                                            <a href="${urlCompare}" data-toggle="tooltip" data-placement="bottom" title="So sánh giá" >
+	                                            <a href="${urlCompare}" target="_blank" data-toggle="tooltip" data-placement="bottom" title="So sánh giá" >
 	                                            	<i class="icon-shuffle"></i>
 	                                            </a>
 		                                        </div>
@@ -300,7 +300,7 @@
 		                                          <c:url var="urlCompare" value="/app-view/compare" >
 		                                     			<c:param name="id" value="${item.productId }"/>  
 		                                     		</c:url>
-		                                          <a href="${urlCompare}" data-toggle="tooltip" data-placement="bottom" title="So sánh giá">
+		                                          <a href="${urlCompare}" target="_blank" data-toggle="tooltip" data-placement="bottom" title="So sánh giá">
 		                                          <i class="icon-shuffle"></i></a>
 		                                        </div>
                                             </div>

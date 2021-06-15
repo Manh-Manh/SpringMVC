@@ -152,7 +152,7 @@ public class Crawler {
 		String nextUrl = "";
 		try {
 			// need http protocol, set this as a Google bot agent :)
-			Document d = Jsoup.connect(url).timeout(5000).get();
+			Document d = Jsoup.connect(url).timeout(3000).get();
 			// get all links
 			Element p = d.getElementById("pnnext");
 			nextUrl = "https://www.google.com/" + p.attr("href");
@@ -177,7 +177,7 @@ public class Crawler {
 			// need http protocol, set this as a Google bot agent :)
 			Document doc = Jsoup.connect(urlPage)
 					.userAgent("Mozilla/5.0 " + "(compatible; Googlebot/2.1; +http://www.google.com/bot.html)")
-					.timeout(5000).get();
+					.timeout(3000).get();
 			// get all links
 
 			Elements links = doc.select("a[href]");
@@ -212,7 +212,7 @@ public class Crawler {
 	public String getProductDetail(String url) throws IOException {
 		Document d;
 		try {
-			d = Jsoup.connect(url).timeout(5000).get();
+			d = Jsoup.connect(url).timeout(3000).get();
 		} catch (Exception e) {
 			return null;
 		}

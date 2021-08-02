@@ -9,14 +9,14 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Quản lý sản phẩm</h1>
+            <h1>Thông kê doanh số</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item">
-              <a href="<c:url value='/admin/addProduct' /> " >
+              <%-- <a href="<c:url value='/admin/addProduct' /> " >
                 	<button type="button" class="btn btn-primary float-right"><i class="fas fa-plus"></i> Thêm mới </button>
-              </a>
+              </a>--%>
               
               
               </li>
@@ -74,7 +74,7 @@
               </div>
               <!-- /.card-header -->
               <div class="card-body">
-                <table id="example1" class="table table-bordered table-striped">
+                <table id="example1" class="table  table-striped ">
                   <thead>
                   <tr>
                   	<th>Số thứ tự</th>
@@ -83,13 +83,13 @@
                     <th>Hình ảnh</th>
                     <th>Tổng số lượng bán</th>
                     <th>Tổng tiền</th>
-                    <th>Hành động</th>
+                    <th>Hành động</th>                 
                   </tr>
                   </thead>
                   <tbody>
                   <c:set var="stt" value="0"></c:set>
              <c:forEach var = "item" items="${dataList}">
-                  <tr>
+                  <tr >
                   <td><c:out value ="${ stt=stt+1 }" /></td>
                     <td><c:out value ="${ item.product.productId }" /></td>
                     <td><c:out value ="${ item.product.productName }" /></td>
@@ -105,12 +105,53 @@
                     	<c:param name="productId" value="${item.product.productId}"></c:param>
                     </c:url>
                     <div class="btn-group btn-group-sm">
-                        <a href="${urlEdit }" class="btn btn-info" data-toggle="tooltip" data-placement="bottom" title="Sửa"><i class="fas fa-edit"></i></a>
+                        <%--<a href="${urlEdit }" class="btn btn-info" data-toggle="tooltip" data-placement="bottom" title="Sửa"><i class="fas fa-eye"></i></a>
                         <a href="${urlDel }" class="btn btn-danger urlConfirm" data-toggle="tooltip" data-placement="bottom" title="Xóa"><i class="fas fa-trash"></i></a>
+                     --%>
+                     <span  class="btn btn-info" data-toggle="tooltip" data-placement="bottom" title="Chi tiết">
+                     	<i class="fas fa-eye clickable" data-toggle="collapse" id="${item.product.productId}" data-target=".${item.product.productId}"></i>
+                      </span>
                       </div>
                     </td>
-                  </tr>  
-              </c:forEach>                
+                  </tr>
+                  <!-- detail -->
+                  <tr class="collapse ${item.product.productId} ">
+                  <c:set var="listOrder" value="${item.listOrder }"></c:set>
+                  <td colspan="7" width="100%">
+		            <table class="table table-sm">
+		            <thead>
+		            	<tr>
+			            	<th>Mã hóa đơn</th>
+			            	<th>Số lượng bán</th>
+			            	<th>Thành tiền</th>
+		            	</tr>
+		            </thead>
+		            <tbody>
+		             <c:forEach var = "order" items="${listOrder}">
+		            <tr>
+		            <c:url var="urlOrder" value="/admin/viewOrder">
+		            	<c:param name="orderId" value="${order.orderId }"></c:param>
+		            </c:url>
+		            	<td><a href="${urlOrder }"><c:out value="${order.orderId}" /> </a> </td>
+		            	<c:forEach var = "pr" items="${order.listProduct}">
+		            		<c:if test="${pr.productId == item.product.productId }">
+		            		<td><c:out value="${pr.cartQuantity }" /> </td>
+		            		<td><c:out value="${pr.cartTotalString }" /> </td>	            		
+		            		</c:if>
+		            		
+		            	</c:forEach>
+		            	
+		            	
+		            </tr>
+		            </c:forEach>
+		            </tbody>
+		            </table>
+		            </td>
+		          </tr> 
+                  
+                    
+              </c:forEach>       
+                     
                   </tbody>
                   
                 </table>

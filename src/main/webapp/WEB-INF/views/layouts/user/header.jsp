@@ -419,13 +419,19 @@
 				<c:set var ="u" value="${sessionScope.user }"></c:set>
                 <div class="logo">
                 <!-- Avatar -->
+                
+                <c:url var="imgsrc" value='/assets/images/user/${u.userId}/${u.avatar}' />
+                <c:if test="${u.avatar == 'default-avatar.png' }">
+                	<c:url var="imgsrc" value='/assets/images/user/${u.avatar}' />
+                </c:if>
                   <a href="<c:url value='/app-view/myAccount' />" >
-                   	<img class="logo-avatar"  src="<c:url value='/assets/images/user/${u.userId}/${u.avatar}' /> " alt="">
+                  
+                   	<img class="logo-avatar"  src="${imgsrc}" alt="">
                   </a>  
                 </div>
 
                 <address class="address">
-                    <span> <a href="<c:url value='/app-view/myAccount' />" ><c:out value="${(u.fullName!=null||u.fullName.lenght==0)?u.fullName:u.userName }" /></a></span> 
+                    <span> <a href="<c:url value='/app-view/myAccount' />" ><c:out value="${(u.fullName!=null&&u.fullName!='')?u.fullName:u.userName }" /></a></span> 
                     <span></span> 
                     <!-- <span>Email: <c:out value="${ u.email }" /></span>    -->
                 </address>

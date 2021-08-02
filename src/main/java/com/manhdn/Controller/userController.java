@@ -148,6 +148,11 @@ public class userController extends CommonController<userEntity> {
 	public ModelAndView login(@ModelAttribute("userSearch") userEntity dataSearch, HttpSession session) {
 		this.dataSearch = dataSearch;
 		userEntity user = service.login(this.dataSearch);
+		if(user == null) {
+			mav = new ModelAndView("/user/login");
+			session.setAttribute(AppConstants.SESSION_MESSAGE, "Thông tin tài khoản không đúng!");
+			return mav;
+		}
 		if (user != null) {
 			session.setAttribute(AppConstants.SESSION_USER, user);
 			orderEntity cart = this.findCart(user.getUserId());
@@ -156,7 +161,7 @@ public class userController extends CommonController<userEntity> {
 				session.setAttribute(AppConstants.SESSION_CART, cart);
 			}
 		}
-		message = "Đăng nhập thành công!";
+//		message = "Đăng nhập thành công!";
 		if(isAdmin(session)) {
 			mav = new ModelAndView("redirect:/admin");
 			return mav;

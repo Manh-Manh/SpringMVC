@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -48,6 +49,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.manhdn.dao.discountDAO;
 import com.manhdn.dao.productDAO;
+import com.manhdn.email.Mailer;
 import com.manhdn.entity.ajaxEntity;
 import com.manhdn.entity.commentEntity;
 import com.manhdn.entity.discountEntity;
@@ -102,7 +104,7 @@ public class productController extends CommonController<productEntity> {
 	public @ResponseBody ModelAndView home(@RequestParam(value = "page", required = false) Integer page) {
 		service = new productService();
 		message = "";
-		mav = new ModelAndView("/user/home");
+		mav = new ModelAndView("/user/homePage");
 		if (isReload) {
 			count = service.countDataList(0L, mapSearch);
 			dataList = service.findDaList(0L, mapSearch, page, pageSize);
@@ -110,8 +112,7 @@ public class productController extends CommonController<productEntity> {
 		if (page != null) {
 			this.page = page;
 		}
-		statisticProductService sss = new statisticProductService();
-		sss.findDaList(0L, null);
+		
 
 		addAttribute();
 		logger.info(mav);

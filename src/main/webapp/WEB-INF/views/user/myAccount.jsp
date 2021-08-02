@@ -158,7 +158,12 @@
                                                     <div class="team-img">
                                                     	<div class="img-fluid">
                                                     		<c:set var="default" value="default-avatar.png"></c:set>
-                                                        	<img id="img-avatar" class="img-avatar" src="<c:url value='/assets/images/user/${u.userId }/${u.avatar}' /> " alt="">
+                                                    		<c:url var="imgsrc" value='/assets/images/user/${u.userId}/${u.avatar}' />
+
+											                <c:if test="${u.avatar == 'default-avatar.png' }">
+	                                                    		<c:url var="imgsrc" value='/assets/images/user/${u.avatar}' />	
+											                </c:if>
+                                                        	<img id="img-avatar" class="img-avatar" src="${imgsrc }" alt="">
                                                     	</div>
                                                     </div>
                                                     

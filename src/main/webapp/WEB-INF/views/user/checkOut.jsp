@@ -44,7 +44,7 @@
                                 <div class="col-lg-13">
                                     <div class="default-form-box">
                                         <label>Tên khách hàng <span>*</span></label>
-                                        <form:input  disabled="true" path="fullName" value = "${sessionScope.user.fullName }" />
+                                        <form:input  disabled="true" path="fullName" value = "${(sessionScope.user.fullName!=null&&sessionScope.user.fullName!='')?sessionScope.user.fullName:sessionScope.user.userName }" />
                                     </div>
                                 </div>
                                 
@@ -52,13 +52,13 @@
                                 <div class="col-12">
                                     <div class="default-form-box">
                                         <label>Địa chỉ<span>*</span></label>
-                                        <form:input path="address" value="${sessionScope.user.address }" placeholder="Số nhà, tên đường,..." type="text" />
+                                        <form:input required="required" path="address" value="${sessionScope.user.address }" placeholder="Số nhà, tên đường,..." type="text" />
                                     </div>
                                 </div>
                                 <div class="col-lg-12">
                                     <div class="default-form-box">
                                         <label>Số điện thoại<span>*</span></label>
-                                        <form:input path="phoneNumber" value ="${sessionScope.user.phoneNumber }" />
+                                        <form:input path="phoneNumber" required="required" value ="${sessionScope.user.phoneNumber }" />
                                     </div>
                                 </div>
                                 <div class="col-lg-12">

@@ -481,6 +481,12 @@ function changePass(){
 		}
 		return true;
 	}
+
+
+function goBack(){
+
+  window.history.back();
+}
 /*// ajax Search
 function advSearch(map) {
         //var data = {}

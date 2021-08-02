@@ -15,6 +15,7 @@ import org.springframework.stereotype.Repository;
 import com.manhdn.AppConstants;
 import com.manhdn.FunctionCommon;
 import com.manhdn.database.CommonDatabase;
+import com.manhdn.entity.discountEntity;
 import com.manhdn.entity.machineEntity;
 import com.manhdn.entity.orderEntity;
 import com.manhdn.entity.productEntity;
@@ -57,7 +58,8 @@ public class orderDAO {
 		String dateNow = dtf.format(LocalDateTime.now());
 		// Insert or update Order
 		if(cart.getOrderId() == null) {
-			String orderID = AppConstants.ID_ODER + (cmd.getMaxId("order", "id") + 1);
+			Long num = cmd.getMaxId("order", "id")+1L;
+			String orderID = AppConstants.ID_ODER + num.toString();
 			cart.setOrderId(orderID);
 		}
 		if (status != null) {
@@ -136,6 +138,28 @@ public class orderDAO {
 		logger.info("Params: " + params + params2 + "Result: " + result + result2);
 		return (result&&result2);
 	}
+	
+	public boolean	updateDiscountOrderDetail(List<String> orderId, List<String> productId,List<Long> unitPrice, List<Double> discount) {
+		StringBuilder sql = new StringBuilder();
+		List<Object> params = new ArrayList<Object>();
+		sql.append(" INSERT INTO `order_detail` (orderId, productId, discount, unitPrice) VALUES ");
+		
+		for(int i = 0 ;i < orderId.size();i++) {
+			sql.append("(?, ?, ?, ?)");
+			params.add(orderId.get(i));
+			params.add(productId.get(i));
+			params.add(discount.get(i));
+			params.add(unitPrice.get(i));
+			if (i < orderId.size() - 1) {
+				sql.append(" , ");
+			}
+		}
+		sql.append(" ON DUPLICATE KEY UPDATE discount = VALUES(discount), unitPrice = VALUES(unitPrice)");
+		CommonDatabase cmd = new CommonDatabase();
+		boolean result = cmd.insertOrUpdateDataBase(sql, params);
+		return result;
+	}
+	
 	
 	public List<orderEntity> findOrderByUserId(Long userId, Long status) {
 
@@ -236,6 +260,32 @@ public class orderDAO {
 		params2.add(order.getOrderId());
 		List<productEntity> lstProduct = (List<productEntity>) cmd.getListObjByParams(sql2, params2,
 				productEntity.class);
+		if(FunctionCommon.isEmpty(lstProduct)) {
+			return null;
+		}
+		
+		// Neu la hoa don chua dat hang thi cap nhat lai gia va giam gia
+		
+		if (order.getStatus() == AppConstants.OS_NO_ORDER) {
+			List<String> orderId = new ArrayList<String>();
+			List<String> productId = new ArrayList<String>();
+			List<Long> unitPrice = new ArrayList<Long>();
+			List<Double> discount = new ArrayList<Double>();
+			for (productEntity p : lstProduct) {
+				productDAO dao = new productDAO();
+				productEntity pNew = dao.getProductDetail(p.getProductId());
+				p.setLstDiscount(pNew.getLstDiscount());
+				p.setDiscount(pNew.getDiscount());
+				p.setUnitPrice(pNew.getUnitPrice());
+				orderId.add(order.getOrderId());
+				productId.add(p.getProductId());
+				unitPrice.add(pNew.getUnitPrice());
+				discount.add(pNew.getDiscount());
+			}
+			updateDiscountOrderDetail(orderId, productId, unitPrice, discount);
+		}
+		
+		
 //		if (lstProduct.size() > 0) {
 //			for(orderEntity o : lstProduct) {
 //				

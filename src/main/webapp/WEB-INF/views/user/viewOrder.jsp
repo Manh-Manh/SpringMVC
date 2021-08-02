@@ -105,6 +105,7 @@
                                 </button>
                             </div>
                             </c:if>	
+                                                                                 	
                         </div>
                     </div>
                 </div>
@@ -143,12 +144,19 @@
                                     </p>
                                 </div>
                                 <div class="checkout_btn">
-                               		<c:if test="${dataSelected.status == 2 }">
+                                
+                                <div class="cart_submit">
+	                                <a href="#" onclick="goBack()" style="float:left;" class="btn btn-md btn-golden">Trở về</a>
+	                                
+	                                <c:if test="${dataSelected.status == 2 }">
               	                       <c:url var="urlCancel" value="/app-view/cancelOrder" >
                  							<c:param name="orderId" value="${dataSelected.orderId }"/>  
                                       </c:url>
                                     	<a id="urlCancel" class="btn btn-md btn-golden" href="#" data-url="${urlCancel }" class="view"> Hủy</a>
                                    	</c:if>	
+	                                
+                            	</div>
+                               		
                                     
                                 </div>
                             </div>

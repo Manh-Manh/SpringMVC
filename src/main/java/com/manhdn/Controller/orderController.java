@@ -3,6 +3,7 @@ package com.manhdn.Controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -25,6 +26,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.manhdn.AppConstants;
 import com.manhdn.FunctionCommon;
+import com.manhdn.email.Mailer;
 import com.manhdn.entity.ajaxEntity;
 import com.manhdn.entity.orderEntity;
 import com.manhdn.entity.productEntity;
@@ -140,7 +142,7 @@ public class orderController extends CommonController<orderEntity> {
 
 	@RequestMapping(value = { "/admin/acceptOrder" }, method = RequestMethod.GET)
 	public ModelAndView acceptOrder(@RequestParam("orderId") String orderId, HttpSession session) {
-		mav = new ModelAndView("/admin/order/manageOrder");
+		mav = new ModelAndView("redirect:/admin/manageOrder");
 		if (!isAdmin(session)) {
 			mav = new ModelAndView("redirect:/app-view");
 			logger.error("Khong co quyen");
@@ -169,7 +171,7 @@ public class orderController extends CommonController<orderEntity> {
 
 	@RequestMapping(value = { "/admin/rejectOrder" }, method = RequestMethod.GET)
 	public ModelAndView rejectOrder(@RequestParam("orderId") String orderId, HttpSession session) {
-		mav = new ModelAndView("/admin/order/manageOrder");
+		mav = new ModelAndView("redirect:/admin/manageOrder");
 		if (!isAdmin(session)) {
 			mav = new ModelAndView("redirect:/app-view");
 			logger.error("Khong co quyen");
@@ -376,6 +378,17 @@ public class orderController extends CommonController<orderEntity> {
 		mav = new ModelAndView("redirect:/app-view/homePage");
 		message = "Đặt hàng thành công!";
 		addMessage(message, session);
+		// send mail
+		Mailer mailer = new Mailer();
+		cart.setUser(user);
+		
+		try {
+			
+			mailer.sendMail(cart);
+		} catch (MessagingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		cart.getListProduct().clear();
 		addData();
 		logger.info(mav);
